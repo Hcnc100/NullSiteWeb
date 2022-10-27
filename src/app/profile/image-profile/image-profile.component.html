@@ -2,12 +2,12 @@
   <img
     (load)="changeLoad()"
     [class.container-img-load]="isLoading"
-    [src]="urlImgProfile"
+    [src]="urlImgProfile!"
     alt="Ricardo Pájaro Coatl"
     class="image-profile"
   >
 
-  <ng-container *ngIf="isLoading || urlImgProfile==''">
+  <ng-container *ngIf="isLoading">
     <ng-lottie
       [options]="options"
       class="container-animation"></ng-lottie>

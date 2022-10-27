@@ -16,13 +16,13 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   readonly listProjectId = "listProjectId"
   readonly icon = faGithub;
 
-  listProjects: Observable<Project[]>;
+  listProjectsAsync: Observable<Project[]>;
 
   constructor(
     private projectServices: ProjectsService,
     private dialog: DialogService,
   ) {
-    this.listProjects = projectServices.listProjects
+    this.listProjectsAsync = projectServices.listProjects
   }
 
   ngOnInit(): void {

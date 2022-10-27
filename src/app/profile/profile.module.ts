@@ -6,7 +6,6 @@ import {ShareModule} from "../share/share.module";
 import {PersonalLinksComponent} from './personal-links/personal-links.component';
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {DescriptionComponent} from './description/description.component';
-import {EllipsisModule} from "ngx-ellipsis";
 import {LottieComponent} from "ngx-lottie";
 
 
@@ -24,7 +23,6 @@ import {LottieComponent} from "ngx-lottie";
     CommonModule,
     ShareModule,
     FontAwesomeModule,
-    EllipsisModule,
     LottieComponent,
   ]
 })

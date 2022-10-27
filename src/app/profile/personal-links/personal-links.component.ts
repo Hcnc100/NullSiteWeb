@@ -9,9 +9,9 @@ import {PersonalInfoService} from "../services/personal-info.service";
 })
 export class PersonalLinksComponent implements OnInit {
 
-  listSocialLink: SocialLink[]
+  listSocialLink: SocialLink[];
 
-  constructor(personalInfo: PersonalInfoService) {
+  constructor(private personalInfo: PersonalInfoService) {
     this.listSocialLink = personalInfo.listSocialLink;
   }
 

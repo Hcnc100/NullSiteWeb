@@ -1,4 +1,4 @@
-<ng-container *ngIf="listCertificates | async; else animateLoad">
+<ng-container *ngIf="listCertificatesAsync | async as listCertificate; else animateLoad">
 
   <div class="container-certificate">
 
@@ -7,7 +7,7 @@
     </div>
 
     <div [id]="listCertificateId" class="container-list-certificate">
-      <ng-container *ngFor="let certificate of (listCertificates | async); let index = index">
+      <ng-container *ngFor="let certificate of listCertificate; let index = index">
         <app-item-certificate
           [certificate]="certificate"
           [gallery]="galleryId"

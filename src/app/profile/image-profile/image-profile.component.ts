@@ -8,7 +8,7 @@ import {AnimationOptions} from "ngx-lottie";
 })
 export class ImageProfileComponent implements OnInit {
 
-  @Input() urlImgProfile: string = ""
+  @Input() urlImgProfile: string | undefined;
   isLoading = true;
   options: AnimationOptions = {
     path: "assets/loading2.json",

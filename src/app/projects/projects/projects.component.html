@@ -1,13 +1,14 @@
-<ng-container *ngIf="(listProjects | async); else animateLoad">
+<ng-container *ngIf="(listProjectsAsync | async) as listProjects; else animateLoad">
 
   <div class="container-projects">
     <h3>Projects</h3>
 
     <div [id]="listProjectId" class="container-list-projects">
-      <ng-container *ngFor="let project of (listProjects | async)">
-        <app-card-project (click)="clickOnProject(project)"
-                          [project]="project"
-                          class="item-project"
+      <ng-container *ngFor="let project of listProjects">
+        <app-card-project
+          (click)="clickOnProject(project)"
+          [project]="project"
+          class="item-project"
         ></app-card-project>
       </ng-container>
     </div>

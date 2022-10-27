@@ -14,7 +14,7 @@ export class CertificateComponent implements OnInit, OnDestroy {
   readonly galleryId: string = "GalleryCertificates"
   readonly listenerCertificate: Subscription;
 
-  readonly listCertificates: Observable<Certificate[]>;
+  readonly listCertificatesAsync: Observable<Certificate[]>;
   readonly listCertificateId = "listCertificateId"
 
   constructor(
@@ -25,7 +25,7 @@ export class CertificateComponent implements OnInit, OnDestroy {
     const galleryCertificate = this.gallery.ref(this.galleryId)
 
     // * init listener for certificates
-    this.listCertificates = certificates.listCertificates;
+    this.listCertificatesAsync = certificates.listCertificates;
     this.listenerCertificate = certificates.listCertificates.pipe(
       map(listCertificate => listCertificate.map(
         certificate => new ImageItem(

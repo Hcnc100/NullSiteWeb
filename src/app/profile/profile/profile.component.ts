@@ -10,10 +10,10 @@ import {PersonalInfoService} from "../services/personal-info.service";
 })
 export class ProfileComponent implements OnInit {
 
-  infoProfile: Observable<InfoProfile>
+  infoProfileAsync: Observable<InfoProfile>
 
   constructor(private personalInfo: PersonalInfoService) {
-    this.infoProfile = this.personalInfo.infoProfile
+    this.infoProfileAsync = this.personalInfo.infoProfile
   }
 
   ngOnInit(): void {
