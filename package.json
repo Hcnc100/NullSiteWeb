@@ -29,7 +29,6 @@
     "lottie-web": "^5.9.6",
     "ng-gallery": "^7.1.2",
     "ng-recaptcha": "^10.0.0",
-    "ngx-ellipsis": "^4.1.0",
     "ngx-lottie": "^9.1.0",
     "ngx-toastr": "^15.2.1",
     "rxjs": "~7.4.0",
