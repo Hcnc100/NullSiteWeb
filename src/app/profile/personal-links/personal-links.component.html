@@ -1,0 +1,10 @@
+<div class="container-social-links">
+  <ng-container *ngFor="let itemSocialLink of listSocialLink">
+    <a [href]="itemSocialLink.link" target="_blank">
+      <fa-icon
+        [icon]="itemSocialLink.icon"
+        class="icon-social-link"
+      ></fa-icon>
+    </a>
+  </ng-container>
+</div>

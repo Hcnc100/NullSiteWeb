@@ -1,0 +1,12 @@
+@mixin apply-responsive-size(
+  $size-item-card:auto,
+  $max-size-item-card:auto,
+  $min-size-item-card:auto,
+) {
+  width: $size-item-card;
+  height: $size-item-card;
+  max-width: $max-size-item-card;
+  max-height: $max-size-item-card;
+  min-width: $min-size-item-card;
+  min-height: $min-size-item-card;
+}

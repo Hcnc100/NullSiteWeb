@@ -1,0 +1,8 @@
+<div *ngIf="itemSkill!=null" class="container-icon">
+  <fa-icon
+    [icon]="itemSkill.icon"
+    [ngStyle]="{'color': itemSkill.color}"
+    size="2x"></fa-icon>
+  <div class="spacer-row"></div>
+  <span>{{itemSkill.name}}</span>
+</div>

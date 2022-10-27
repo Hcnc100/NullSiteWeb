@@ -1,0 +1,34 @@
+@import "src/app/scss/mixin_globals";
+
+.container-certificate {
+  @include size-section;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-image: url("/assets/background-certificate.svg");
+  background-size: cover;
+  color: white;
+
+  .container-list-certificate {
+    display: grid;
+    justify-items: center;
+    row-gap: 20px;
+    column-gap: 18px;
+    grid-template-columns: repeat(5, 1fr);
+    max-width: 1000px;
+    margin: 0 auto;
+    width: calc(100% - 40px);
+    padding: 20px;
+
+    @media screen and (max-width: 900px) {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+
+  }
+
+  .container-title-certificate {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+}
+

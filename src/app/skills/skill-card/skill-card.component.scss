@@ -1,0 +1,49 @@
+@import "scss/mixin-skills";
+
+.container-icon {
+  border: 1px solid rgb(140, 140, 140);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-size: 20px;
+  background: black;
+  color: white;
+  box-shadow: 10px 9px 26px -8px rgba(112, 112, 112, 0.52);
+  -webkit-box-shadow: 10px 9px 26px -8px rgba(112, 112, 112, 0.52);
+  -moz-box-shadow: 10px 9px 26px -8px rgba(112, 112, 112, 0.52);
+  @include apply-responsive-size(
+    $size-item-card: 15vw,
+    $max-size-item-card: 120px,
+    $min-size-item-card: 85px
+  );
+
+  span {
+    font-size: 19px;
+  }
+
+  .spacer-row {
+    height: 5px;
+  }
+}
+
+@media only screen and (max-width: 300px) {
+  .container-icon {
+    flex-direction: row;
+    @include apply-responsive-size(
+      $size-item-card: 16vw,
+      $min-size-item-card: 60px,
+    );
+
+  }
+
+  .spacer-row {
+    display: none;
+  }
+
+  .container-icon span {
+    display: none;
+  }
+
+}

@@ -1,0 +1,40 @@
+<div class="container-language-programming">
+
+  <ng-container *ngIf="!(isMobile | async) else blockMobile">
+
+    <div>
+      <h3 class="title-items-skills">Programming languages</h3>
+      <div class="container-cards-items">
+        <!--      when is mobile screen show all items-->
+        <ng-container *ngFor="let item of listLanguages">
+          <app-skill-card [itemSkill]="item"></app-skill-card>
+        </ng-container>
+      </div>
+    </div>
+    <!--      when is mobile gone this-->
+    <div>
+      <h3 class="title-items-skills">Technologies</h3>
+      <div class="container-cards-items">
+        <ng-container *ngFor="let tech of listTech">
+          <app-skill-card [itemSkill]="tech"></app-skill-card>
+        </ng-container>
+      </div>
+
+    </div>
+
+  </ng-container>
+
+
+  <ng-template #blockMobile>
+    <div>
+      <h3 class="title-skills">Skills</h3>
+      <div class="container-cards-items">
+        <ng-container *ngFor="let tech of allItems">
+          <app-skill-card [itemSkill]="tech"></app-skill-card>
+        </ng-container>
+      </div>
+    </div>
+
+  </ng-template>
+
+</div>

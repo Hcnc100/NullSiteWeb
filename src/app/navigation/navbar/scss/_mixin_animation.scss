@@ -1,0 +1,13 @@
+@use "colors_nav_bar";
+
+@mixin animation_hover {
+  transition: background-color 500ms linear;
+  background: colors_nav_bar.$background-color-pre-selected;
+  cursor: pointer;
+}
+
+@mixin animation_active($scale:.8) {
+  transform: scale($scale);
+  transition: transform 500ms linear;
+  background: colors_nav_bar.$background-color-selected;
+}

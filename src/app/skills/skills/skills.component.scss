@@ -1,0 +1,32 @@
+@import "src/app/scss/mixin_globals";
+
+.container-language-programming {
+  @include size-section;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  color: white;
+  background-image: url("/assets/background-skills.svg");
+  background-size: cover;
+
+  h3 {
+    text-align: center;
+    font-size: 25px;
+    padding-bottom: 25px;
+  }
+
+  @media screen and (max-width: 600px) {
+    justify-content: center;
+  }
+}
+
+.container-cards-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  justify-items: center;
+  row-gap: 10px;
+
+  @media screen and (max-width: 300px) {
+    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+  }
+}

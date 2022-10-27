@@ -1,0 +1,11 @@
+<svg height="540" id="visual" version="1.1" viewBox="0 0 960 540" width="960" xmlns="http://www.w3.org/2000/svg">
+  <rect fill="#0e0a1e" height="540" width="960"></rect>
+  <g>
+    <g transform="translate(330 157)">
+      <path d="M0 -149.7L149.7 0L0 149.7L-149.7 0Z" fill="#297EA6"></path>
+    </g>
+    <g transform="translate(792 272)">
+      <path d="M0 -145L145 0L0 145L-145 0Z" fill="#297EA6"></path>
+    </g>
+  </g>
+</svg>

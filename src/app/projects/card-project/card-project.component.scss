@@ -1,0 +1,49 @@
+@import "src/app/scss/mixin_globals";
+
+$padding-horizontal: 10px;
+$size-image: 180px;
+$size-title: 30px;
+
+.title-hover {
+  opacity: 1 !important;
+}
+
+.container-card-project {
+  position: relative;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  img {
+    width: $size-image;
+    height: $size-image;
+    object-fit: cover;
+    border-radius: 5px;
+  }
+
+  .container-title-project {
+    position: absolute;
+    top: $size-image - $size-title;
+    left: 0;
+    background: black;
+    width: calc(100% - $padding-horizontal * 2);
+    height: $size-title;
+    display: flex;
+    align-items: center;
+    padding: 0 $padding-horizontal;
+    opacity: .5;
+    transition: opacity 0.5s ease-in-out;
+
+    h3 {
+      color: white;
+      font-size: 15px;
+    }
+  }
+}
+
+.container-animation {
+  @include elevation-hover($width-content: $size-image, $height-content: $size-image)
+}
+
+

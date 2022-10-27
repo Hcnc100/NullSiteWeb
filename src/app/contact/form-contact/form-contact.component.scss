@@ -1,0 +1,27 @@
+@use "scss/error-count-style";
+@use "scss/submit-style";
+@use "scss/text-input-style";
+@import "src/app/contact/contact/scss/mixins-contact";
+
+
+.container-form {
+  @include fill_max_size_with_padding(40px);
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+}
+
+
+
+

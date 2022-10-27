@@ -1,0 +1,16 @@
+@import "src/app/scss/mixin_globals";
+
+
+.container-animation-load {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: black;
+  @include size-section;
+
+  ng-lottie {
+    height: 250px;
+    width: auto;
+  }
+
+}

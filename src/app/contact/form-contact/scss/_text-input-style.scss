@@ -1,0 +1,32 @@
+$inner-padding-text: 20px;
+$width-border-text: 1px;
+
+
+input.ng-invalid.ng-touched, textarea.ng-invalid.ng-touched {
+  border: $width-border-text solid red;
+  transition: border 0.3s ease-in-out;
+}
+
+input[type=text], textarea {
+  width: calc(100% - ($inner-padding-text * 2 + $width-border-text * 2));
+  padding: 12px $inner-padding-text;
+  border: $width-border-text solid #ccc;
+  border-radius: 4px;
+}
+
+input[type=text]:focus, textarea:focus {
+  border: $width-border-text solid #0ab5b1;
+  outline: none;
+  transition: border 0.3s ease-in-out;
+}
+
+textarea {
+  resize: none;
+  height: 70px;
+}
+
+@media screen and (max-width: 600px) {
+  textarea {
+    height: 50px;
+  }
+}

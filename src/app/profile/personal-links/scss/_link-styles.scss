@@ -1,0 +1,49 @@
+@use "../../../scss/variables_global";
+
+$list-breakpoints: (
+  1000px:26px,
+  800px:24px,
+  600px:28px,
+  350px:26px,
+  300px:24px,
+  250px:22px
+);
+
+$color-link-active: #1976d2;
+$color-link-hover: rgba(25, 118, 210, 0.71);
+$color-link-normal: white;
+$size-container-icon: 40px;
+
+.container-social-links a {
+  display: inline-block;
+  font-size: 25px;
+  color: $color-link-normal;
+  height: $size-container-icon;
+  width: $size-container-icon;
+  line-height: $size-container-icon;
+  text-align: center;
+  vertical-align: bottom;
+  border-radius: 50%;
+
+  &:hover {
+    background: $color-link-hover;
+    color: $color-link-normal;
+  }
+
+  &:active {
+    background: $color-link-active;
+    color: $color-link-normal;
+    transform: scale(.9);
+    transition: transform .3s linear;
+  }
+}
+
+
+@each $width-screen, $size-font in $list-breakpoints {
+  @media screen and (max-width: $width-screen) {
+    .container-social-links a {
+      font-size: $size-font;
+    }
+  }
+}
+

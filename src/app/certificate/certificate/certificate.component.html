@@ -1,0 +1,23 @@
+<ng-container *ngIf="listCertificates | async; else animateLoad">
+
+  <div class="container-certificate">
+
+    <div class="container-title-certificate">
+      <h3>Certificates</h3>
+    </div>
+
+    <div [id]="listCertificateId" class="container-list-certificate">
+      <ng-container *ngFor="let certificate of (listCertificates | async); let index = index">
+        <app-item-certificate
+          [certificate]="certificate"
+          [gallery]="galleryId"
+          [lightbox]="index"
+        ></app-item-certificate>
+      </ng-container>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #animateLoad>
+  <app-loading [pathArg]="'/assets/loading4.json'"></app-loading>
+</ng-template>

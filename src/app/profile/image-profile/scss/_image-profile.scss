@@ -1,0 +1,26 @@
+@use "../../../scss/variables_global";
+
+@mixin circular-img-responsive(
+  $size-image,$size-max,$size-min
+) {
+  height: $size-image;
+  width: $size-image;
+  max-width: $size-max;
+  max-height: $size-max;
+  min-height: $size-min;
+  min-width: $size-min;
+  border-radius: 50%;
+}
+
+.image-profile {
+  padding: 20px 0;
+  @include circular-img-responsive($size-image: 20vw, $size-max: 260px, $size-min: 200px);
+
+  @media screen and (max-width: #{variables_global.$size-mobile}) {
+    @include circular-img-responsive($size-image: 40vw, $size-max: 200px, $size-min: 150px);
+  }
+}
+
+.container-img-load {
+  opacity: 0.1;
+}

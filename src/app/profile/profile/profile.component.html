@@ -1,0 +1,18 @@
+<ng-container *ngIf="infoProfile | async; else animateLoad">
+  <div class="container-profile">
+    <div class="container-info-profile">
+      <app-image-profile [urlImgProfile]="(infoProfile | async)?.urlImg!"></app-image-profile>
+      <app-personal-links></app-personal-links>
+    </div>
+
+    <div class="container-description-profile">
+      <app-description [infoProfile]="(infoProfile | async)!"></app-description>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #animateLoad>
+  <app-loading [pathArg]="'/assets/loading.json'"></app-loading>
+</ng-template>
+
+

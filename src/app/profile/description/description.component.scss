@@ -1,0 +1,25 @@
+@use "../../scss/variables_global";
+
+.container-personal-info {
+
+  h1 {
+    font-size: 25px;
+    padding: 10px 0;
+  }
+
+  h2 {
+    font-size: 23px;
+  }
+
+  p {
+    font-size: 18px;
+    padding: 10px 0;
+  }
+
+  @media screen and (max-width: #{variables_global.$size-mobile}) {
+    .self-description {
+      height: 100px;
+      width: 100%;
+    }
+  }
+}

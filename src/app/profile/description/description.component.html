@@ -1,0 +1,11 @@
+<div class="container-personal-info">
+  <ng-container *ngIf="infoProfile">
+    <h1>{{infoProfile.name}}</h1>
+    <p>{{infoProfile.profession}}</p>
+    <h2>About me</h2>
+    <p [ellipsis-content]=" infoProfile.description " class="self-description"
+       ellipsis="..."
+    ></p>
+
+  </ng-container>
+</div>

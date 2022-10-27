@@ -1,0 +1,13 @@
+<svg height="450" id="visual" version="1.1" viewBox="0 0 900 450" width="900" xmlns="http://www.w3.org/2000/svg">
+  <rect fill="#222324" height="450" width="900"></rect>
+  <g>
+    <g transform="translate(764 270)">
+      <path d="M0 -137.4L119 -68.7L119 68.7L0 137.4L-119 68.7L-119 -68.7Z" fill="none" stroke="#297EA6"
+            stroke-width="2"></path>
+    </g>
+    <g transform="translate(352 214)">
+      <path d="M0 -117L101.3 -58.5L101.3 58.5L0 117L-101.3 58.5L-101.3 -58.5Z" fill="none" stroke="#297EA6"
+            stroke-width="2"></path>
+    </g>
+  </g>
+</svg>

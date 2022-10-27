@@ -1,0 +1,17 @@
+$padding-count-error: 5px;
+
+span {
+  font-size: 12px;
+  margin-right: 5px;
+}
+
+.error-field {
+  color: red;
+}
+
+.count-and-error {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 $padding-count-error;
+  width: calc(100% - $padding-count-error * 2);
+}

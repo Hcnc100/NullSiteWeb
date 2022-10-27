@@ -1,0 +1,23 @@
+@use "mixin_profile";
+
+$breakpoints: (
+  1200px: 35%,
+  600px: 100%
+);
+
+.container-info-profile {
+  width: 30%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+
+@include mixin_profile.responsive-block-info(
+  $class-block: container-info-profile,
+  $padding-normal: 10px,
+  $padding-mobile: 20px,
+  $list-breakpoints: $breakpoints
+)
+

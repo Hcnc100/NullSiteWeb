@@ -1,0 +1,21 @@
+@use "../../../scss/variables_global";
+
+@mixin responsive-block-info($class-block,$padding-normal:0,$padding-mobile:0,$list-breakpoints) {
+  $padding-horizontal: null;
+  @each $width-screen, $width-element in $list-breakpoints {
+
+    @if ($width-screen>variables_global.$size-mobile) {
+      $padding-horizontal: $padding-normal;
+    } @else {
+      $padding-horizontal: $padding-mobile;
+    }
+
+    @media screen and (max-width: $width-screen) {
+      .#{$class-block} {
+        width: calc($width-element - $padding-horizontal * 2);
+        padding: 0 $padding-horizontal;
+      }
+    }
+  }
+
+}

@@ -1,0 +1,33 @@
+@use "../../../scss/variables_global";
+@use "mixin_animation";
+@use "colors_nav_bar";
+
+.container-icon {
+  font-size: 20px;
+  text-align: center;
+  display: inline-block;
+  vertical-align: bottom;
+
+  color:colors_nav_bar.$color-text
+;
+  width: variables_global.$height-nav-bar;
+  height: variables_global.$height-nav-bar;
+  line-height: variables_global.$height-nav-bar;
+
+  background:colors_nav_bar.$background-color-normal
+;
+
+  &:hover {
+    @include mixin_animation.animation_hover;
+  }
+
+  &:active {
+    @include mixin_animation.animation_active();
+  }
+
+}
+
+.section-active {
+  transition: background-color 500ms linear;
+  background: colors_nav_bar.$background-color-pre-selected;
+}

@@ -1,0 +1,74 @@
+@use "variables_global";
+
+@function real-height-sections() {
+  @return calc(100vh - #{variables_global.$height-nav-bar});
+}
+
+@mixin size-section() {
+  min-height: real-height-sections();
+  width: (100% -  #{variables_global.$height-nav-bar});
+  padding-top: #{variables_global.$height-nav-bar};
+}
+
+@mixin style-button-git {
+  width: fit-content;
+  background: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  color: black;
+  display: block !important;
+  transition: all 200ms linear;
+  border: 1px solid black;
+  border-radius: 5px;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  fa-icon {
+    padding-right: 5px;
+  }
+
+}
+
+
+@mixin elevation-hover($width-content, $height-content) {
+  position: relative;
+  display: inline-block;
+  width: $width-content;
+  height: $height-content;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+
+
+  &:after {
+    content: "";
+    border-radius: 5px;
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+
+  &:hover {
+    -webkit-transform: scale(1.25, 1.25);
+    transform: scale(1.25, 1.25);
+  }
+
+  &:hover::after {
+    opacity: 1;
+  }
+}

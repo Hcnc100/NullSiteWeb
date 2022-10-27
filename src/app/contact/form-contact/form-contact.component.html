@@ -1,0 +1,79 @@
+<div class="container-form">
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="formContact"
+  >
+    <div class="container-inputs">
+      <div class="form-section">
+        <input formControlName="name" placeholder="Name" type="text">
+        <div class="count-and-error">
+          <span *ngIf="!formContact.controls['name']?.errors || formContact.controls['name']?.untouched"></span>
+          <span
+            *ngIf="formContact.controls['name']?.errors?.['required'] && formContact.controls['name']?.touched"
+            class="error-field">The name is require</span>
+          <span
+            *ngIf="formContact.controls['name']?.errors?.['maxlength'] || formContact.controls['name']?.errors?.['minlength']  && formContact.controls['name']?.touched"
+            class="error-field">The name is invalid</span>
+          <span
+            [class.error-field]="this.formContact.controls['name'].value.length > this.maxCountName"
+          >{{this.formContact.controls['name'].value.length + '/' + this.maxCountName}}</span>
+        </div>
+      </div>
+      <div class="form-section">
+        <input formControlName="email" placeholder="Email" type="text">
+        <div class="count-and-error">
+          <span *ngIf="!formContact.controls['email']?.errors || formContact.controls['email']?.untouched"></span>
+          <span
+            *ngIf="formContact.controls['email']?.errors?.['required'] && formContact.controls['email']?.touched"
+            class="error-field">The email is require</span>
+          <span
+            *ngIf=" formContact.controls['email']?.errors?.['maxlength']
+            || formContact.controls['email']?.errors?.['minlength']
+            || formContact.controls['email']?.errors?.['pattern']
+             && formContact.controls['email']?.touched"
+            class="error-field">The email is invalid</span>
+          <span
+            [class.error-field]="this.formContact.controls['email'].value.length > this.maxCountEmail"
+          >{{this.formContact.controls['email'].value.length + '/' + this.maxCountEmail}}</span>
+        </div>
+      </div>
+      <div class="form-section">
+        <input formControlName="subject" placeholder="Subject" type="text">
+        <div class="count-and-error">
+          <span *ngIf="!formContact.controls['subject']?.errors || formContact.controls['subject']?.untouched"></span>
+          <span
+            *ngIf="formContact.controls['subject']?.errors?.['required'] && formContact.controls['subject']?.touched"
+            class="error-field">The subject is require</span>
+          <span
+            *ngIf="formContact.controls['subject']?.errors?.['maxlength'] || formContact.controls['subject']?.errors?.['minlength']  && formContact.controls['subject']?.touched"
+            class="error-field">The subject is invalid</span>
+
+          <span
+            [class.error-field]="this.formContact.controls['subject'].value.length > this.maxCountSubject"
+          >{{this.formContact.controls['subject'].value.length + '/' + this.maxCountSubject}}</span>
+        </div>
+      </div>
+      <div class="form-section">
+        <textarea formControlName="message" placeholder="Write your message"></textarea>
+        <div class="count-and-error">
+          <span *ngIf="!formContact.controls['message']?.errors || formContact.controls['message']?.untouched"></span>
+          <span
+            *ngIf="formContact.controls['message']?.errors?.['required'] && formContact.controls['message']?.touched"
+            class="error-field">The message is require</span>
+          <span
+            *ngIf="formContact.controls['message']?.errors?.['maxlength'] || formContact.controls['message']?.errors?.['minlength']  && formContact.controls['message']?.touched"
+            class="error-field">The message is invalid</span>
+          <span
+            [class.error-field]="this.formContact.controls['message'].value.length > this.maxCountMessage"
+          >{{this.formContact.controls['message'].value.length + '/' + this.maxCountMessage}}</span>
+        </div>
+      </div>
+    </div>
+
+
+    <re-captcha formControlName="token"></re-captcha>
+
+
+    <input type="submit" value="Send Message">
+
+  </form>
+</div>

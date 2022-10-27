@@ -1,0 +1,63 @@
+@use "../../../scss/variables_global";
+@use "colors_nav_bar";
+@use "mixin_animation";
+
+
+nav {
+  display: flex;
+  background: black;
+  justify-content: flex-end;
+  height: variables_global.$height-nav-bar;
+  position: fixed;
+  width: 100%;
+  z-index: 7;
+
+  ul {
+    display: flex;
+    list-style: none;
+    width: fit-content;
+    flex-direction: row;
+    background: black;
+
+    li a {
+      display: block !important;
+      background: colors_nav_bar.$background-color-normal;
+      color: colors_nav_bar.$color-text;
+      padding: 0 10px;
+      margin: 0 1px;
+      text-decoration: none;
+      height: variables_global.$height-nav-bar;
+      line-height: variables_global.$height-nav-bar;
+      text-align: center;
+      transition: visibility 0.3s linear, opacity 0.3s linear;
+
+      &:hover {
+        @include mixin_animation.animation_hover;
+      }
+
+      &:active {
+        @include mixin_animation.animation_active();
+      }
+
+      @media screen and (max-width: #{variables_global.$size-mobile}) {
+        &:active {
+          @include mixin_animation.animation_active(.95);
+        }
+      }
+
+    }
+
+    @media screen and (max-width: #{variables_global.$size-mobile}) {
+      flex-direction: column;
+      width: 100%;
+      margin: 0;
+    }
+
+  }
+
+  @media screen and (max-width: #{variables_global.$size-mobile}) {
+    justify-content: flex-start;
+    flex-direction: column;
+  }
+
+}

@@ -1,0 +1,32 @@
+@import '~@angular/cdk/overlay-prebuilt.css';
+@import '~ngx-toastr/toastr';
+@import "app/scss/variables_global";
+
+$padding-horizontal: 30px;
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+main {
+  background: black;
+}
+
+.ngneat-dialog-backdrop-visible {
+  width: calc(100% - $padding-horizontal * 2) !important;
+  padding: $padding-horizontal !important;
+  height: calc(100% - $padding-horizontal * 2) !important;
+}
+
+.ngneat-dialog-backdrop {
+  z-index: 9 !important;
+}
+
+.toast-top-right {
+  top: $height-nav-bar + 10px !important;
+  right: 12px;
+}
+
+
+
