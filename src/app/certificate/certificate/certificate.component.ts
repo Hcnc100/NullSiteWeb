@@ -1,8 +1,8 @@
-import {Gallery, ImageItem} from "ng-gallery";
-import {map, Observable, Subscription} from "rxjs";
-import {Certificate} from "../../models/Certificate";
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {CertificatesService} from "../services/certificates.service";
+import { Gallery, ImageItem } from "ng-gallery";
+import { map, Observable, Subject, Subscription, takeUntil } from "rxjs";
+import { Certificate } from "../../models/Certificate";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { CertificatesService } from "../services/certificates.service";
 
 @Component({
   selector: 'app-certificate',
@@ -16,6 +16,8 @@ export class CertificateComponent implements OnInit, OnDestroy {
 
   readonly listCertificatesAsync: Observable<Certificate[]>;
   readonly listCertificateId = "listCertificateId"
+
+  private readonly destroy$ = new Subject<void>();
 
   constructor(
     private gallery: Gallery,
@@ -35,6 +37,7 @@ export class CertificateComponent implements OnInit, OnDestroy {
           }
         )
       )),
+      takeUntil(this.destroy$),
     ).subscribe(listImages => {
       galleryCertificate.load(listImages)
     })
@@ -45,6 +48,7 @@ export class CertificateComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.listenerCertificate.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
