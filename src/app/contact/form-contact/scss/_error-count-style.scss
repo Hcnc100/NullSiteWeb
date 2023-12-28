@@ -1,17 +1,30 @@
-$padding-count-error: 5px;
+// This SCSS file defines styles for error count display in a contact form.
+
+$padding-count-error: 5px; // Padding value for error count element
+$font-size: 12px; // Font size for error count element
+$color-error: red; // Color for error text
+
+@mixin flex-end {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 $padding-count-error;
+  width: 100%;
+  box-sizing: border-box;
+}
 
 span {
-  font-size: 12px;
-  margin-right: 5px;
+  font-size: $font-size;
 }
 
 .error-field {
-  color: red;
+  color: $color-error;
 }
 
 .count-and-error {
-  display: flex;
+  @include flex-end;
   justify-content: space-between;
-  padding: 0 $padding-count-error;
-  width: calc(100% - $padding-count-error * 2);
+}
+
+.only-count {
+  @include flex-end;
 }

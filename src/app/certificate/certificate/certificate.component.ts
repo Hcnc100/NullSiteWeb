@@ -21,7 +21,7 @@ export class CertificateComponent implements OnInit, OnDestroy {
 
   constructor(
     private gallery: Gallery,
-    private certificates: CertificatesService,
+    certificates: CertificatesService,
   ) {
     // * init gallery
     const galleryCertificate = this.gallery.ref(this.galleryId)

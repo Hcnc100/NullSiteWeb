@@ -1,4 +1,4 @@
-<section *ngIf="listCertificatesAsync | async as listCertificate; else animateLoad" class="container-certificate">
+<section *ngIf="(listCertificatesAsync | async ) as listCertificate; else animateLoad" class="container-certificate">
 
   <header class="container-title-certificate">
     <h3>Certificates</h3>

@@ -1,39 +1,38 @@
 <div class="container-form">
-  <form (ngSubmit)="onSubmit()"
-        [formGroup]="formContact"
-  >
+  <form (ngSubmit)="onSubmit()" [formGroup]="formContact">
     <div class="container-inputs">
       <div class="form-section">
-        <input formControlName="name" placeholder="Name" type="text">
-        <div class="count-and-error">
-          <span *ngIf="!formContact.controls['name']?.errors || formContact.controls['name']?.untouched"></span>
-          <span
-            *ngIf="formContact.controls['name']?.errors?.['required'] && formContact.controls['name']?.touched"
-            class="error-field">The name is require</span>
-          <span
-            *ngIf="formContact.controls['name']?.errors?.['maxlength'] || formContact.controls['name']?.errors?.['minlength']  && formContact.controls['name']?.touched"
-            class="error-field">The name is invalid</span>
-          <span
-            [class.error-field]="this.formContact.controls['name'].value.length > this.maxCountName"
-          >{{this.formContact.controls['name'].value.length + '/' + this.maxCountName}}</span>
+
+        <input formControlName="name" placeholder="Name" type="text" [maxlength]="maxCountName+10">
+        <div *ngIf="nameControl"
+          [ngClass]="nameControl.touched && nameControl.errors ? 'count-and-error' : 'only-count'">
+          <ng-container class="container-message-error" *ngIf="nameControl.touched && nameControl.errors as error">
+            <span class="error-field" *ngIf="error['required']">The name is required</span>
+            <span class="error-field" *ngIf="error['maxlength']">The name is too long</span>
+            <span class="error-field" *ngIf="error['minlength']">The name is too short</span>
+          </ng-container>
+
+          <span [ngClass]="{'error-field': nameControl.touched && nameControl.errors}">
+            {{(nameControl.value?.length ?? 0) + '/' + maxCountName}}
+          </span>
         </div>
+
+
+
       </div>
       <div class="form-section">
         <input formControlName="email" placeholder="Email" type="text">
         <div class="count-and-error">
           <span *ngIf="!formContact.controls['email']?.errors || formContact.controls['email']?.untouched"></span>
-          <span
-            *ngIf="formContact.controls['email']?.errors?.['required'] && formContact.controls['email']?.touched"
+          <span *ngIf="formContact.controls['email']?.errors?.['required'] && formContact.controls['email']?.touched"
             class="error-field">The email is require</span>
-          <span
-            *ngIf=" formContact.controls['email']?.errors?.['maxlength']
+          <span *ngIf=" formContact.controls['email']?.errors?.['maxlength']
             || formContact.controls['email']?.errors?.['minlength']
             || formContact.controls['email']?.errors?.['pattern']
-             && formContact.controls['email']?.touched"
-            class="error-field">The email is invalid</span>
+             && formContact.controls['email']?.touched" class="error-field">The email is invalid</span>
           <span
-            [class.error-field]="this.formContact.controls['email'].value.length > this.maxCountEmail"
-          >{{this.formContact.controls['email'].value.length + '/' + this.maxCountEmail}}</span>
+            [class.error-field]="this.formContact.controls['email'].value?.length ?? 0 > this.maxCountEmail">{{this.formContact.controls['email'].value?.length
+            ?? 0 + '/' + this.maxCountEmail}}</span>
         </div>
       </div>
       <div class="form-section">
@@ -48,8 +47,8 @@
             class="error-field">The subject is invalid</span>
 
           <span
-            [class.error-field]="this.formContact.controls['subject'].value.length > this.maxCountSubject"
-          >{{this.formContact.controls['subject'].value.length + '/' + this.maxCountSubject}}</span>
+            [class.error-field]="this.formContact.controls['subject'].value?.length ?? 0 > this.maxCountSubject">{{this.formContact.controls['subject'].value?.length
+            ?? 0 + '/' + this.maxCountSubject}}</span>
         </div>
       </div>
       <div class="form-section">
@@ -63,8 +62,8 @@
             *ngIf="formContact.controls['message']?.errors?.['maxlength'] || formContact.controls['message']?.errors?.['minlength']  && formContact.controls['message']?.touched"
             class="error-field">The message is invalid</span>
           <span
-            [class.error-field]="this.formContact.controls['message'].value.length > this.maxCountMessage"
-          >{{this.formContact.controls['message'].value.length + '/' + this.maxCountMessage}}</span>
+            [class.error-field]="this.formContact.controls['message'].value?.length ?? 0 > this.maxCountMessage">{{this.formContact.controls['message'].value?.length
+            ?? 0 + '/' + this.maxCountMessage}}</span>
         </div>
       </div>
     </div>

@@ -1,93 +1,98 @@
-import {Email} from "../../models/Email";
-import {ToastrService} from "ngx-toastr";
-import {Component, OnInit} from '@angular/core';
-import {EmailService} from "../services/email.service";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import { Email } from "../../models/Email";
+import { ToastrService } from "ngx-toastr";
+import { Component, OnInit } from '@angular/core';
+import { EmailService } from "../services/email.service";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { ResizeService } from "src/app/services/resize/resize.service";
+import { Observable } from "rxjs";
 
 @Component({
   selector: 'app-form-contact',
   templateUrl: './form-contact.component.html',
   styleUrls: ['./form-contact.component.scss']
 })
-export class FormContactComponent implements OnInit {
+export class FormContactComponent {
 
-  readonly formContact: FormGroup;
   readonly maxCountName = 50;
   readonly maxCountSubject = 100;
   readonly maxCountEmail = 50;
   readonly maxCountMessage = 250;
 
 
+  isMobile: Observable<boolean>;
+
+
+
+  readonly formContact = this.formBuilder.group({
+    name: ['', [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(this.maxCountName),
+    ]],
+    email: ['', [
+      Validators.required,
+      Validators.maxLength(this.maxCountEmail),
+      Validators.pattern(/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/)
+    ]],
+    subject: ['', [
+      Validators.required,
+      Validators.maxLength(this.maxCountSubject),
+    ]],
+    message: ['', [
+      Validators.required,
+      Validators.maxLength(this.maxCountMessage),
+    ]],
+    token: ['', Validators.required]
+  });
+
+  get nameControl() {
+    return this.formContact.controls['name'];
+  }
+
   constructor(
     private toast: ToastrService,
-    private emailService: EmailService
+    private formBuilder: FormBuilder,
+    private emailService: EmailService,
+    resizeServices: ResizeService
   ) {
-    this.formContact = new FormGroup({
-      name: new FormControl('', [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(this.maxCountName),
-      ]),
-      email: new FormControl('', [
-        Validators.required,
-        Validators.maxLength(this.maxCountEmail),
-        Validators.pattern(/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/)
-      ]),
-      subject: new FormControl('', [
-        Validators.required,
-        Validators.maxLength(this.maxCountSubject),
-      ]),
-      message: new FormControl('', [
-        Validators.required,
-        Validators.maxLength(this.maxCountMessage),
-      ]),
-
-      token: new FormControl('', Validators.required)
-    });
-
+    this.isMobile = resizeServices.isMobileSize;
   }
 
-  ngOnInit(): void {
+  // disableFieldsFrom() {
+  //   Object.keys(this.formContact.controls).forEach(key => {
+  //     this.formContact.controls[key].disable();
+  //   });
+  // }
 
-  }
+  // enableFieldsForm() {
+  //   Object.keys(this.formContact.controls).forEach(key => {
+  //     this.formContact.controls[key].enable();
+  //   });
+  // }
 
-  disableFieldsFrom() {
-    Object.keys(this.formContact.controls).forEach(key => {
-      this.formContact.controls[key].disable();
-    });
-  }
-
-  enableFieldsForm() {
-    Object.keys(this.formContact.controls).forEach(key => {
-      this.formContact.controls[key].enable();
-    });
-  }
-
-  resetForm() {
-    Object.keys(this.formContact.controls).forEach(key => {
-      this.formContact.controls[key].setValue("")
-      this.formContact.controls[key].setErrors(null)
-    });
-  }
+  // resetForm() {
+  //   Object.keys(this.formContact.controls).forEach(key => {
+  //     this.formContact.controls[key].setValue("")
+  //     this.formContact.controls[key].setErrors(null)
+  //   });
+  // }
 
   async onSubmit() {
     this.formContact.markAllAsTouched();
     if (this.formContact.valid) {
       try {
 
-        this.disableFieldsFrom()
+        this.formContact.disable();
 
         await this.emailService.sendNewEmail(this.createEmailFromFrom());
         this.formContact.reset();
-
-        this.resetForm();
 
         this.toast.success('Email has been sent');
       } catch (e) {
         console.log("Error insert new email " + e);
         this.toast.error('Could not send email', "Error");
       } finally {
-        this.enableFieldsForm()
+        this.formContact.enable();
       }
     } else {
       this.toast.error('Email is invalid', "Error");
@@ -96,12 +101,16 @@ export class FormContactComponent implements OnInit {
 
   private createEmailFromFrom(): Email {
     return {
-      name: this.formContact.controls['name'].value,
-      email: this.formContact.controls['email'].value,
-      subject: this.formContact.controls['subject'].value,
-      message: this.formContact.controls['message'].value,
+      name: this.formContact.get('name')!.value!,
+      email: this.formContact.get('email')!.value!,
+      subject: this.formContact.get('subject')!.value!,
+      message: this.formContact.get('message')!.value!,
       isOpen: false,
     }
   }
+
+
+
+
 
 }
