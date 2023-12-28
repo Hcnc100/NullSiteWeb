@@ -1,11 +1,14 @@
 <div class="container-image-contact">
-  <div *ngIf="!isMobile; else normalBlock" class="contact-text">
-    <h3>Contact me, let's talk for a while</h3>
-    <p>I am open to any job proposal</p>
-  </div>
+  <ng-container *ngIf="!isMobile; else normalBlock">
+    <div class="contact-text">
+      <h3>Contact me, let's talk for a while</h3>
+      <p>I am open to any job proposal</p>
+    </div>
+  </ng-container>
+
   <ng-template #normalBlock>
     <h2>Contact</h2>
   </ng-template>
 
-  <img alt="image contact form" src="assets/contact.svg">
+  <img alt="Contact form illustration" src="assets/contact.svg">
 </div>

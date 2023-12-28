@@ -7,12 +7,14 @@ import {RECAPTCHA_SETTINGS, RecaptchaFormsModule, RecaptchaModule, RecaptchaSett
 import {ToastrModule} from 'ngx-toastr';
 import {environment} from '../../environments/environment';
 import {ReactiveFormsModule} from "@angular/forms";
+import { CountAndErrorFieldComponent } from './count-and-error-field/count-and-error-field.component';
 
 @NgModule({
   declarations: [
     ContactComponent,
     ImageContactComponent,
-    FormContactComponent
+    FormContactComponent,
+    CountAndErrorFieldComponent
   ],
   exports: [
     ContactComponent

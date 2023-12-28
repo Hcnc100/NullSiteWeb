@@ -5,6 +5,7 @@ import { EmailService } from "../services/email.service";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ResizeService } from "src/app/services/resize/resize.service";
 import { Observable } from "rxjs";
+import { ErrorAndMessage } from "src/app/models/ErrorAndMessage";
 
 @Component({
   selector: 'app-form-contact',
@@ -17,6 +18,29 @@ export class FormContactComponent {
   readonly maxCountSubject = 100;
   readonly maxCountEmail = 50;
   readonly maxCountMessage = 250;
+
+  readonly errorsListName: ErrorAndMessage[] = [
+    { error: "required", message: "Name is required" },
+    { error: "minlength", message: "Name must be at least 3 characters" },
+    { error: "maxlength", message: `Name must be less than ${this.maxCountName} characters` },
+  ];
+
+  readonly errorsListEmail: ErrorAndMessage[] = [
+    { error: "required", message: "Email is required" },
+    { error: "maxlength", message: `Email must be less than ${this.maxCountEmail} characters` },
+    { error: "pattern", message: "Email is invalid" },
+  ];
+
+  readonly errorsListSubject: ErrorAndMessage[] = [
+    { error: "required", message: "Subject is required" },
+    { error: "maxlength", message: `Subject must be less than ${this.maxCountSubject} characters` },
+  ];
+
+  readonly errorsListMessage: ErrorAndMessage[] = [
+    { error: "required", message: "Message is required" },
+    { error: "maxlength", message: `Message must be less than ${this.maxCountMessage} characters` },
+  ];
+
 
 
   isMobile: Observable<boolean>;
@@ -49,6 +73,18 @@ export class FormContactComponent {
     return this.formContact.controls['name'];
   }
 
+  get emailControl() {
+    return this.formContact.controls['email'];
+  }
+
+  get subjectControl() {
+    return this.formContact.controls['subject'];
+  }
+
+  get messageControl() {
+    return this.formContact.controls['message'];
+  }
+
   constructor(
     private toast: ToastrService,
     private formBuilder: FormBuilder,
@@ -57,25 +93,6 @@ export class FormContactComponent {
   ) {
     this.isMobile = resizeServices.isMobileSize;
   }
-
-  // disableFieldsFrom() {
-  //   Object.keys(this.formContact.controls).forEach(key => {
-  //     this.formContact.controls[key].disable();
-  //   });
-  // }
-
-  // enableFieldsForm() {
-  //   Object.keys(this.formContact.controls).forEach(key => {
-  //     this.formContact.controls[key].enable();
-  //   });
-  // }
-
-  // resetForm() {
-  //   Object.keys(this.formContact.controls).forEach(key => {
-  //     this.formContact.controls[key].setValue("")
-  //     this.formContact.controls[key].setErrors(null)
-  //   });
-  // }
 
   async onSubmit() {
     this.formContact.markAllAsTouched();
@@ -101,10 +118,10 @@ export class FormContactComponent {
 
   private createEmailFromFrom(): Email {
     return {
-      name: this.formContact.get('name')!.value!,
-      email: this.formContact.get('email')!.value!,
-      subject: this.formContact.get('subject')!.value!,
-      message: this.formContact.get('message')!.value!,
+      name: this.nameControl!.value!,
+      email: this.emailControl!.value!,
+      subject: this.subjectControl!.value!,
+      message: this.messageControl!.value!,
       isOpen: false,
     }
   }

@@ -1,4 +1,3 @@
-@use "scss/error-count-style";
 @use "scss/submit-style";
 @use "scss/text-input-style";
 @import "src/app/contact/contact/scss/mixins-contact";
@@ -21,7 +20,3 @@ form {
   height: 100%;
   justify-content: center;
 }
-
-
-
-
