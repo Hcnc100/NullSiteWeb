@@ -1,10 +1,10 @@
-import {Observable} from "rxjs";
-import {Injectable} from '@angular/core';
-import {SocialLink} from "../../models/SocialLink";
-import {InfoProfile} from "../../models/InfoProfile";
-import {DocumentReference} from "@firebase/firestore";
-import {doc, docData, Firestore} from "@angular/fire/firestore";
-import {faFacebookF, faGithub, faInstagram, faTwitter, faWhatsapp} from "@fortawesome/free-brands-svg-icons";
+import { Observable } from "rxjs";
+import { Injectable } from '@angular/core';
+import { SocialLink } from "../../models/SocialLink";
+import { InfoProfile } from "../../models/InfoProfile";
+import { DocumentReference } from "@firebase/firestore";
+import { doc, docData, Firestore } from "@angular/fire/firestore";
+import { faFacebookF, faGithub, faInstagram, faTwitter, faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 
 
 @Injectable({
@@ -12,7 +12,7 @@ import {faFacebookF, faGithub, faInstagram, faTwitter, faWhatsapp} from "@fortaw
 })
 export class PersonalInfoService {
 
-  listSocialLink: SocialLink[] = [
+  readonly listSocialLink: SocialLink[] = [
     {
       icon: faGithub,
       link: 'https://github.com/Hcnc100',

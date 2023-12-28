@@ -1,9 +1,8 @@
-<div class="container-personal-info">
-  <ng-container *ngIf="infoProfile">
+<ng-container *ngIf="infoProfile">
+  <div class="container-personal-info">
     <h1>{{infoProfile.name}}</h1>
     <p>{{infoProfile.profession}}</p>
     <h2>About me</h2>
     <p>{{infoProfile.description}}</p>
-  </ng-container>
-  <span style="display: none">{{infoProfile | json}}</span>
-</div>
+  </div>
+</ng-container>
