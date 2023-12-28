@@ -1,19 +1,14 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {ItemSkill} from "../../models/ItemSkill";
+import { Component, Input, OnInit } from '@angular/core';
+import { ItemSkill } from "../../models/ItemSkill";
 
 @Component({
   selector: 'app-skill-card',
   templateUrl: './skill-card.component.html',
   styleUrls: ['./skill-card.component.scss']
 })
-export class SkillCardComponent implements OnInit {
+export class SkillCardComponent {
 
   @Input() itemSkill: ItemSkill | undefined;
 
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
 
 }

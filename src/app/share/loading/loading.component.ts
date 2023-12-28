@@ -1,5 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {AnimationOptions} from "ngx-lottie";
+import { Component, Input, OnInit } from '@angular/core';
+import { AnimationOptions } from "ngx-lottie";
 
 @Component({
   selector: 'app-loading',
@@ -8,9 +8,9 @@ import {AnimationOptions} from "ngx-lottie";
 })
 export class LoadingComponent implements OnInit {
 
-  @Input() pathArg: string = "";
+  @Input() pathArg: string | undefined;
 
-  options: AnimationOptions | null = null;
+  options: AnimationOptions | undefined;
 
   constructor() {
   }
