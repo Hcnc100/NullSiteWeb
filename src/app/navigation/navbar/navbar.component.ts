@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {faBars} from "@fortawesome/free-solid-svg-icons/faBars";
-import {ResizeService} from 'src/app/services/resize/resize.service';
-import {Observable} from "rxjs";
-import {navigatorSections} from "../../../utils/Constants";
-import {NavigatorServices} from "../services/navigator.service";
+import { Component, OnInit } from '@angular/core';
+import { faBars } from "@fortawesome/free-solid-svg-icons/faBars";
+import { ResizeService } from 'src/app/services/resize/resize.service';
+import { Observable, Subject, takeUntil } from "rxjs";
+import { navigatorSections } from "../../../utils/Constants";
+import { NavigatorServices } from "../services/navigator.service";
 
 @Component({
   selector: 'app-navbar',
@@ -17,6 +17,7 @@ export class NavbarComponent implements OnInit {
   currentIdSection: Observable<string>;
   isGoneMenu = true;
   listIdsSections: string[];
+  private destroy$ = new Subject<void>();
 
 
   constructor(
@@ -26,10 +27,19 @@ export class NavbarComponent implements OnInit {
     // // * the first section always is the home
     this.listIdsSections = Object.values(navigatorSections);
     this.currentIdSection = navigator.currentSection;
-    resizeService.isMobileSize.subscribe((isMenuMobile) => {
-      if (!isMenuMobile && !this.isGoneMenu) this.isGoneMenu = true;
-      this.isMobile = isMenuMobile;
-    })
+    resizeService.isMobileSize
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((isMenuMobile) => {
+        if (!isMenuMobile && !this.isGoneMenu) {
+          this.isGoneMenu = true;
+        }
+        this.isMobile = isMenuMobile;
+      })
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
 
@@ -44,7 +54,9 @@ export class NavbarComponent implements OnInit {
 
 
   hiddenMenuIfNeed() {
-    if (!this.isGoneMenu) this.isGoneMenu = true;
+    if (!this.isGoneMenu) {
+      this.isGoneMenu = true;
+    }
   }
 
 }
