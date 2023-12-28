@@ -24,7 +24,7 @@ export class NavbarComponent implements OnInit {
     private resizeService: ResizeService,
     private navigator: NavigatorServices,
   ) {
-    // // * the first section always is the home
+    // * the first section always is the home
     this.listIdsSections = Object.values(navigatorSections);
     this.currentIdSection = navigator.currentSection;
     resizeService.isMobileSize
