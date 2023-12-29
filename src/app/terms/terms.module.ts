@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { BrowserModule } from '@angular/platform-browser';
 import { TermsComponent } from './terms/terms.component';
+import { ShareModule } from "../share/share.module";
 
 
 
@@ -8,8 +10,12 @@ import { TermsComponent } from './terms/terms.component';
   declarations: [
     TermsComponent
   ],
+  exports: [
+    TermsComponent
+  ],
   imports: [
-    CommonModule
+    CommonModule,
+    ShareModule
   ]
 })
 export class TermsModule { }

@@ -1,1 +1,29 @@
-<p>terms works!</p>
+<!-- FILEPATH: /c:/Users/desarrollador6/Documents/Proyectos/NullSiteWeb/src/app/terms/terms/terms.component.html -->
+<section class="seccion-terms ">
+    <!-- ngIf directive to conditionally render the section based on the data object -->
+    <ng-container *ngIf="{ project: termsProject | async, loading: isLoading } as data">
+        <!-- ngIf directive to conditionally render the article based on the data.project -->
+        <article *ngIf="data.project; else loadingOrNotFound" class="container-term">
+            <header class="container-terms__title">
+                <!-- Display the title of the project -->
+                <h1>{{data.project.title}}</h1>
+            </header>
+            <div class="container-terms__content">
+                <div class="container-terms__content__text" [innerHTML]="getSafeContent(data.project.content)">
+                </div>
+            </div>
+        </article>
+
+        <!-- ng-template to handle the case when data.project is falsy -->
+        <ng-template #loadingOrNotFound>
+            <!-- ngIf directive to conditionally render the container-not-found div based on the data.loading -->
+            <div *ngIf="!data.loading" class="container-not-found">
+                <h1>404</h1>
+                <h2>Not Found Terms and Conditions</h2>
+            </div>
+
+            <!-- app-loading component to display a loading animation when data.loading is true -->
+            <app-loading *ngIf="data.loading" [pathArg]="'/assets/loading3.json'"></app-loading>
+        </ng-template>
+    </ng-container>
+</section>
