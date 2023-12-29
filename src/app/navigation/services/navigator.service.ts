@@ -24,15 +24,9 @@ export class NavigatorServices {
         takeUntil(this.destroy$)
       )
       .subscribe((event) => {
-        if (event instanceof RouterEvent) {
-          const onlyUrl = event.url.substring(1)
-          if (onlyUrl == "") {
-            this._currentSection.next(defaultSection);
-          } else {
-            const listUrl = getListSections();
-            const newSection = listUrl.includes(onlyUrl) ? onlyUrl : defaultSection;
-            this._currentSection.next(newSection);
-          }
+        if (event instanceof NavigationEnd) {
+          const onlyUrl = event.urlAfterRedirects.replace("/", "");
+          this._currentSection.next(onlyUrl);
         }
       });
   }
