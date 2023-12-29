@@ -8,14 +8,12 @@
   display: inline-block;
   vertical-align: bottom;
 
-  color:colors_nav_bar.$color-text
-;
+  color: colors_nav_bar.$color-text;
   width: variables_global.$height-nav-bar;
   height: variables_global.$height-nav-bar;
   line-height: variables_global.$height-nav-bar;
 
-  background:colors_nav_bar.$background-color-normal
-;
+  background: colors_nav_bar.$background-color-normal;
 
   &:hover {
     @include mixin_animation.animation_hover;

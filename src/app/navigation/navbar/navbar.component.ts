@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { faBars } from "@fortawesome/free-solid-svg-icons/faBars";
+import {
+  faBars,
+  faArrowLeft
+} from "@fortawesome/free-solid-svg-icons";
 import { ResizeService } from 'src/app/services/resize/resize.service';
 import { Observable, Subject, takeUntil } from "rxjs";
 import { navigatorSections } from "../../../utils/Constants";
@@ -13,6 +16,7 @@ import { NavigatorServices } from "../services/navigator.service";
 export class NavbarComponent implements OnInit {
 
   iconMenu = faBars;
+  iconBack = faArrowLeft;
   isMobile: boolean = false;
   currentIdSection: Observable<string>;
   isGoneMenu = true;
@@ -24,6 +28,7 @@ export class NavbarComponent implements OnInit {
     private resizeService: ResizeService,
     private navigator: NavigatorServices,
   ) {
+
     // * the first section always is the home
     this.listIdsSections = Object.values(navigatorSections);
     this.currentIdSection = navigator.currentSection;
@@ -50,6 +55,11 @@ export class NavbarComponent implements OnInit {
   onClickMobile() {
     // * toggle menu mobile
     this.isGoneMenu = !this.isGoneMenu
+  }
+
+  onClickBack() {
+    // * go back
+    window.history.back();
   }
 
 

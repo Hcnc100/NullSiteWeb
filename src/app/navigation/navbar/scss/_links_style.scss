@@ -2,15 +2,23 @@
 @use "colors_nav_bar";
 @use "mixin_animation";
 
-
-nav {
+.navbar {
   display: flex;
   background: black;
-  justify-content: flex-end;
   height: variables_global.$height-nav-bar;
   position: fixed;
   width: 100%;
   z-index: 7;
+}
+
+nav.back-navbar {
+  @extend .navbar;
+  justify-content: flex-start;
+}
+
+nav.home-navbar {
+  @extend .navbar;
+  justify-content: flex-end;
 
   ul {
     display: flex;

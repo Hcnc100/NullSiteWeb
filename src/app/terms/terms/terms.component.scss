@@ -1,0 +1,6 @@
+@import "src/app/scss/mixin_globals";
+
+.container-terms {
+    background-image: url("/src/assets/background-skills.svg");
+    @include size-section;
+}
