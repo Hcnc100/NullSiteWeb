@@ -2,13 +2,14 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { TermsService } from './../terms.service';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, Subscription, tap, switchMap, of, catchError, finalize } from 'rxjs';
+import { Observable, tap, switchMap, of, catchError, finalize } from 'rxjs';
 import { Terms } from 'src/app/models/Terms';
 
 @Component({
   selector: 'app-terms',
   templateUrl: './terms.component.html',
   styleUrls: ['./terms.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class TermsComponent implements OnInit {
 
@@ -41,6 +42,7 @@ export class TermsComponent implements OnInit {
   }
 
   getSafeContent(content: string) {
+    console.log(content);
     return this.sanitizer.bypassSecurityTrustHtml(content);
   }
 

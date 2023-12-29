@@ -1,9 +1,16 @@
 @import "src/app/scss/mixin_globals";
 
+
 .seccion-terms {
     background-image: url("/src/assets/background-skills.svg");
     @include size-section;
     color: white;
+
+
+}
+
+.seccion-terms * {
+    all: revert;
 }
 
 .container-not-found {
