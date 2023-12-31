@@ -8,6 +8,6 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class ItemCertificateComponent {
 
-  @Input() certificate: Certificate | undefined;
+  @Input() certificate?: Certificate;
 
 }

@@ -1,17 +1,17 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {DialogService} from "@ngneat/dialog";
-import {ProjectDetailsComponent} from "../project-details/project-details.component";
-import {faGithub} from "@fortawesome/free-brands-svg-icons";
-import {Project} from "../../models/Project";
-import {ProjectsService} from "../services/projects.service";
-import {Observable} from "rxjs";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { DialogService } from "@ngneat/dialog";
+import { ProjectDetailsComponent } from "../project-details/project-details.component";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { Project } from "../../models/Project";
+import { ProjectsService } from "../services/projects.service";
+import { Observable } from "rxjs";
 
 @Component({
   selector: 'app-projects',
   templateUrl: './projects.component.html',
   styleUrls: ['./projects.component.scss']
 })
-export class ProjectsComponent implements OnInit, OnDestroy {
+export class ProjectsComponent {
 
   readonly listProjectId = "listProjectId"
   readonly icon = faGithub;
@@ -25,8 +25,6 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     this.listProjectsAsync = projectServices.listProjects
   }
 
-  ngOnInit(): void {
-  }
 
   clickOnProject(project: Project) {
     this.dialog.open(ProjectDetailsComponent,
@@ -36,6 +34,5 @@ export class ProjectsComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnDestroy(): void {
-  }
+
 }

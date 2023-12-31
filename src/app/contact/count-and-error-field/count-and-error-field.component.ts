@@ -9,12 +9,9 @@ import { ErrorAndMessage } from 'src/app/models/ErrorAndMessage';
 })
 export class CountAndErrorFieldComponent {
 
-  @Input() control: FormControl | undefined;
-  @Input() maxCount: number | undefined;
-  @Input() errorsList: ErrorAndMessage[] | undefined;
-
-
-  constructor() { }
+  @Input() control?: FormControl;
+  @Input() maxCount?: number;
+  @Input() errorsList?: ErrorAndMessage[];
 
 
 

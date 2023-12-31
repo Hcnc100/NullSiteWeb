@@ -8,7 +8,7 @@ import { ItemSkill } from "../../models/ItemSkill";
 })
 export class SkillCardComponent {
 
-  @Input() itemSkill: ItemSkill | undefined;
+  @Input() itemSkill?: ItemSkill;
 
 
 }

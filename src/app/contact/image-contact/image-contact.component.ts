@@ -9,7 +9,7 @@ import { ResizeService } from "../../services/resize/resize.service";
 })
 export class ImageContactComponent {
 
-  isMobile: Observable<boolean>;
+  readonly isMobile: Observable<boolean>;
 
   constructor(resizeService: ResizeService) {
     this.isMobile = resizeService.isMobileSize

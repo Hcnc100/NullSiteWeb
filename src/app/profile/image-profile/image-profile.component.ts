@@ -8,9 +8,11 @@ import { AnimationOptions } from "ngx-lottie";
 })
 export class ImageProfileComponent {
 
-  @Input() urlImgProfile: string | undefined;
+  @Input() urlImgProfile?: string;
+
   isLoading = true;
-  options: AnimationOptions = {
+
+  readonly options: AnimationOptions = {
     path: "assets/loading2.json",
   }
 

@@ -8,7 +8,7 @@ import { InfoProfile } from "../../models/InfoProfile";
 })
 export class DescriptionComponent {
 
-  @Input() infoProfile: InfoProfile | undefined
+  @Input() infoProfile?: InfoProfile
 
 
 }

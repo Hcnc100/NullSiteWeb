@@ -13,7 +13,7 @@ import { Terms } from 'src/app/models/Terms';
 })
 export class TermsComponent implements OnInit {
 
-  termsProject!: Observable<Terms | null>;
+  termsProject?: Observable<Terms | null>;
   isLoading = true;
 
   constructor(
@@ -42,7 +42,6 @@ export class TermsComponent implements OnInit {
   }
 
   getSafeContent(content: string) {
-    console.log(content);
     return this.sanitizer.bypassSecurityTrustHtml(content);
   }
 

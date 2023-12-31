@@ -8,12 +8,10 @@ import { AnimationOptions } from "ngx-lottie";
 })
 export class LoadingComponent implements OnInit {
 
-  @Input() pathArg: string | undefined;
+  @Input() pathArg?: string;
 
-  options: AnimationOptions | undefined;
+  options?: AnimationOptions;
 
-  constructor() {
-  }
 
   ngOnInit(): void {
     this.options = {

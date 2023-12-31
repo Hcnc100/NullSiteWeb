@@ -6,12 +6,7 @@ import { ResizeService } from "./services/resize/resize.service";
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   title = 'Ricardo Pájaro Coatl';
-  ngOnInit(): void {
-
-  }
-
-
 
 }

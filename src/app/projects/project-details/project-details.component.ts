@@ -1,8 +1,8 @@
-import {Project} from "../../models/Project";
-import {DialogRef} from '@ngneat/dialog';
-import {Gallery, GalleryItem, ImageItem} from "ng-gallery";
-import {faGithub} from "@fortawesome/free-brands-svg-icons";
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import { Project } from "../../models/Project";
+import { DialogRef } from '@ngneat/dialog';
+import { Gallery, GalleryItem, ImageItem } from "ng-gallery";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-project-details',
@@ -10,7 +10,7 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
   styleUrls: ['./project-details.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProjectDetailsComponent implements OnInit {
+export class ProjectDetailsComponent {
 
   projectDetails: Project
   images: GalleryItem[];
@@ -20,13 +20,10 @@ export class ProjectDetailsComponent implements OnInit {
   constructor(public ref: DialogRef<Project, boolean>, private gallery: Gallery) {
     this.projectDetails = ref.data
     this.images = this.projectDetails.gallery.map(urlImg =>
-      new ImageItem({src: urlImg, thumb: urlImg})
+      new ImageItem({ src: urlImg, thumb: urlImg })
     );
     const galleryProject = gallery.ref(this.galleryId);
     galleryProject.load(this.images)
-  }
-
-  ngOnInit(): void {
   }
 
 }
