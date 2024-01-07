@@ -1,7 +1,7 @@
 import { Project } from "../../models/Project";
 import { DialogRef } from '@ngneat/dialog';
 import { Gallery, GalleryItem, ImageItem } from "ng-gallery";
-import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { faGithub, faGooglePlay } from "@fortawesome/free-brands-svg-icons";
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
 @Component({
@@ -14,7 +14,8 @@ export class ProjectDetailsComponent {
 
   projectDetails: Project
   images: GalleryItem[];
-  icon = faGithub;
+  iconGit = faGithub;
+  iconPlay = faGooglePlay;
   galleryId: string = "galleryProject"
 
   constructor(public ref: DialogRef<Project, boolean>, private gallery: Gallery) {

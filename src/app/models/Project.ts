@@ -4,5 +4,6 @@ export interface Project {
   readonly id: string;
   readonly name: string;
   readonly urlRepo: string;
+  readonly urlPlay: string;
   readonly gallery: string[];
 }
