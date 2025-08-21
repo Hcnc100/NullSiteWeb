@@ -11,7 +11,7 @@ export class PersonalLinksComponent {
 
   readonly listSocialLink: SocialLink[];
 
-  constructor(private personalInfo: PersonalInfoService) {
+  constructor(personalInfo: PersonalInfoService) {
     this.listSocialLink = personalInfo.listSocialLink;
   }
 

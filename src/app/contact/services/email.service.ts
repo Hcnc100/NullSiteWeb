@@ -1,7 +1,7 @@
-import {Observable} from "rxjs";
-import {Email} from "../../models/Email";
-import {Injectable} from '@angular/core';
-import {collectionNames} from "../../../utils/Constants";
+import { Observable } from "rxjs";
+import { Email } from "../../models/Email";
+import { Injectable } from '@angular/core';
+import { collectionNames } from "../../../utils/Constants";
 import {
   addDoc,
   collection,
@@ -27,7 +27,8 @@ export class EmailService {
   async sendNewEmail(email: Email) {
     await addDoc(this.emailsCollection, {
       ...email,
-      timestamp: serverTimestamp()
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
     })
   }
 }
