@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {RouterLinkWithHref} from "@angular/router";
+import {RouterLink} from "@angular/router";
 import {NavbarComponent} from './navbar/navbar.component';
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 
@@ -15,7 +15,7 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
   imports: [
     CommonModule,
     FontAwesomeModule,
-    RouterLinkWithHref
+    RouterLink
   ]
 })
 export class NavigationModule {
