@@ -5,10 +5,11 @@ import { faGithub, faGooglePlay } from "@fortawesome/free-brands-svg-icons";
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-project-details',
-  templateUrl: './project-details.component.html',
-  styleUrls: ['./project-details.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-project-details',
+    templateUrl: './project-details.component.html',
+    styleUrls: ['./project-details.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ProjectDetailsComponent {
 

@@ -8,9 +8,10 @@ import { Observable } from "rxjs";
 import { ErrorAndMessage } from "src/app/models/ErrorAndMessage";
 
 @Component({
-  selector: 'app-form-contact',
-  templateUrl: './form-contact.component.html',
-  styleUrls: ['./form-contact.component.scss']
+    selector: 'app-form-contact',
+    templateUrl: './form-contact.component.html',
+    styleUrls: ['./form-contact.component.scss'],
+    standalone: false
 })
 export class FormContactComponent {
 

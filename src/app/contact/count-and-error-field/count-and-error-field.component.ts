@@ -3,9 +3,10 @@ import { FormControl } from '@angular/forms';
 import { ErrorAndMessage } from 'src/app/models/ErrorAndMessage';
 
 @Component({
-  selector: 'app-count-and-error-field',
-  templateUrl: './count-and-error-field.component.html',
-  styleUrls: ['./count-and-error-field.component.scss']
+    selector: 'app-count-and-error-field',
+    templateUrl: './count-and-error-field.component.html',
+    styleUrls: ['./count-and-error-field.component.scss'],
+    standalone: false
 })
 export class CountAndErrorFieldComponent {
 

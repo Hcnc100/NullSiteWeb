@@ -5,9 +5,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CertificatesService } from "../services/certificates.service";
 
 @Component({
-  selector: 'app-certificate',
-  templateUrl: './certificate.component.html',
-  styleUrls: ['./certificate.component.scss']
+    selector: 'app-certificate',
+    templateUrl: './certificate.component.html',
+    styleUrls: ['./certificate.component.scss'],
+    standalone: false
 })
 export class CertificateComponent implements OnInit, OnDestroy {
 

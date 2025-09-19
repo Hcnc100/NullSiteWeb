@@ -3,9 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { ResizeService } from "../../services/resize/resize.service";
 
 @Component({
-  selector: 'app-image-contact',
-  templateUrl: './image-contact.component.html',
-  styleUrls: ['./image-contact.component.scss']
+    selector: 'app-image-contact',
+    templateUrl: './image-contact.component.html',
+    styleUrls: ['./image-contact.component.scss'],
+    standalone: false
 })
 export class ImageContactComponent {
 
