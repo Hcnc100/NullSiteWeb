@@ -2,16 +2,21 @@ import { Email } from "../../models/Email";
 import { ToastrService } from "ngx-toastr";
 import { Component, OnInit } from '@angular/core';
 import { EmailService } from "../services/email.service";
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ResizeService } from "src/app/services/resize/resize.service";
 import { Observable } from "rxjs";
 import { ErrorAndMessage } from "src/app/models/ErrorAndMessage";
+import { CountAndErrorFieldComponent } from "../count-and-error-field/count-and-error-field.component";
 
 @Component({
-    selector: 'app-form-contact',
-    templateUrl: './form-contact.component.html',
-    styleUrls: ['./form-contact.component.scss'],
-    standalone: false
+  selector: 'app-form-contact',
+  templateUrl: './form-contact.component.html',
+  styleUrls: ['./form-contact.component.scss'],
+  standalone: true,
+  imports: [
+    CountAndErrorFieldComponent,
+    ReactiveFormsModule
+  ]
 })
 export class FormContactComponent {
 
