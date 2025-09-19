@@ -11,7 +11,7 @@ import { RouterOutlet } from '@angular/router';
   styleUrls: ['./app.component.scss'],
   standalone: true,
   imports: [
-    BrowserModule,
+    CommonModule,
     FontAwesomeModule,
     NavbarComponent,
     RouterOutlet

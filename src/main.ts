@@ -18,6 +18,7 @@ import { CustomReuseStrategy } from './app/cache-route-reuse.strategy';
 import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { appRoutes } from './app/app.routes';
 import { GalleryModule } from 'ng-gallery';
+import { ToastrModule } from 'ngx-toastr';
 
 
 if (environment.production) {
@@ -27,7 +28,13 @@ if (environment.production) {
 
 bootstrapApplication(AppComponent, {
   providers: [
-    importProvidersFrom(GalleryModule),
+    importProvidersFrom(
+      GalleryModule,
+      ToastrModule.forRoot({
+        positionClass: 'toast-bottom-right',
+        preventDuplicates: true,
+      })
+    ),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAnalytics(() => getAnalytics()),
     provideDatabase(() => getDatabase()),
@@ -37,6 +44,6 @@ bootstrapApplication(AppComponent, {
     provideRouter(appRoutes),
     ScreenTrackingService,
     UserTrackingService,
-    { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }
+    //{ provide: RouteReuseStrategy, useClass: CustomReuseStrategy }
   ]
 }).catch(err => console.error(err));
