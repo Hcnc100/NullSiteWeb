@@ -1,21 +1,18 @@
-<ng-container *ngIf="(listProjectsAsync | async) as listProjects; else animateLoad">
-
+@if ((listProjectsAsync | async); as listProjects) {
   <div class="container-projects">
     <h3>Projects</h3>
-
     <div [id]="listProjectId" class="container-list-projects">
-      <ng-container *ngFor="let project of listProjects">
+      @for (project of listProjects; track project) {
         <app-card-project
           (click)="clickOnProject(project)"
           [project]="project"
           class="item-project"
         ></app-card-project>
-      </ng-container>
+      }
     </div>
   </div>
-</ng-container>
-
-<ng-template #animateLoad>
+} @else {
   <app-loading [pathArg]="'/assets/loading3.json'"></app-loading>
-</ng-template>
+}
+
 

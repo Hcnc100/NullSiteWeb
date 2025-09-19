@@ -1,28 +1,29 @@
-<ng-container *ngIf="(currentIdSection|async) as currentIdSection">
-  <nav class="home-navbar" *ngIf="listIdsSections.includes(currentIdSection);else seccionBack">
-
-    <!-- icon menu -->
-    <div (click)="onClickMobile()" *ngIf="isMobile" class="container-icon">
-      <fa-icon [icon]="iconMenu" class="icon-menu"></fa-icon>
-    </div>
-
-    <!-- container links navigation -->
-    <ul *ngIf="!(isGoneMenu && isMobile)" class="container-links-menu" id="navigation-links">
-      <ng-container *ngFor="let idSection of listIdsSections">
-        <li [ngClass]="{'section-active': currentIdSection== idSection}">
-          <a (click)="hiddenMenuIfNeed()" [routerLink]="idSection">{{idSection}}</a>
-        </li>
-      </ng-container>
-    </ul>
-  </nav>
-
-  <!-- icon back -->
-  <ng-template #seccionBack>
+@if ((currentIdSection|async); as currentIdSection) {
+  @if (listIdsSections.includes(currentIdSection)) {
+    <nav class="home-navbar">
+      <!-- icon menu -->
+      @if (isMobile) {
+        <div (click)="onClickMobile()" class="container-icon">
+          <fa-icon [icon]="iconMenu" class="icon-menu"></fa-icon>
+        </div>
+      }
+      <!-- container links navigation -->
+      @if (!(isGoneMenu && isMobile)) {
+        <ul class="container-links-menu" id="navigation-links">
+          @for (idSection of listIdsSections; track idSection) {
+            <li [ngClass]="{'section-active': currentIdSection== idSection}">
+              <a (click)="hiddenMenuIfNeed()" [routerLink]="idSection">{{idSection}}</a>
+            </li>
+          }
+        </ul>
+      }
+    </nav>
+  } @else {
     <nav class="back-navbar">
       <div (click)="onClickBack()" class="container-icon">
         <fa-icon [icon]="iconBack" class="icon-menu"></fa-icon>
       </div>
     </nav>
-
-  </ng-template>
-</ng-container>
+  }
+  <!-- icon back -->
+}

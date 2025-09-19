@@ -1,13 +1,16 @@
-<div *ngIf="control && errorsList" [ngClass]="control.touched && control.errors ? 'count-and-error' : 'only-count'">
-    <ng-container class="container-message-error" *ngIf="control.touched && control.errors as error">
-
-        <ng-container *ngFor="let currentError of errorsList">
-            <span class="error-field" *ngIf="error[currentError.error]">{{currentError.message}}</span>
-        </ng-container>
-
-    </ng-container>
-
+@if (control && errorsList) {
+  <div [ngClass]="control.touched && control.errors ? 'count-and-error' : 'only-count'">
+    @if (control.touched && control.errors; as error) {
+      <ng-container class="container-message-error">
+        @for (currentError of errorsList; track currentError) {
+          @if (error[currentError.error]) {
+            <span class="error-field">{{currentError.message}}</span>
+          }
+        }
+      </ng-container>
+    }
     <span [ngClass]="{'error-field': control.touched && control.errors}">
-        {{(control.value?.length ?? 0) + '/' + maxCount}}
+      {{(control.value?.length ?? 0) + '/' + maxCount}}
     </span>
-</div>
+  </div>
+}

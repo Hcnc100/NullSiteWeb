@@ -7,23 +7,26 @@
   <p>{{projectDetails.description}}</p>
 
 
-  <div *ngIf="images.length !=0 ">
-    <h3>Gallery</h3>
-    <div class="container-images">
-      <ng-container *ngFor="let img of images;let index=index">
-        <app-img-details-project [gallery]="galleryId" [indexScreenshots]="index" [lightbox]="index"
+  @if (images.length !=0 ) {
+    <div>
+      <h3>Gallery</h3>
+      <div class="container-images">
+        @for (img of images; track img; let index = $index) {
+          <app-img-details-project [gallery]="galleryId" [indexScreenshots]="index" [lightbox]="index"
           [urlImgProject]="img.data.src"></app-img-details-project>
-      </ng-container>
+        }
+      </div>
     </div>
-
-  </div>
+  }
   <div class="container-buttons">
     <a class="button-github" href="{{projectDetails.urlRepo}}" target="_blank">
       <fa-icon [icon]="iconGit"></fa-icon>
-      Go to Project</a>
-    <a class="button-github" href="{{projectDetails.urlPlay}}" target="_blank" *ngIf="projectDetails.urlPlay">
-      <fa-icon [icon]="iconPlay"></fa-icon>
+    Go to Project</a>
+    @if (projectDetails.urlPlay) {
+      <a class="button-github" href="{{projectDetails.urlPlay}}" target="_blank">
+        <fa-icon [icon]="iconPlay"></fa-icon>
       Go to Demo</a>
+    }
   </div>
 
 
