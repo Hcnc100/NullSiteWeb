@@ -12,12 +12,18 @@ import {
   faJsSquare,
   faPython
 } from "@fortawesome/free-brands-svg-icons";
+import { SkillCardComponent } from "../skill-card/skill-card.component";
+import { CommonModule } from "@angular/common";
 
 @Component({
-    selector: 'app-skills',
-    templateUrl: './skills.component.html',
-    styleUrls: ['./skills.component.scss'],
-    standalone: false
+  selector: 'app-skills',
+  templateUrl: './skills.component.html',
+  styleUrls: ['./skills.component.scss'],
+  standalone: true,
+  imports: [
+    SkillCardComponent,
+    CommonModule
+  ]
 })
 export class SkillsComponent {
 

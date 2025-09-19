@@ -6,11 +6,11 @@ import { Observable, tap, switchMap, of, catchError, finalize } from 'rxjs';
 import { Terms } from 'src/app/models/Terms';
 
 @Component({
-    selector: 'app-terms',
-    templateUrl: './terms.component.html',
-    styleUrls: ['./terms.component.scss'],
-    encapsulation: ViewEncapsulation.None,
-    standalone: false
+  selector: 'app-terms',
+  templateUrl: './terms.component.html',
+  styleUrls: ['./terms.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  standalone: true
 })
 export class TermsComponent implements OnInit {
 
