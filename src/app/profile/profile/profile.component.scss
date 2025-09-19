@@ -1,7 +1,7 @@
 @use "../../scss/variables_global";
-@import "src/app/scss/mixin_globals";
-@import "scss/description_style";
-@import "scss/photo-profile-style";
+@use "index" as *;
+@use "scss/description_style";
+@use "scss/photo-profile-style";
 
 .container-profile {
   background-image: url("/assets/background-profile.svg");

@@ -1,4 +1,4 @@
-@import "src/app/scss/mixin_globals";
+@use "index" as *;
 
 .container-certificate {
   @include size-section;
