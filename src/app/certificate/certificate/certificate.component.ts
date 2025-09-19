@@ -3,12 +3,22 @@ import { map, Observable, Subject, Subscription, takeUntil } from "rxjs";
 import { Certificate } from "../../models/Certificate";
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CertificatesService } from "../services/certificates.service";
+import { ItemCertificateComponent } from "../item-certificate/item-certificate.component";
+import { LoadingComponent } from "src/app/share/loading/loading.component";
+import { AsyncPipe } from "@angular/common";
+import { LightboxModule } from "ng-gallery/lightbox";
 
 @Component({
   selector: 'app-certificate',
   templateUrl: './certificate.component.html',
   styleUrls: ['./certificate.component.scss'],
-  standalone: true
+  standalone: true,
+  imports: [
+    ItemCertificateComponent,
+    LoadingComponent,
+    AsyncPipe,
+    LightboxModule
+  ],
 })
 export class CertificateComponent implements OnInit, OnDestroy {
 

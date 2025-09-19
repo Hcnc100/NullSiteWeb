@@ -5,12 +5,20 @@ import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { Project } from "../../models/Project";
 import { ProjectsService } from "../services/projects.service";
 import { Observable } from "rxjs";
+import { CardProjectComponent } from '../card-project/card-project.component';
+import { LoadingComponent } from 'src/app/share/loading/loading.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
-    selector: 'app-projects',
-    templateUrl: './projects.component.html',
-    styleUrls: ['./projects.component.scss'],
-    standalone: false
+  selector: 'app-projects',
+  templateUrl: './projects.component.html',
+  styleUrls: ['./projects.component.scss'],
+  standalone: true,
+  imports: [
+    CardProjectComponent,
+    LoadingComponent,
+    CommonModule
+  ]
 })
 export class ProjectsComponent {
 

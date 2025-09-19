@@ -1,15 +1,24 @@
 import { Project } from "../../models/Project";
 import { DialogRef } from '@ngneat/dialog';
-import { Gallery, GalleryItem, ImageItem } from "ng-gallery";
+import { Gallery, GalleryItem, GalleryModule, ImageItem } from "ng-gallery";
+import { LightboxModule } from 'ng-gallery/lightbox';
 import { faGithub, faGooglePlay } from "@fortawesome/free-brands-svg-icons";
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { ImgDetailsProjectComponent } from "../img-details-project/img-details-project.component";
 
 @Component({
-    selector: 'app-project-details',
-    templateUrl: './project-details.component.html',
-    styleUrls: ['./project-details.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'app-project-details',
+  templateUrl: './project-details.component.html',
+  styleUrls: ['./project-details.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    FaIconComponent,
+    ImgDetailsProjectComponent,
+    GalleryModule,
+    LightboxModule
+  ]
 })
 export class ProjectDetailsComponent {
 
@@ -28,4 +37,8 @@ export class ProjectDetailsComponent {
     galleryProject.load(this.images)
   }
 
+
+  getImgUrl(src?: string | { url: string; type: string }[]): string | undefined {
+    return typeof src === 'string' ? src : undefined;
+  }
 }

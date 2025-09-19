@@ -23,7 +23,7 @@ import { LoadingComponent } from "src/app/share/loading/loading.component";
 })
 export class ProfileComponent {
 
-  infoProfileAsync: Observable<InfoProfile>
+  infoProfileAsync: Observable<InfoProfile | undefined>;
 
   constructor(private personalInfo: PersonalInfoService) {
     this.infoProfileAsync = this.personalInfo.infoProfile

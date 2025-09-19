@@ -1,11 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AnimationOptions } from "ngx-lottie";
+import { AnimationOptions, LottieComponent } from "ngx-lottie";
 
 @Component({
   selector: 'app-loading',
   templateUrl: './loading.component.html',
   styleUrls: ['./loading.component.scss'],
-  standalone: true
+  standalone: true,
+  imports: [LottieComponent]
 })
 export class LoadingComponent implements OnInit {
 

@@ -13,7 +13,7 @@
       <div class="container-images">
         @for (img of images; track img; let index = $index) {
           <app-img-details-project [gallery]="galleryId" [indexScreenshots]="index" [lightbox]="index"
-          [urlImgProject]="img.data.src"></app-img-details-project>
+          [urlImgProject]="getImgUrl(img.data?.src)"></app-img-details-project>
         }
       </div>
     </div>

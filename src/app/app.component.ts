@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { ResizeService } from "./services/resize/resize.service";
+import { Component } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { AppRoutingModule } from './app-routing.module';
 import { NavbarComponent } from './navigation/navbar/navbar.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { CommonModule } from '@angular/common';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -12,9 +12,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
   standalone: true,
   imports: [
     BrowserModule,
-    AppRoutingModule,
     FontAwesomeModule,
     NavbarComponent,
+    RouterOutlet
   ],
 })
 export class AppComponent {

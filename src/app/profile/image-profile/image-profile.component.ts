@@ -1,11 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AnimationOptions } from "ngx-lottie";
+import { AnimationOptions, LottieComponent } from "ngx-lottie";
 
 @Component({
   selector: 'app-image-profile',
   templateUrl: './image-profile.component.html',
   styleUrls: ['./image-profile.component.scss'],
-  standalone: true
+  standalone: true,
+  imports: [
+    LottieComponent
+  ]
 })
 export class ImageProfileComponent {
 

@@ -15,8 +15,9 @@ import { getAuth } from 'firebase/auth';
 import { environment } from './environments/environment';
 import { provideRouter, RouteReuseStrategy } from '@angular/router';
 import { CustomReuseStrategy } from './app/cache-route-reuse.strategy';
-import { enableProdMode } from '@angular/core';
+import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { appRoutes } from './app/app.routes';
+import { GalleryModule } from 'ng-gallery';
 
 
 if (environment.production) {
@@ -26,6 +27,7 @@ if (environment.production) {
 
 bootstrapApplication(AppComponent, {
   providers: [
+    importProvidersFrom(GalleryModule),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAnalytics(() => getAnalytics()),
     provideDatabase(() => getDatabase()),

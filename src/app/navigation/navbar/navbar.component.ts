@@ -7,12 +7,16 @@ import { ResizeService } from 'src/app/services/resize/resize.service';
 import { Observable, Subject, takeUntil } from "rxjs";
 import { navigatorSections } from "../../../utils/Constants";
 import { NavigatorServices } from "../services/navigator.service";
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
-  standalone: true
+  standalone: true,
+  imports: [FaIconComponent, CommonModule, RouterLink]
 })
 export class NavbarComponent implements OnInit {
 

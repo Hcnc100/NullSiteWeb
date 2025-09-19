@@ -1,4 +1,6 @@
-@use "src/app/contact/contact/scss/mixins-contact";
+@use "../../contact/contact/scss/mixins-contact" as *;
+@use "index" as *;
+
 
 .container-image-contact {
   display: flex;

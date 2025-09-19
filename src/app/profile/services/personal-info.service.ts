@@ -35,11 +35,12 @@ export class PersonalInfoService {
     }
   ];
 
-  readonly infoProfile: Observable<InfoProfile>;
+  readonly infoProfile: Observable<InfoProfile | undefined>;
 
   constructor(private firestore: Firestore) {
     this.infoProfile = docData<InfoProfile>(
       doc(this.firestore, 'infoProfile', "nullPointer") as DocumentReference<InfoProfile>
     );
+
   }
 }

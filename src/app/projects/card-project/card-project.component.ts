@@ -2,10 +2,10 @@ import { Project } from "../../models/Project";
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-    selector: 'app-card-project',
-    templateUrl: './card-project.component.html',
-    styleUrls: ['./card-project.component.scss'],
-    standalone: false
+  selector: 'app-card-project',
+  templateUrl: './card-project.component.html',
+  styleUrls: ['./card-project.component.scss'],
+  standalone: true
 })
 export class CardProjectComponent {
 
