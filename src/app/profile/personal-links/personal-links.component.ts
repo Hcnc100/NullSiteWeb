@@ -3,10 +3,10 @@ import { SocialLink } from "../../models/SocialLink";
 import { PersonalInfoService } from "../services/personal-info.service";
 
 @Component({
-    selector: 'app-personal-links',
-    templateUrl: './personal-links.component.html',
-    styleUrls: ['./personal-links.component.scss'],
-    standalone: false
+  selector: 'app-personal-links',
+  templateUrl: './personal-links.component.html',
+  styleUrls: ['./personal-links.component.scss'],
+  standalone: true
 })
 export class PersonalLinksComponent {
 
