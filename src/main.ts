@@ -13,9 +13,10 @@ import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { getAuth } from 'firebase/auth';
 import { environment } from './environments/environment';
-import { RouteReuseStrategy } from '@angular/router';
+import { provideRouter, RouteReuseStrategy } from '@angular/router';
 import { CustomReuseStrategy } from './app/cache-route-reuse.strategy';
 import { enableProdMode } from '@angular/core';
+import { appRoutes } from './app/app.routes';
 
 
 if (environment.production) {
@@ -31,6 +32,7 @@ bootstrapApplication(AppComponent, {
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
     provideAuth(() => getAuth()),
+    provideRouter(appRoutes),
     ScreenTrackingService,
     UserTrackingService,
     { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }
