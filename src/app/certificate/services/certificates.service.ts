@@ -1,4 +1,4 @@
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 import { Injectable } from '@angular/core';
 import { Certificate } from "../../models/Certificate";
 import { collectionNames } from "../../../utils/Constants";
@@ -23,6 +23,6 @@ export class CertificatesService {
    */
   constructor(firestore: Firestore) {
     const certificateCollections = collection(firestore, collectionNames.certificateCollection) as CollectionReference<Certificate>
-    this.listCertificates = collectionData(certificateCollections);
+    this.listCertificates = of([]);
   }
 }

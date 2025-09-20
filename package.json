@@ -26,11 +26,11 @@
     "@fortawesome/free-regular-svg-icons": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@ngneat/dialog": "^2.1.1",
-    "firebase": "^12.3.0",
+    "firebase": "^11.0.0",
     "lottie-web": "^5.9.6",
     "ng-gallery": "^12.0.0",
     "ngx-lottie": "^20.0.0",
-    "ngx-toastr": "^15.2.1",
+    "ngx-toastr": "^19.1.0",
     "rxjs": "7.8",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.1"
@@ -47,6 +47,7 @@
     "karma-coverage": "~2.0.3",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
+    "rxfire": "6.1.0",
     "typescript": "~5.8.3"
   }
 }

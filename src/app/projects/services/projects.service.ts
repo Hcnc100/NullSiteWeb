@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {Observable} from "rxjs";
-import {collection, collectionData, CollectionReference, Firestore} from "@angular/fire/firestore";
-import {Project} from "../../models/Project";
-import {collectionNames} from "../../../utils/Constants";
+import { Injectable } from '@angular/core';
+import { Observable, of } from "rxjs";
+import { collection, collectionData, CollectionReference, Firestore } from "@angular/fire/firestore";
+import { Project } from "../../models/Project";
+import { collectionNames } from "../../../utils/Constants";
 
 
 @Injectable({
@@ -14,6 +14,6 @@ export class ProjectsService {
 
   constructor(private firestore: Firestore) {
     this.projectCollections = collection(firestore, collectionNames.projectCollections) as CollectionReference<Project>
-    this.listProjects = collectionData(this.projectCollections);
+    this.listProjects = of([]);
   }
 }

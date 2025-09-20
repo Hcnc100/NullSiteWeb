@@ -1,4 +1,4 @@
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 import { Injectable } from '@angular/core';
 import { SocialLink } from "../../models/SocialLink";
 import { InfoProfile } from "../../models/InfoProfile";
@@ -42,5 +42,6 @@ export class PersonalInfoService {
       doc(this.firestore, 'infoProfile', "nullPointer") as DocumentReference<InfoProfile>
     );
 
+    this.infoProfile = of(undefined);
   }
 }
