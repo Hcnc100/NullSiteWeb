@@ -12,7 +12,7 @@ export class EmailService {
   readonly emailList: Observable<Email[]>;
   private readonly emailsCollection: CollectionReference<Email>;
 
-  constructor(public firestore: Firestore) {
+  constructor(firestore: Firestore) {
     this.emailsCollection = collection(firestore, collectionNames.emailCollection) as CollectionReference<Email>;
     this.emailList = collectionData(this.emailsCollection);
   }

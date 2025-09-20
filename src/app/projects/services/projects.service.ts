@@ -12,7 +12,7 @@ export class ProjectsService {
   readonly listProjects: Observable<Project[]>;
   private readonly projectCollections: CollectionReference<Project>;
 
-  constructor(private firestore: Firestore) {
+  constructor(firestore: Firestore) {
     this.projectCollections = collection(firestore, collectionNames.projectCollections) as CollectionReference<Project>
     this.listProjects = collectionData(this.projectCollections);
   }
