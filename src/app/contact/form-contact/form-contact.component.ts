@@ -7,6 +7,8 @@ import { ResizeService } from "src/app/services/resize/resize.service";
 import { Observable } from "rxjs";
 import { ErrorAndMessage } from "src/app/models/ErrorAndMessage";
 import { CountAndErrorFieldComponent } from "../count-and-error-field/count-and-error-field.component";
+import { RecaptchaFormsModule, RecaptchaModule } from "ng-recaptcha";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: 'app-form-contact',
@@ -15,7 +17,9 @@ import { CountAndErrorFieldComponent } from "../count-and-error-field/count-and-
   standalone: true,
   imports: [
     CountAndErrorFieldComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RecaptchaModule,
+    RecaptchaFormsModule
   ]
 })
 export class FormContactComponent {
@@ -74,6 +78,7 @@ export class FormContactComponent {
     ]],
     token: ['', Validators.required]
   });
+  siteKey: string = environment.siteKey;
 
   get nameControl() {
     return this.formContact.controls['name'];
