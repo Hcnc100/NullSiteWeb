@@ -14,6 +14,6 @@ export class ProjectsService {
 
   constructor(private firestore: Firestore) {
     this.projectCollections = collection(firestore, collectionNames.projectCollections) as CollectionReference<Project>
-    this.listProjects = of([]);
+    this.listProjects = collectionData(this.projectCollections);
   }
 }

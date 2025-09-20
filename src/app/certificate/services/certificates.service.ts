@@ -23,6 +23,6 @@ export class CertificatesService {
    */
   constructor(firestore: Firestore) {
     const certificateCollections = collection(firestore, collectionNames.certificateCollection) as CollectionReference<Certificate>
-    this.listCertificates = of([]);
+    this.listCertificates = collectionData(certificateCollections);
   }
 }

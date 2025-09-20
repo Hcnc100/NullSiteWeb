@@ -4,4 +4,6 @@ export interface Email {
   readonly subject: string;
   readonly message: string;
   readonly isOpen: boolean;
+  readonly createdAt?: any;
+  readonly updatedAt?: any;
 }

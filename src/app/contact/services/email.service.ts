@@ -10,20 +10,18 @@ import { collectionNames } from 'src/utils/Constants';
 export class EmailService {
 
   readonly emailList: Observable<Email[]>;
-  private readonly emailsCollection: CollectionReference;
+  private readonly emailsCollection: CollectionReference<Email>;
 
   constructor(public firestore: Firestore) {
-    console.log('Firestore instance:', this.firestore); // Debug line to check Firestore instance
     this.emailsCollection = collection(firestore, collectionNames.emailCollection) as CollectionReference<Email>;
-    this.emailList = of([]);
+    this.emailList = collectionData(this.emailsCollection);
   }
 
   async sendNewEmail(email: Email) {
-    //   await addDoc(this.emailsCollection, {
-    //     ...email,
-    //     createdAt: serverTimestamp(),
-    //     updatedAt: serverTimestamp()
-    //   })
-    // }
+    await addDoc(this.emailsCollection, {
+      ...email,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    })
   }
 }

@@ -41,7 +41,5 @@ export class PersonalInfoService {
     this.infoProfile = docData<InfoProfile>(
       doc(this.firestore, 'infoProfile', "nullPointer") as DocumentReference<InfoProfile>
     );
-
-    this.infoProfile = of(undefined);
   }
 }
