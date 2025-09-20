@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { AppComponent } from './app/app.component';
 import { enableProdMode, importProvidersFrom } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, RouteReuseStrategy } from '@angular/router';
 
 import { environment } from './environments/environment';
 import { appRoutes } from './app/app.routes';
@@ -25,6 +25,7 @@ import { provideToastr } from 'ngx-toastr';
 import { DialogModule } from '@ngneat/dialog';
 import { provideLottieOptions } from 'ngx-lottie';
 import player from 'lottie-web';
+import { CustomReuseStrategy } from './app/cache-route-reuse.strategy';
 
 if (environment.production) {
   enableProdMode();
@@ -34,6 +35,9 @@ bootstrapApplication(AppComponent, {
   providers: [
     // Router
     provideRouter(appRoutes),
+
+    // 👇 Aquí agregas tu estrategia
+    { provide: RouteReuseStrategy, useClass: CustomReuseStrategy },
 
     // Firebase
     provideFirebaseApp(() => initializeApp(environment.firebase)),
