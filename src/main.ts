@@ -26,6 +26,7 @@ import { DialogModule } from '@ngneat/dialog';
 import { provideLottieOptions } from 'ngx-lottie';
 import player from 'lottie-web';
 import { CustomReuseStrategy } from './app/cache-route-reuse.strategy';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 if (environment.production) {
   enableProdMode();
@@ -39,6 +40,9 @@ bootstrapApplication(AppComponent, {
     // 👇 Aquí agregas tu estrategia
     { provide: RouteReuseStrategy, useClass: CustomReuseStrategy },
 
+
+
+
     // Firebase
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAnalytics(() => getAnalytics()),
@@ -50,6 +54,7 @@ bootstrapApplication(AppComponent, {
     UserTrackingService,
 
     // Gallery (no tiene provide*, se usa con importProvidersFrom)
+    provideAnimations(),
     importProvidersFrom(GalleryModule),
 
     // Toastr (versión standalone)
