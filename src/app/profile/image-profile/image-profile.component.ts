@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AnimationOptions, LottieComponent } from "ngx-lottie";
+import type { AnimationOptions} from "ngx-lottie";
+import { LottieComponent } from "ngx-lottie";
 
 @Component({
   selector: 'app-image-profile',

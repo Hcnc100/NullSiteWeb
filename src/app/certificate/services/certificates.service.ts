@@ -1,8 +1,10 @@
-import { Observable, of } from "rxjs";
+import type { Observable} from "rxjs";
+import { of } from "rxjs";
 import { Injectable } from '@angular/core';
-import { Certificate } from "../../models/Certificate";
+import type { Certificate } from "../../models/Certificate";
 import { collectionNames } from "../../../utils/Constants";
-import { collection, collectionData, CollectionReference, Firestore } from "@angular/fire/firestore";
+import type { CollectionReference, Firestore } from "@angular/fire/firestore";
+import { collection, collectionData } from "@angular/fire/firestore";
 
 /**
  * Service for managing certificates.

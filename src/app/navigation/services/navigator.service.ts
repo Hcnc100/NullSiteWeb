@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject, filter, takeUntil } from "rxjs";
-import { NavigationEnd, Router, RouterEvent } from "@angular/router";
+import type { Router} from "@angular/router";
+import { NavigationEnd, RouterEvent } from "@angular/router";
 import { defaultSection, getListSections } from "../../../utils/Constants";
 
 @Injectable({
@@ -9,7 +10,7 @@ import { defaultSection, getListSections } from "../../../utils/Constants";
 export class NavigatorServices {
 
   private readonly _currentSection = new BehaviorSubject<string>(defaultSection);
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
 
   /**
    * Constructs a new instance of the NavigatorServices class.

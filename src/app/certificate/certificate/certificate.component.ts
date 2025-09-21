@@ -1,8 +1,11 @@
-import { Gallery, ImageItem } from "ng-gallery";
-import { map, Observable, Subject, Subscription, takeUntil } from "rxjs";
-import { Certificate } from "../../models/Certificate";
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { CertificatesService } from "../services/certificates.service";
+import type { Gallery} from "ng-gallery";
+import { ImageItem } from "ng-gallery";
+import type { Observable, Subscription} from "rxjs";
+import { map, Subject, takeUntil } from "rxjs";
+import type { Certificate } from "../../models/Certificate";
+import type { OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import type { CertificatesService } from "../services/certificates.service";
 import { ItemCertificateComponent } from "../item-certificate/item-certificate.component";
 import { LoadingComponent } from "src/app/share/loading/loading.component";
 import { AsyncPipe } from "@angular/common";
@@ -31,7 +34,7 @@ export class CertificateComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
 
   constructor(
-    private gallery: Gallery,
+    private readonly gallery: Gallery,
     certificates: CertificatesService,
   ) {
     // * init gallery

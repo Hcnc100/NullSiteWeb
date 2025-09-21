@@ -1,4 +1,4 @@
-import {NavigatorSection} from "../app/models/NavigatorSection";
+import type {NavigatorSection} from "../app/models/NavigatorSection";
 
 export const collectionNames = {
   certificateCollection: "last-certificates",

@@ -1,11 +1,12 @@
-import { Email } from "../../models/Email";
-import { ToastrService } from "ngx-toastr";
+import type { Email } from "../../models/Email";
+import type { ToastrService } from "ngx-toastr";
 import { Component, OnInit } from '@angular/core';
-import { EmailService } from "../services/email.service";
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { ResizeService } from "src/app/services/resize/resize.service";
-import { Observable } from "rxjs";
-import { ErrorAndMessage } from "src/app/models/ErrorAndMessage";
+import type { EmailService } from "../services/email.service";
+import type { FormBuilder} from "@angular/forms";
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import type { ResizeService } from "src/app/services/resize/resize.service";
+import type { Observable } from "rxjs";
+import type { ErrorAndMessage } from "src/app/models/ErrorAndMessage";
 import { CountAndErrorFieldComponent } from "../count-and-error-field/count-and-error-field.component";
 import { RecaptchaFormsModule, RecaptchaModule } from "ng-recaptcha";
 import { environment } from "src/environments/environment";
@@ -97,9 +98,9 @@ export class FormContactComponent {
   }
 
   constructor(
-    private toast: ToastrService,
-    private formBuilder: FormBuilder,
-    private emailService: EmailService,
+    private readonly toast: ToastrService,
+    private readonly formBuilder: FormBuilder,
+    private readonly emailService: EmailService,
     resizeServices: ResizeService
   ) {
     this.isMobile = resizeServices.isMobileSize;

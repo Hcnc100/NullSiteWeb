@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ItemSkill } from "../../models/ItemSkill";
+import type { ItemSkill } from "../../models/ItemSkill";
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { CommonModule } from '@angular/common';
 

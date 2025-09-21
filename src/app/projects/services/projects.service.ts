@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from "rxjs";
-import { collection, collectionData, CollectionReference, Firestore } from "@angular/fire/firestore";
-import { Project } from "../../models/Project";
+import type { Observable} from "rxjs";
+import { of } from "rxjs";
+import type { CollectionReference, Firestore } from "@angular/fire/firestore";
+import { collection, collectionData } from "@angular/fire/firestore";
+import type { Project } from "../../models/Project";
 import { collectionNames } from "../../../utils/Constants";
 
 

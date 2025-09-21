@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { ErrorAndMessage } from 'src/app/models/ErrorAndMessage';
+import type { FormControl} from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import type { ErrorAndMessage } from 'src/app/models/ErrorAndMessage';
 
 @Component({
   selector: 'app-count-and-error-field',

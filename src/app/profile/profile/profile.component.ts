@@ -1,7 +1,7 @@
-import { Observable } from "rxjs";
+import type { Observable } from "rxjs";
 import { Component, OnInit } from '@angular/core';
-import { InfoProfile } from "../../models/InfoProfile";
-import { PersonalInfoService } from "../services/personal-info.service";
+import type { InfoProfile } from "../../models/InfoProfile";
+import type { PersonalInfoService } from "../services/personal-info.service";
 import { ImageProfileComponent } from "../image-profile/image-profile.component";
 import { CommonModule } from "@angular/common";
 import { PersonalLinksComponent } from "../personal-links/personal-links.component";
@@ -25,7 +25,7 @@ export class ProfileComponent {
 
   infoProfileAsync: Observable<InfoProfile | undefined>;
 
-  constructor(private personalInfo: PersonalInfoService) {
+  constructor(private readonly personalInfo: PersonalInfoService) {
     this.infoProfileAsync = this.personalInfo.infoProfile
   }
 

@@ -1,9 +1,11 @@
-import { Observable, of } from "rxjs";
+import type { Observable} from "rxjs";
+import { of } from "rxjs";
 import { Injectable } from '@angular/core';
-import { SocialLink } from "../../models/SocialLink";
-import { InfoProfile } from "../../models/InfoProfile";
-import { DocumentReference } from "@firebase/firestore";
-import { doc, docData, Firestore } from "@angular/fire/firestore";
+import type { SocialLink } from "../../models/SocialLink";
+import type { InfoProfile } from "../../models/InfoProfile";
+import type { DocumentReference } from "@firebase/firestore";
+import type { Firestore } from "@angular/fire/firestore";
+import { doc, docData } from "@angular/fire/firestore";
 import { faFacebookF, faGithub, faInstagram, faTwitter, faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 
 

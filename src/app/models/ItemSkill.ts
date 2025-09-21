@@ -1,4 +1,4 @@
-import { IconDefinition } from "@fortawesome/free-brands-svg-icons";
+import type { IconDefinition } from "@fortawesome/free-brands-svg-icons";
 
 export interface ItemSkill {
   readonly name: string;

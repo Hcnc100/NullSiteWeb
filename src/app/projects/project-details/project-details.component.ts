@@ -1,6 +1,7 @@
-import { Project } from "../../models/Project";
-import { DialogRef } from '@ngneat/dialog';
-import { Gallery, GalleryItem, GalleryModule, ImageItem } from "ng-gallery";
+import type { Project } from "../../models/Project";
+import type { DialogRef } from '@ngneat/dialog';
+import type { Gallery, GalleryItem} from "ng-gallery";
+import { GalleryModule, ImageItem } from "ng-gallery";
 import { LightboxModule } from 'ng-gallery/lightbox';
 import { faGithub, faGooglePlay } from "@fortawesome/free-brands-svg-icons";
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
@@ -28,7 +29,7 @@ export class ProjectDetailsComponent {
   iconPlay = faGooglePlay;
   galleryId: string = "galleryProject"
 
-  constructor(public ref: DialogRef<Project, boolean>, private gallery: Gallery) {
+  constructor(public ref: DialogRef<Project, boolean>, private readonly gallery: Gallery) {
     this.projectDetails = ref.data
     this.images = this.projectDetails.gallery.map(urlImg =>
       new ImageItem({ src: urlImg, thumb: urlImg })

@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { DialogService } from "@ngneat/dialog";
+import type { DialogService } from "@ngneat/dialog";
 import { ProjectDetailsComponent } from "../project-details/project-details.component";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
-import { Project } from "../../models/Project";
-import { ProjectsService } from "../services/projects.service";
-import { Observable } from "rxjs";
+import type { Project } from "../../models/Project";
+import type { ProjectsService } from "../services/projects.service";
+import type { Observable } from "rxjs";
 import { CardProjectComponent } from '../card-project/card-project.component';
 import { LoadingComponent } from 'src/app/share/loading/loading.component';
 import { CommonModule } from '@angular/common';
@@ -28,8 +28,8 @@ export class ProjectsComponent {
   listProjectsAsync: Observable<Project[]>;
 
   constructor(
-    private projectServices: ProjectsService,
-    private dialog: DialogService,
+    private readonly projectServices: ProjectsService,
+    private readonly dialog: DialogService,
   ) {
     this.listProjectsAsync = projectServices.listProjects
   }

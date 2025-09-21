@@ -1,12 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import type { OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   faBars,
   faArrowLeft
 } from "@fortawesome/free-solid-svg-icons";
-import { ResizeService } from 'src/app/services/resize/resize.service';
-import { Observable, Subject, takeUntil } from "rxjs";
+import type { ResizeService } from 'src/app/services/resize/resize.service';
+import type { Observable} from "rxjs";
+import { Subject, takeUntil } from "rxjs";
 import { navigatorSections } from "../../../utils/Constants";
-import { NavigatorServices } from "../services/navigator.service";
+import type { NavigatorServices } from "../services/navigator.service";
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -26,12 +28,12 @@ export class NavbarComponent implements OnInit {
   currentIdSection: Observable<string>;
   isGoneMenu = true;
   listIdsSections: string[];
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
 
 
   constructor(
-    private resizeService: ResizeService,
-    private navigator: NavigatorServices,
+    private readonly resizeService: ResizeService,
+    private readonly navigator: NavigatorServices,
   ) {
 
     // * the first section always is the home

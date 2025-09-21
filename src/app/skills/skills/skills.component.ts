@@ -1,7 +1,7 @@
-import { Observable } from "rxjs";
+import type { Observable } from "rxjs";
 import { Component, OnInit } from '@angular/core';
-import { ItemSkill } from "../../models/ItemSkill";
-import { ResizeService } from "../../services/resize/resize.service";
+import type { ItemSkill } from "../../models/ItemSkill";
+import type { ResizeService } from "../../services/resize/resize.service";
 import {
   faAndroid,
   faAngular,
@@ -79,7 +79,7 @@ export class SkillsComponent {
 
   isMobile: Observable<boolean>
 
-  constructor(private resizeServices: ResizeService) {
+  constructor(private readonly resizeServices: ResizeService) {
     this.isMobile = this.resizeServices.isMobileSize;
   }
 

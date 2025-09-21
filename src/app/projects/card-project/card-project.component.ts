@@ -1,4 +1,4 @@
-import { Project } from "../../models/Project";
+import type { Project } from "../../models/Project";
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({

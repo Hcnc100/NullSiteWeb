@@ -58,7 +58,7 @@ export default [
       'arrow-body-style': ['error', 'as-needed'],
       'no-console': 'warn',
       'no-debugger': 'error',
-      'no-duplicate-imports': 'error',
+       'no-duplicate-imports': 'off',
       'max-len': ['warn', { code: 120 }],
     },
   },

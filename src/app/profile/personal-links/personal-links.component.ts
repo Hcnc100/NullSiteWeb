@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { SocialLink } from "../../models/SocialLink";
-import { PersonalInfoService } from "../services/personal-info.service";
+import type { SocialLink } from "../../models/SocialLink";
+import type { PersonalInfoService } from "../services/personal-info.service";
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 @Component({

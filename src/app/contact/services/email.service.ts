@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, CollectionReference, collectionData, addDoc, serverTimestamp } from '@angular/fire/firestore';
-import { Observable, of } from 'rxjs';
-import { Email } from '../../models/Email';
+import type { Firestore, CollectionReference} from '@angular/fire/firestore';
+import { collection, collectionData, addDoc, serverTimestamp } from '@angular/fire/firestore';
+import type { Observable} from 'rxjs';
+import { of } from 'rxjs';
+import type { Email } from '../../models/Email';
 import { collectionNames } from 'src/utils/Constants';
 
 @Injectable({

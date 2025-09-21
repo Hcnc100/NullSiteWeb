@@ -7,10 +7,10 @@ const MOBILE_SIZE = 600;
   providedIn: 'root'
 })
 export class ResizeService {
-  private _isMobileSize = new BehaviorSubject<boolean>(window.innerWidth <= MOBILE_SIZE);
+  private readonly _isMobileSize = new BehaviorSubject<boolean>(window.innerWidth <= MOBILE_SIZE);
   isMobileSize = this._isMobileSize.asObservable();
 
-  private _widthSize = new BehaviorSubject<number>(window.innerWidth);
+  private readonly _widthSize = new BehaviorSubject<number>(window.innerWidth);
   widthSize = this._widthSize.asObservable();
 
   constructor() {

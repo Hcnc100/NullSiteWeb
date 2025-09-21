@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { InfoProfile } from "../../models/InfoProfile";
+import type { InfoProfile } from "../../models/InfoProfile";
 
 @Component({
   selector: 'app-description',

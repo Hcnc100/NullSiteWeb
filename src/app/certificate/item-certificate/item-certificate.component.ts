@@ -1,4 +1,4 @@
-import { Certificate } from "../../models/Certificate";
+import type { Certificate } from "../../models/Certificate";
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
