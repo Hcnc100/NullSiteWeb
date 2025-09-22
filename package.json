@@ -31,6 +31,7 @@
     "firebase": "^11.0.0",
     "lottie-web": "^5.9.6",
     "ng-gallery": "^12.0.0",
+    "ngx-captcha": "^14.0.0",
     "ngx-lottie": "^20.0.0",
     "ngx-toastr": "^19.1.0",
     "rxjs": "7.8",
