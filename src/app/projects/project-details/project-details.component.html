@@ -7,24 +7,24 @@
   <p>{{projectDetails.description}}</p>
 
 
-  @if (images.length !=0 ) {
-    <div>
-      <h3>Gallery</h3>
-      <div class="container-images">
-        @for (img of images; track img; let index = $index) {
-          <app-img-details-project [gallery]="galleryId" [indexScreenshots]="index" [lightbox]="index"
-          [urlImgProject]="getImgUrl(img.data?.src)"></app-img-details-project>
-        }
-      </div>
+  @if (images.length !== 0 ) {
+  <div>
+    <h3>Gallery</h3>
+    <div class="container-images">
+      @for (img of images; track img; let index = $index) {
+      <app-img-details-project [gallery]="galleryId" [indexScreenshots]="index" [lightbox]="index"
+        [urlImgProject]="getImgUrl(img.data?.src)"></app-img-details-project>
+      }
     </div>
+  </div>
   }
   <div class="container-buttons">
     <a class="button-github" href="{{projectDetails.urlRepo}}" target="_blank">
       <fa-icon [icon]="iconGit"></fa-icon>
-    Go to Project</a>
+      Go to Project</a>
     @if (projectDetails.urlPlay) {
-      <a class="button-github" href="{{projectDetails.urlPlay}}" target="_blank">
-        <fa-icon [icon]="iconPlay"></fa-icon>
+    <a class="button-github" href="{{projectDetails.urlPlay}}" target="_blank">
+      <fa-icon [icon]="iconPlay"></fa-icon>
       Go to Demo</a>
     }
   </div>

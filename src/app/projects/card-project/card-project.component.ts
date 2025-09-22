@@ -1,5 +1,5 @@
 import type { Project } from "../../models/Project";
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-card-project',
@@ -9,9 +9,6 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class CardProjectComponent {
 
-  @Input() project?: Project;
-
-  constructor() {
-  }
+  public readonly project = input.required<Project>();
 
 }

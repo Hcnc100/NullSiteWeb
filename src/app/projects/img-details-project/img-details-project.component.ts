@@ -1,5 +1,4 @@
-import type { OnInit } from '@angular/core';
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-img-details-project',
@@ -7,16 +6,11 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./img-details-project.component.scss'],
   standalone: true
 })
-export class ImgDetailsProjectComponent implements OnInit {
+export class ImgDetailsProjectComponent {
 
-  @Input() urlImgProject?: string;
-  @Input() indexScreenshots?: number;
+  public readonly urlImgProject = input.required<string>();
+  public readonly indexScreenshots = input.required<number>();
 
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
 
 
 }
