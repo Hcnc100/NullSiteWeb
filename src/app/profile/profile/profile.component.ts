@@ -1,7 +1,7 @@
 import type { Observable } from "rxjs";
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import type { InfoProfile } from "../../models/InfoProfile";
-import type { PersonalInfoService } from "../services/personal-info.service";
+import { PersonalInfoService } from "../services/personal-info.service";
 import { ImageProfileComponent } from "../image-profile/image-profile.component";
 import { CommonModule } from "@angular/common";
 import { PersonalLinksComponent } from "../personal-links/personal-links.component";
@@ -23,10 +23,8 @@ import { LoadingComponent } from "src/app/share/loading/loading.component";
 })
 export class ProfileComponent {
 
-  infoProfileAsync: Observable<InfoProfile | undefined>;
+  private readonly personalInfo: PersonalInfoService = inject(PersonalInfoService);
 
-  constructor(private readonly personalInfo: PersonalInfoService) {
-    this.infoProfileAsync = this.personalInfo.infoProfile
-  }
+  public infoProfileAsync: Observable<InfoProfile | undefined> = this.personalInfo.infoProfile;
 
 }

@@ -1,10 +1,9 @@
-import type { Observable} from "rxjs";
-import { of } from "rxjs";
-import { Injectable } from '@angular/core';
+import type { Observable } from "rxjs";
+import { inject, Injectable } from '@angular/core';
 import type { SocialLink } from "../../models/SocialLink";
 import type { InfoProfile } from "../../models/InfoProfile";
 import type { DocumentReference } from "@firebase/firestore";
-import type { Firestore } from "@angular/fire/firestore";
+import { Firestore } from "@angular/fire/firestore";
 import { doc, docData } from "@angular/fire/firestore";
 import { faFacebookF, faGithub, faInstagram, faTwitter, faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 
@@ -14,7 +13,7 @@ import { faFacebookF, faGithub, faInstagram, faTwitter, faWhatsapp } from "@fort
 })
 export class PersonalInfoService {
 
-  readonly listSocialLink: SocialLink[] = [
+  public readonly listSocialLink: SocialLink[] = [
     {
       icon: faGithub,
       link: 'https://github.com/Hcnc100',
@@ -37,11 +36,13 @@ export class PersonalInfoService {
     }
   ];
 
-  readonly infoProfile: Observable<InfoProfile | undefined>;
+  public readonly infoProfile: Observable<InfoProfile | undefined>;
 
-  constructor(firestore: Firestore) {
+  private readonly firestore: Firestore = inject(Firestore);
+
+  public constructor() {
     this.infoProfile = docData<InfoProfile>(
-      doc(firestore, 'infoProfile', "nullPointer") as DocumentReference<InfoProfile>
+      doc(this.firestore, 'infoProfile', "nullPointer") as DocumentReference<InfoProfile>
     );
   }
 }

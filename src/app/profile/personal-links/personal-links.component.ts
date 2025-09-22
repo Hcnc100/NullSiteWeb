@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import type { SocialLink } from "../../models/SocialLink";
-import type { PersonalInfoService } from "../services/personal-info.service";
+import { PersonalInfoService } from "../services/personal-info.service";
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 @Component({
@@ -12,11 +12,8 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 })
 export class PersonalLinksComponent {
 
-  readonly listSocialLink: SocialLink[];
+  private readonly personalInfo: PersonalInfoService = inject(PersonalInfoService);
 
-  constructor(personalInfo: PersonalInfoService) {
-    this.listSocialLink = personalInfo.listSocialLink;
-  }
-
+  public readonly listSocialLink: SocialLink[] = this.personalInfo.listSocialLink;
 
 }

@@ -1,8 +1,7 @@
-import { Injectable } from '@angular/core';
-import type { Firestore, CollectionReference} from '@angular/fire/firestore';
+import { inject, Injectable } from '@angular/core';
+import { Firestore, CollectionReference } from '@angular/fire/firestore';
 import { collection, collectionData, addDoc, serverTimestamp } from '@angular/fire/firestore';
-import type { Observable} from 'rxjs';
-import { of } from 'rxjs';
+import type { Observable } from 'rxjs';
 import type { Email } from '../../models/Email';
 import { collectionNames } from 'src/utils/Constants';
 
@@ -11,19 +10,21 @@ import { collectionNames } from 'src/utils/Constants';
 })
 export class EmailService {
 
-  readonly emailList: Observable<Email[]>;
+  private readonly firestore: Firestore = inject(Firestore);
+
+  public readonly emailList: Observable<Email[]>;
   private readonly emailsCollection: CollectionReference<Email>;
 
-  constructor(firestore: Firestore) {
-    this.emailsCollection = collection(firestore, collectionNames.emailCollection) as CollectionReference<Email>;
+  public constructor() {
+    this.emailsCollection = collection(this.firestore, collectionNames.emailCollection) as CollectionReference<Email>;
     this.emailList = collectionData(this.emailsCollection);
   }
 
-  async sendNewEmail(email: Email) {
+  public async sendNewEmail(email: Email): Promise<void> {
     await addDoc(this.emailsCollection, {
       ...email,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
-    })
+    });
   }
 }

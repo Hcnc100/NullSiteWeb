@@ -1,8 +1,6 @@
-@if (infoProfile) {
-  <div class="container-personal-info">
-    <h1>{{infoProfile.name}}</h1>
-    <p>{{infoProfile.profession}}</p>
-    <h2>About me</h2>
-    <p>{{infoProfile.description}}</p>
-  </div>
-}
+<div class="container-personal-info">
+  <h1>{{infoProfile().name}}</h1>
+  <p>{{infoProfile().profession}}</p>
+  <h2>About me</h2>
+  <p>{{infoProfile().description}}</p>
+</div>

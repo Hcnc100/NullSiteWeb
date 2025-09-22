@@ -3,7 +3,7 @@
     <nav class="home-navbar">
       <!-- icon menu -->
       @if (isMobile) {
-        <div (click)="onClickMobile()" class="container-icon">
+        <div (click)="onClickMobile()" (keyup.enter)="onClickMobile()" tabindex="0" class="container-icon" role="button" aria-label="Open menu">
           <fa-icon [icon]="iconMenu" class="icon-menu"></fa-icon>
         </div>
       }
@@ -11,7 +11,7 @@
       @if (!(isGoneMenu && isMobile)) {
         <ul class="container-links-menu" id="navigation-links">
           @for (idSection of listIdsSections; track idSection) {
-            <li [ngClass]="{'section-active': currentIdSection== idSection}">
+            <li [ngClass]="{'section-active': currentIdSection === idSection}">
               <a (click)="hiddenMenuIfNeed()" [routerLink]="idSection">{{idSection}}</a>
             </li>
           }

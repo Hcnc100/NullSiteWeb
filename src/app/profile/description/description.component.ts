@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, input } from '@angular/core';
 import type { InfoProfile } from "../../models/InfoProfile";
 
 @Component({
@@ -9,7 +9,7 @@ import type { InfoProfile } from "../../models/InfoProfile";
 })
 export class DescriptionComponent {
 
-  @Input() infoProfile?: InfoProfile
+  public readonly infoProfile = input.required<InfoProfile>();
 
 
 }
