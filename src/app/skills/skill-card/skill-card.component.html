@@ -1,8 +1,6 @@
-@if (itemSkill) {
-  <div class="container-icon">
-    <fa-icon [icon]="itemSkill.icon" [ngStyle]="{'color': itemSkill.color}" size="2x"
+<div class="container-icon">
+  <fa-icon [icon]="itemSkill().icon" [ngStyle]="{'color': itemSkill().color}" size="2x"
     [attr.aria-label]="itemSkill.name + ' icon'"></fa-icon>
-    <div class="spacer-row"></div>
-    <span>{{itemSkill.name}}</span>
-  </div>
-}
+  <div class="spacer-row"></div>
+  <span>{{itemSkill().name}}</span>
+</div>

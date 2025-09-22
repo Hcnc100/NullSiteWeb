@@ -1,7 +1,7 @@
 import type { Observable } from "rxjs";
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import type { ItemSkill } from "../../models/ItemSkill";
-import type { ResizeService } from "../../services/resize/resize.service";
+import { ResizeService } from "../../services/resize/resize.service";
 import {
   faAndroid,
   faAngular,
@@ -27,7 +27,9 @@ import { CommonModule } from "@angular/common";
 })
 export class SkillsComponent {
 
-  readonly listLanguages: ItemSkill[] = [
+  private readonly resizeServices: ResizeService = inject(ResizeService);
+
+  public readonly listLanguages: ItemSkill[] = [
     {
       name: "Python",
       icon: faPython,
@@ -59,7 +61,7 @@ export class SkillsComponent {
     },
   ]
 
-  readonly listTech: ItemSkill[] = [
+  public readonly listTech: ItemSkill[] = [
     {
       name: "Github",
       icon: faGithub,
@@ -77,13 +79,9 @@ export class SkillsComponent {
     }
   ]
 
-  isMobile: Observable<boolean>
+  public isMobile: Observable<boolean> = this.resizeServices.isMobileSize;
 
-  constructor(private readonly resizeServices: ResizeService) {
-    this.isMobile = this.resizeServices.isMobileSize;
-  }
-
-  get allItems() {
+  public get allItems(): ItemSkill[] {
     return [...this.listLanguages, ...this.listTech]
   }
 

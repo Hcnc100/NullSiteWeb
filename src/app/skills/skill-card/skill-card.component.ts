@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, input } from '@angular/core';
 import type { ItemSkill } from "../../models/ItemSkill";
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { CommonModule } from '@angular/common';
@@ -12,7 +12,6 @@ import { CommonModule } from '@angular/common';
 })
 export class SkillCardComponent {
 
-  @Input() itemSkill?: ItemSkill;
-
+  public readonly itemSkill = input.required<ItemSkill>();
 
 }

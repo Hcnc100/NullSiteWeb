@@ -4,7 +4,7 @@ import type { Observable } from "rxjs";
 import { map } from "rxjs";
 import type { Certificate } from "../../models/Certificate";
 import type { OnInit } from '@angular/core';
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { CertificatesService } from "../services/certificates.service";
 import { ItemCertificateComponent } from "../item-certificate/item-certificate.component";
 import { LoadingComponent } from "src/app/share/loading/loading.component";
@@ -26,6 +26,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class CertificateComponent implements OnInit {
 
+  private readonly destroyRef = inject(DestroyRef);
   private readonly gallery: Gallery = inject(Gallery);
   private readonly certificatesService: CertificatesService = inject(CertificatesService);
 
@@ -51,7 +52,7 @@ export class CertificateComponent implements OnInit {
           }
         )
       )),
-      takeUntilDestroyed()
+      takeUntilDestroyed(this.destroyRef)
     ).subscribe(listImages => {
       galleryCertificate.load(listImages)
     })

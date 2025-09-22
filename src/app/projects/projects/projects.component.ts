@@ -1,9 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import type { DialogService } from "@ngneat/dialog";
+import { Component, inject } from '@angular/core';
+import { DialogService } from "@ngneat/dialog";
 import { ProjectDetailsComponent } from "../project-details/project-details.component";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import type { Project } from "../../models/Project";
-import type { ProjectsService } from "../services/projects.service";
+import { ProjectsService } from "../services/projects.service";
 import type { Observable } from "rxjs";
 import { CardProjectComponent } from '../card-project/card-project.component';
 import { LoadingComponent } from 'src/app/share/loading/loading.component';
@@ -22,20 +22,16 @@ import { CommonModule } from '@angular/common';
 })
 export class ProjectsComponent {
 
-  readonly listProjectId = "listProjectId"
-  readonly icon = faGithub;
+  private readonly projectServices: ProjectsService = inject(ProjectsService);
+  private readonly dialog: DialogService = inject(DialogService);
 
-  listProjectsAsync: Observable<Project[]>;
+  public readonly listProjectId = "listProjectId"
+  public readonly icon = faGithub;
 
-  constructor(
-    private readonly projectServices: ProjectsService,
-    private readonly dialog: DialogService,
-  ) {
-    this.listProjectsAsync = projectServices.listProjects
-  }
+  public listProjectsAsync: Observable<Project[]> = this.projectServices.listProjects;
 
 
-  clickOnProject(project: Project) {
+  public clickOnProject(project: Project): void {
     this.dialog.open(ProjectDetailsComponent,
       {
         closeButton: false,

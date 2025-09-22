@@ -1,6 +1,6 @@
 import type { OnInit } from '@angular/core';
-import { Component, Input } from '@angular/core';
-import type { AnimationOptions} from "ngx-lottie";
+import { Component, input, model } from '@angular/core';
+import type { AnimationOptions } from "ngx-lottie";
 import { LottieComponent } from "ngx-lottie";
 
 @Component({
@@ -12,14 +12,14 @@ import { LottieComponent } from "ngx-lottie";
 })
 export class LoadingComponent implements OnInit {
 
-  @Input() pathArg?: string;
+  public readonly pathArg = input.required<string>();
 
-  options?: AnimationOptions;
+  public readonly options = model<AnimationOptions>({});
 
 
-  ngOnInit(): void {
-    this.options = {
-      path: this.pathArg,
-    };
+  public ngOnInit(): void {
+    this.options.update(
+      () => ({ path: this.pathArg() })
+    );
   }
 }

@@ -1,5 +1,5 @@
 import type { OnInit } from '@angular/core';
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import type {
   IconDefinition
 } from "@fortawesome/free-solid-svg-icons";
@@ -27,6 +27,7 @@ export class NavbarComponent implements OnInit {
 
   private readonly resizeService: ResizeService = inject(ResizeService);
   private readonly navigator: NavigatorServices = inject(NavigatorServices);
+  private readonly destroyRef = inject(DestroyRef);
 
 
   public readonly iconMenu: IconDefinition = faBars;
@@ -39,7 +40,7 @@ export class NavbarComponent implements OnInit {
 
   public ngOnInit(): void {
     this.resizeService.isMobileSize
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((isMenuMobile) => {
         if (!isMenuMobile && !this.isGoneMenu) {
           this.isGoneMenu = true;

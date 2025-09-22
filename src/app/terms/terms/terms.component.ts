@@ -1,7 +1,7 @@
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TermsService } from './../terms.service';
 import type { OnInit } from '@angular/core';
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, inject, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import type { Observable } from 'rxjs';
 import { tap, switchMap, of, catchError, finalize } from 'rxjs';
@@ -22,27 +22,26 @@ import { CommonModule } from '@angular/common';
 })
 export class TermsComponent implements OnInit {
 
-  termsProject?: Observable<Terms | null>;
-  isLoading = true;
+  private readonly route: ActivatedRoute = inject(ActivatedRoute);
+  private readonly termsServices: TermsService = inject(TermsService)
+  private readonly sanitizer: DomSanitizer = inject(DomSanitizer);
 
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly termsServices: TermsService,
-    private readonly sanitizer: DomSanitizer
-  ) { }
 
-  ngOnInit(): void {
+  public termsProject?: Observable<Terms | null>;
+  public isLoading = true;
+
+
+  public ngOnInit(): void {
     this.termsProject = this.route.paramMap.pipe(
       switchMap(params => {
         const projectId = params.get('projectID');
-        if (projectId) {
+        if (projectId != null) {
           return this.termsServices.getTerms(projectId).pipe(
             catchError(error => this.handleError(error)),
             finalize(() => this.isLoading = false)
           );
         } else {
           return of(null).pipe(
-            tap(() => console.error('No se proporcionó un projectId')),
             tap(() => this.isLoading = false)
           );
         }
@@ -50,12 +49,11 @@ export class TermsComponent implements OnInit {
     );
   }
 
-  getSafeContent(content: string) {
+  public getSafeContent(content: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(content);
   }
 
-  private handleError(error: any): Observable<null> {
-    console.error('Error al obtener los términos:', error);
+  private handleError(_: unknown): Observable<null> {
     return of(null);
   }
 
