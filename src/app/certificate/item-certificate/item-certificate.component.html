@@ -1,5 +1,3 @@
-@if (certificate) {
-  <div class="container-img-certificate">
-    <img [alt]="'Certificate: ' + certificate.name" [src]="certificate.urlCertificate">
-  </div>
-}
+<div class="container-img-certificate">
+  <img [alt]="'Certificate: ' + certificate().name" [src]="certificate().urlCertificate">
+</div>

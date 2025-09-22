@@ -1,5 +1,6 @@
 import type { Certificate } from "../../models/Certificate";
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, input } from '@angular/core';
+
 
 @Component({
   selector: 'app-item-certificate',
@@ -9,6 +10,6 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class ItemCertificateComponent {
 
-  @Input() certificate?: Certificate;
+  public readonly certificate = input.required<Certificate>();
 
 }
