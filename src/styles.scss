@@ -1,6 +1,6 @@
-@import '~@angular/cdk/overlay-prebuilt.css';
-@import '~ngx-toastr/toastr';
-@import "app/scss/variables_global";
+@use '@angular/cdk/overlay-prebuilt.css';
+@use 'ngx-toastr/toastr';
+@use "app/scss/variables_global" as *;
 
 $padding-horizontal: 30px;
 

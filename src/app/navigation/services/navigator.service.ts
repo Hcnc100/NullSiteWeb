@@ -1,49 +1,30 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject, filter, takeUntil } from "rxjs";
-import { NavigationEnd, Router, RouterEvent } from "@angular/router";
-import { defaultSection, getListSections } from "../../../utils/Constants";
+import { DestroyRef, inject, Injectable } from '@angular/core';
+import { BehaviorSubject, filter } from "rxjs";
+import type { Observable } from "rxjs";
+import { Router } from "@angular/router";
+import { NavigationEnd } from "@angular/router";
+import { defaultSection } from "../../../utils/Constants";
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class NavigatorServices {
 
-  private readonly _currentSection = new BehaviorSubject<string>(defaultSection);
-  private destroy$ = new Subject<void>();
 
-  /**
-   * Constructs a new instance of the NavigatorServices class.
-   * @param router An instance of the Angular Router class.
-   */
-  constructor(
-    router: Router
-  ) {
-    router.events
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly _currentSection = new BehaviorSubject<string>(defaultSection);
+  public readonly currentSection$: Observable<string> = this._currentSection.asObservable();
+
+  private readonly router = inject(Router);
+
+  public constructor() {
+    this.router.events
       .pipe(
-        filter((event) => event instanceof NavigationEnd),
-        takeUntil(this.destroy$)
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe((event) => {
-        if (event instanceof NavigationEnd) {
-          const onlyUrl = event.urlAfterRedirects.replace("/", "");
-          this._currentSection.next(onlyUrl);
-        }
+        const onlyUrl = event.urlAfterRedirects.replace("/", "");
+        this._currentSection.next(onlyUrl);
       });
-  }
-
-  /**
-   * Cleans up resources when the component is destroyed.
-   */
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  /**
-   * Gets an Observable of the current section.
-   * @returns An Observable that emits the current section value whenever it changes.
-   */
-  get currentSection() {
-    return this._currentSection.asObservable();
   }
 }

@@ -1,21 +1,25 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { AnimationOptions } from "ngx-lottie";
+import type { OnInit } from '@angular/core';
+import { Component, input, model } from '@angular/core';
+import type { AnimationOptions } from "ngx-lottie";
+import { LottieComponent } from "ngx-lottie";
 
 @Component({
   selector: 'app-loading',
   templateUrl: './loading.component.html',
-  styleUrls: ['./loading.component.scss']
+  styleUrls: ['./loading.component.scss'],
+  standalone: true,
+  imports: [LottieComponent]
 })
 export class LoadingComponent implements OnInit {
 
-  @Input() pathArg?: string;
+  public readonly pathArg = input.required<string>();
 
-  options?: AnimationOptions;
+  public readonly options = model<AnimationOptions>({});
 
 
-  ngOnInit(): void {
-    this.options = {
-      path: this.pathArg,
-    };
+  public ngOnInit(): void {
+    this.options.update(
+      () => ({ path: this.pathArg() })
+    );
   }
 }

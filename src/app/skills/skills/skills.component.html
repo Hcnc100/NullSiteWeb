@@ -1,36 +1,32 @@
 <div class="container-language-programming">
 
-  <ng-container *ngIf="!(isMobile | async); else blockMobile">
-
+  @if (!(isMobile | async)) {
     <div>
       <h3 class="title-items-skills">Programming languages</h3>
       <div class="container-cards-items">
-        <ng-container *ngFor="let item of listLanguages">
+        @for (item of listLanguages; track item) {
           <app-skill-card [itemSkill]="item"></app-skill-card>
-        </ng-container>
+        }
       </div>
     </div>
-
     <div>
       <h3 class="title-items-skills">Technologies</h3>
       <div class="container-cards-items">
-        <ng-container *ngFor="let tech of listTech">
+        @for (tech of listTech; track tech) {
           <app-skill-card [itemSkill]="tech"></app-skill-card>
-        </ng-container>
+        }
       </div>
     </div>
-
-  </ng-container>
-
-  <ng-template #blockMobile>
+  } @else {
     <div>
       <h3 class="title-skills">Skills</h3>
       <div class="container-cards-items">
-        <ng-container *ngFor="let tech of allItems">
+        @for (tech of allItems; track tech) {
           <app-skill-card [itemSkill]="tech"></app-skill-card>
-        </ng-container>
+        }
       </div>
     </div>
-  </ng-template>
+  }
+
 
 </div>

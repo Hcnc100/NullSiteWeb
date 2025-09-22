@@ -1,6 +1,6 @@
-import { Observable } from "rxjs";
-import { Component, OnInit } from '@angular/core';
-import { ItemSkill } from "../../models/ItemSkill";
+import type { Observable } from "rxjs";
+import { Component, inject } from '@angular/core';
+import type { ItemSkill } from "../../models/ItemSkill";
 import { ResizeService } from "../../services/resize/resize.service";
 import {
   faAndroid,
@@ -12,15 +12,24 @@ import {
   faJsSquare,
   faPython
 } from "@fortawesome/free-brands-svg-icons";
+import { SkillCardComponent } from "../skill-card/skill-card.component";
+import { CommonModule } from "@angular/common";
 
 @Component({
   selector: 'app-skills',
   templateUrl: './skills.component.html',
-  styleUrls: ['./skills.component.scss']
+  styleUrls: ['./skills.component.scss'],
+  standalone: true,
+  imports: [
+    SkillCardComponent,
+    CommonModule
+  ]
 })
 export class SkillsComponent {
 
-  readonly listLanguages: ItemSkill[] = [
+  private readonly resizeServices: ResizeService = inject(ResizeService);
+
+  public readonly listLanguages: ItemSkill[] = [
     {
       name: "Python",
       icon: faPython,
@@ -52,7 +61,7 @@ export class SkillsComponent {
     },
   ]
 
-  readonly listTech: ItemSkill[] = [
+  public readonly listTech: ItemSkill[] = [
     {
       name: "Github",
       icon: faGithub,
@@ -70,13 +79,9 @@ export class SkillsComponent {
     }
   ]
 
-  isMobile: Observable<boolean>
+  public isMobile: Observable<boolean> = this.resizeServices.isMobileSize;
 
-  constructor(private resizeServices: ResizeService) {
-    this.isMobile = this.resizeServices.isMobileSize;
-  }
-
-  get allItems() {
+  public get allItems(): ItemSkill[] {
     return [...this.listLanguages, ...this.listTech]
   }
 

@@ -1,5 +1,5 @@
 <!-- Container for the profile information -->
-<ng-container *ngIf="infoProfileAsync | async as infoProfile; else animateLoad">
+@if (infoProfileAsync | async; as infoProfile) {
   <div class="container-profile">
     <div class="container-info-profile">
       <!-- Profile image -->
@@ -7,15 +7,13 @@
       <!-- Personal links -->
       <app-personal-links></app-personal-links>
     </div>
-
     <div class="container-description-profile">
       <!-- Profile description -->
       <app-description [infoProfile]="infoProfile"></app-description>
     </div>
   </div>
-</ng-container>
+} @else {
+  <app-loading [pathArg]="'/assets/loading.json'"></app-loading>
+}
 
 <!-- Loading animation -->
-<ng-template #animateLoad>
-  <app-loading [pathArg]="'/assets/loading.json'"></app-loading>
-</ng-template>

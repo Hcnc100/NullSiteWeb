@@ -6,7 +6,7 @@
       <!-- Input field for name -->
       <div class="form-section">
         <input formControlName="name" placeholder="Name" type="text" [maxlength]="maxCountName+10">
-        <app-count-and-error-field [control]="nameControl" [errorsList]="errorsListName" [maxCount]="maxCountName">
+        <app-count-and-error-field [control]="formContact.controls.name" [errorsList]="errorsListName" [maxCount]="maxCountName">
         </app-count-and-error-field>
       </div>
 
@@ -14,7 +14,7 @@
       <div class="form-section">
         <input formControlName="email" placeholder="Email" type="text" [maxlength]="maxCountEmail+10">
         <div class="count-and-error">
-          <app-count-and-error-field [control]="emailControl" [errorsList]="errorsListEmail" [maxCount]="maxCountEmail">
+          <app-count-and-error-field [control]="formContact.controls.email" [errorsList]="errorsListEmail" [maxCount]="maxCountEmail">
           </app-count-and-error-field>
         </div>
       </div>
@@ -22,7 +22,7 @@
       <!-- Input field for subject -->
       <div class="form-section">
         <input formControlName="subject" placeholder="Subject" type="text" [maxlength]="maxCountSubject+10">
-        <app-count-and-error-field [control]="subjectControl" [errorsList]="errorsListSubject"
+        <app-count-and-error-field [control]="formContact.controls.subject" [errorsList]="errorsListSubject"
           [maxCount]="maxCountSubject">
         </app-count-and-error-field>
       </div>
@@ -31,12 +31,12 @@
     <!-- Textarea field for message -->
     <div class="form-section">
       <textarea formControlName="message" placeholder="Write your message" [maxlength]="maxCountMessage+10"></textarea>
-      <app-count-and-error-field [control]="messageControl" [errorsList]="errorsListMessage"
+      <app-count-and-error-field [control]="formContact.controls.message" [errorsList]="errorsListMessage"
         [maxCount]="maxCountMessage"></app-count-and-error-field>
     </div>
 
     <!-- reCAPTCHA field -->
-    <re-captcha formControlName="token"></re-captcha>
+    <ngx-recaptcha2 formControlName="token" [siteKey]="siteKey"></ngx-recaptcha2>
 
     <!-- Submit button -->
     <input type="submit" value="Send Message">

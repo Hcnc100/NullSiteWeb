@@ -1,17 +1,15 @@
-<section *ngIf="(listCertificatesAsync | async ) as listCertificate; else animateLoad" class="container-certificate">
-
-  <header class="container-title-certificate">
-    <h3>Certificates</h3>
-  </header>
-
-  <div [id]="listCertificateId" class="container-list-certificate">
-    <ng-container *ngFor="let certificate of listCertificate; let index = index">
-      <app-item-certificate [certificate]="certificate" [gallery]="galleryId" [lightbox]="index"></app-item-certificate>
-    </ng-container>
-  </div>
-
-</section>
-
-<ng-template #animateLoad>
+@if ((listCertificatesAsync | async ); as listCertificate) {
+  <section class="container-certificate">
+    <header class="container-title-certificate">
+      <h3>Certificates</h3>
+    </header>
+    <div [id]="listCertificateId" class="container-list-certificate">
+      @for (certificate of listCertificate; track certificate; let index = $index) {
+        <app-item-certificate [certificate]="certificate" [gallery]="galleryId" [lightbox]="index"></app-item-certificate>
+      }
+    </div>
+  </section>
+} @else {
   <app-loading [pathArg]="'/assets/loading4.json'"></app-loading>
-</ng-template>
+}
+

@@ -7,13 +7,13 @@ const MOBILE_SIZE = 600;
   providedIn: 'root'
 })
 export class ResizeService {
-  private _isMobileSize = new BehaviorSubject<boolean>(window.innerWidth <= MOBILE_SIZE);
-  isMobileSize = this._isMobileSize.asObservable();
+  private readonly _isMobileSize = new BehaviorSubject<boolean>(window.innerWidth <= MOBILE_SIZE);
+  public isMobileSize = this._isMobileSize.asObservable();
 
-  private _widthSize = new BehaviorSubject<number>(window.innerWidth);
-  widthSize = this._widthSize.asObservable();
+  private readonly _widthSize = new BehaviorSubject<number>(window.innerWidth);
+  public widthSize = this._widthSize.asObservable();
 
-  constructor() {
+  public constructor() {
     fromEvent(window, 'resize').pipe(
       map(() => window.innerWidth),
       distinctUntilChanged(),

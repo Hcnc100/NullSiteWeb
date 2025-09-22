@@ -1,6 +1,6 @@
 @use "scss/submit-style";
 @use "scss/text-input-style";
-@import "src/app/contact/contact/scss/mixins-contact";
+@use "../contact/scss/mixins-contact.scss" as *;
 
 
 .container-form {

@@ -1,24 +1,27 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { AnimationOptions } from "ngx-lottie";
+import { Component, input } from '@angular/core';
+import type { AnimationOptions } from "ngx-lottie";
+import { LottieComponent } from "ngx-lottie";
 
 @Component({
   selector: 'app-image-profile',
   templateUrl: './image-profile.component.html',
-  styleUrls: ['./image-profile.component.scss']
+  styleUrls: ['./image-profile.component.scss'],
+  standalone: true,
+  imports: [
+    LottieComponent
+  ]
 })
 export class ImageProfileComponent {
 
-  @Input() urlImgProfile?: string;
+  public readonly urlImgProfile = input.required<string>();
 
-  isLoading = true;
+  public isLoading = true;
 
-  readonly options: AnimationOptions = {
+  public readonly options: AnimationOptions = {
     path: "assets/loading2.json",
   }
 
-
-
-  changeLoad() {
+  public changeLoad(): void {
     setTimeout(() => this.isLoading = false, 800);
   }
 

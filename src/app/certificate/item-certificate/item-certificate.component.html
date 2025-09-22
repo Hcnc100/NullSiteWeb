@@ -1,5 +1,3 @@
-<ng-container *ngIf="certificate">
-  <div class="container-img-certificate">
-    <img [alt]="'Certificate: ' + certificate.name" [src]="certificate.urlCertificate">
-  </div>
-</ng-container>
+<div class="container-img-certificate">
+  <img [alt]="'Certificate: ' + certificate().name" [src]="certificate().urlCertificate">
+</div>

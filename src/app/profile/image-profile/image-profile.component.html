@@ -1,9 +1,9 @@
 <div class="container-img-container">
-  <img (load)="changeLoad()" [class.container-img-load]="isLoading" [src]="urlImgProfile!" alt="Ricardo Pájaro Coatl"
+  <img (load)="changeLoad()" [class.container-img-load]="isLoading" [src]="urlImgProfile()" alt="Ricardo Pájaro Coatl"
     class="image-profile">
 
-  <ng-container *ngIf="isLoading">
-    <ng-lottie [options]="options" class="container-animation"></ng-lottie>
-  </ng-container>
+    @if (isLoading) {
+      <ng-lottie [options]="options" class="container-animation"></ng-lottie>
+    }
 
-</div>
+  </div>

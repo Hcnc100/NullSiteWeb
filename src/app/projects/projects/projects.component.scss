@@ -1,6 +1,6 @@
 @use "scss/button-git";
 @use "scss/container-list-projects";
-@import "src/app/scss/mixin_globals";
+@use "index" as *;
 
 .container-projects {
   @include size-section;

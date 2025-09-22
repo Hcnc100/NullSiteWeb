@@ -1,32 +1,37 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { DialogService } from "@ngneat/dialog";
 import { ProjectDetailsComponent } from "../project-details/project-details.component";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
-import { Project } from "../../models/Project";
+import type { Project } from "../../models/Project";
 import { ProjectsService } from "../services/projects.service";
-import { Observable } from "rxjs";
+import type { Observable } from "rxjs";
+import { CardProjectComponent } from '../card-project/card-project.component';
+import { LoadingComponent } from 'src/app/share/loading/loading.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-projects',
   templateUrl: './projects.component.html',
-  styleUrls: ['./projects.component.scss']
+  styleUrls: ['./projects.component.scss'],
+  standalone: true,
+  imports: [
+    CardProjectComponent,
+    LoadingComponent,
+    CommonModule
+  ]
 })
 export class ProjectsComponent {
 
-  readonly listProjectId = "listProjectId"
-  readonly icon = faGithub;
+  private readonly projectServices: ProjectsService = inject(ProjectsService);
+  private readonly dialog: DialogService = inject(DialogService);
 
-  listProjectsAsync: Observable<Project[]>;
+  public readonly listProjectId = "listProjectId"
+  public readonly icon = faGithub;
 
-  constructor(
-    private projectServices: ProjectsService,
-    private dialog: DialogService,
-  ) {
-    this.listProjectsAsync = projectServices.listProjects
-  }
+  public listProjectsAsync: Observable<Project[]> = this.projectServices.listProjects;
 
 
-  clickOnProject(project: Project) {
+  public clickOnProject(project: Project): void {
     this.dialog.open(ProjectDetailsComponent,
       {
         closeButton: false,

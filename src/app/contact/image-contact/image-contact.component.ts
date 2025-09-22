@@ -1,18 +1,21 @@
-import { Observable } from "rxjs";
-import { Component, OnInit } from '@angular/core';
+import type { Observable } from "rxjs";
+import { Component, inject } from '@angular/core';
 import { ResizeService } from "../../services/resize/resize.service";
 
 @Component({
   selector: 'app-image-contact',
   templateUrl: './image-contact.component.html',
-  styleUrls: ['./image-contact.component.scss']
+  styleUrls: ['./image-contact.component.scss'],
+  standalone: true
 })
 export class ImageContactComponent {
 
-  readonly isMobile: Observable<boolean>;
+  public readonly resizeService: ResizeService = inject(ResizeService);
 
-  constructor(resizeService: ResizeService) {
-    this.isMobile = resizeService.isMobileSize
+  public readonly isMobile: Observable<boolean>;
+
+  public constructor() {
+    this.isMobile = this.resizeService.isMobileSize;
   }
 
 }

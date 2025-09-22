@@ -1,13 +1,15 @@
-import { Certificate } from "../../models/Certificate";
-import { Component, Input, OnInit } from '@angular/core';
+import type { Certificate } from "../../models/Certificate";
+import { Component, input } from '@angular/core';
+
 
 @Component({
   selector: 'app-item-certificate',
   templateUrl: './item-certificate.component.html',
-  styleUrls: ['./item-certificate.component.scss']
+  styleUrls: ['./item-certificate.component.scss'],
+  standalone: true
 })
 export class ItemCertificateComponent {
 
-  @Input() certificate?: Certificate;
+  public readonly certificate = input.required<Certificate>();
 
 }
