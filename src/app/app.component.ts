@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
 import { NavbarComponent } from './navigation/navbar/navbar.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CommonModule } from '@angular/common';
@@ -18,6 +17,6 @@ import { RouterOutlet } from '@angular/router';
   ],
 })
 export class AppComponent {
-  title = 'Ricardo Pájaro Coatl';
+  public readonly title = 'Ricardo Pájaro Coatl';
 
 }

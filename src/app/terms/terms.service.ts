@@ -1,18 +1,21 @@
-import { Injectable } from '@angular/core';
-import type { Firestore} from '@angular/fire/firestore';
+import { inject, Injectable } from '@angular/core';
+import type { DocumentReference } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { doc, docData, getDoc } from '@angular/fire/firestore';
 import type { Terms } from '../models/Terms';
-import type { Observable} from 'rxjs';
-import { from, switchMap, catchError, throwError } from 'rxjs';
+import type { Observable } from 'rxjs';
+import { from, switchMap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TermsService {
-  constructor(private readonly firestore: Firestore) { }
 
-  getTerms(projectID: string): Observable<Terms> {
-    const documentData = doc(this.firestore, "terms", projectID);
+  private readonly firestore: Firestore = inject(Firestore);
+
+
+  public getTerms(projectID: string): Observable<Terms> {
+    const documentData: DocumentReference = doc(this.firestore, "terms", projectID);
 
     return from(getDoc(documentData)).pipe(
       switchMap((doc) => {
@@ -24,4 +27,6 @@ export class TermsService {
       })
     );
   }
+
+
 }

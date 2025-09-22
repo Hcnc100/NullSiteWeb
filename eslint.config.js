@@ -50,6 +50,11 @@ export default [
       '@typescript-eslint/no-floating-promises': 'error',
       '@typescript-eslint/no-misused-promises': 'error',
       '@typescript-eslint/consistent-type-imports': 'warn',
+      "@typescript-eslint/explicit-member-accessibility": [
+  "error",
+  { "accessibility": "explicit" }
+],
+
 
       // -------------------
       // Estilo general

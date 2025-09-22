@@ -1,5 +1,5 @@
-import type { DomSanitizer } from '@angular/platform-browser';
-import type { TermsService } from './../terms.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { TermsService } from './../terms.service';
 import type { OnInit } from '@angular/core';
 import { Component, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
