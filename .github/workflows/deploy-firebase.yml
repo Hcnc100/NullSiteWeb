@@ -1,9 +1,10 @@
+# .github/workflows/deploy-firebase.yml
 name: Deploy Angular to Firebase Hosting
 
 on:
   push:
     branches:
-      - main
+      - main   # cambia si usas otra rama principal
 
 jobs:
   build_and_deploy:
@@ -11,21 +12,37 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5   # Actualizado desde v3
+        uses: actions/checkout@v5   # última versión
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22'
+          node-version: '22'  # usas Node 22.18.0 localmente
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Generate environment.prod.ts
+        run: |
+          echo "export const environment = {
+            production: true,
+            siteKey: '${{ secrets.SITE_KEY }}',
+            firebase: {
+              apiKey: '${{ secrets.FIREBASE_API_KEY }}',
+              authDomain: '${{ secrets.FIREBASE_AUTH_DOMAIN }}',
+              projectId: '${{ secrets.FIREBASE_PROJECT_ID }}',
+              storageBucket: '${{ secrets.FIREBASE_STORAGE_BUCKET }}',
+              messagingSenderId: '${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}',
+              appId: '${{ secrets.FIREBASE_APP_ID }}',
+              measurementId: '${{ secrets.FIREBASE_MEASUREMENT_ID }}'
+            }
+          };" > src/environments/environment.prod.ts
 
       - name: Build Angular project (prod)
         run: npm run build -- --configuration production
 
       - name: Deploy to Firebase Hosting
-        uses: FirebaseExtended/action-hosting-deploy@v0.10.0   # Versión más reciente
+        uses: FirebaseExtended/action-hosting-deploy@v0.10.0   # última versión
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
