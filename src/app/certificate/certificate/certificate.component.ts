@@ -1,15 +1,16 @@
-import type { Gallery} from "ng-gallery";
+import { Gallery } from "ng-gallery";
 import { ImageItem } from "ng-gallery";
-import type { Observable, Subscription} from "rxjs";
-import { map, Subject, takeUntil } from "rxjs";
+import type { Observable } from "rxjs";
+import { map } from "rxjs";
 import type { Certificate } from "../../models/Certificate";
-import type { OnDestroy, OnInit } from '@angular/core';
-import { Component } from '@angular/core';
-import type { CertificatesService } from "../services/certificates.service";
+import type { OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { CertificatesService } from "../services/certificates.service";
 import { ItemCertificateComponent } from "../item-certificate/item-certificate.component";
 import { LoadingComponent } from "src/app/share/loading/loading.component";
 import { AsyncPipe } from "@angular/common";
 import { LightboxModule } from "ng-gallery/lightbox";
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-certificate',
@@ -23,26 +24,25 @@ import { LightboxModule } from "ng-gallery/lightbox";
     LightboxModule
   ],
 })
-export class CertificateComponent implements OnInit, OnDestroy {
+export class CertificateComponent implements OnInit {
 
-  readonly galleryId: string = "GalleryCertificates"
-  readonly listenerCertificate: Subscription;
+  private readonly gallery: Gallery = inject(Gallery);
+  private readonly certificatesService: CertificatesService = inject(CertificatesService);
 
-  readonly listCertificatesAsync: Observable<Certificate[]>;
-  readonly listCertificateId = "listCertificateId"
+  public readonly galleryId: string = "GalleryCertificates"
 
-  private readonly destroy$ = new Subject<void>();
+  public listCertificatesAsync?: Observable<Certificate[]>;
+  public listCertificateId = "listCertificateId"
 
-  constructor(
-    private readonly gallery: Gallery,
-    certificates: CertificatesService,
-  ) {
+
+
+  public ngOnInit(): void {
     // * init gallery
     const galleryCertificate = this.gallery.ref(this.galleryId)
 
     // * init listener for certificates
-    this.listCertificatesAsync = certificates.listCertificates;
-    this.listenerCertificate = certificates.listCertificates.pipe(
+    this.listCertificatesAsync = this.certificatesService.listCertificates;
+    this.certificatesService.listCertificates.pipe(
       map(listCertificate => listCertificate.map(
         certificate => new ImageItem(
           {
@@ -51,18 +51,10 @@ export class CertificateComponent implements OnInit, OnDestroy {
           }
         )
       )),
-      takeUntil(this.destroy$),
+      takeUntilDestroyed()
     ).subscribe(listImages => {
       galleryCertificate.load(listImages)
     })
   }
 
-
-  ngOnInit(): void {
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
 }
