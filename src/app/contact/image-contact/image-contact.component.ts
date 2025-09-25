@@ -1,4 +1,4 @@
-import type { Observable } from "rxjs";
+import type { Signal } from '@angular/core';
 import { Component, inject } from '@angular/core';
 import { ResizeService } from "../../services/resize/resize.service";
 
@@ -12,10 +12,6 @@ export class ImageContactComponent {
 
   public readonly resizeService: ResizeService = inject(ResizeService);
 
-  public readonly isMobile: Observable<boolean>;
-
-  public constructor() {
-    this.isMobile = this.resizeService.isMobileSize;
-  }
+  public readonly isMobile: Signal<boolean> = this.resizeService.isMobileSize;
 
 }

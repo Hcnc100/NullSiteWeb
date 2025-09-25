@@ -1,4 +1,5 @@
-import { Component, inject, Signal } from '@angular/core';
+import type { Signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { DialogService } from "@ngneat/dialog";
 import { ProjectDetailsComponent } from "../project-details/project-details.component";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";

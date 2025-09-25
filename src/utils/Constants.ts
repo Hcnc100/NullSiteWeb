@@ -1,4 +1,4 @@
-import type {NavigatorSection} from "../app/models/NavigatorSection";
+import type { NavigatorSection } from "../app/models/NavigatorSection";
 
 export const collectionNames = {
   certificateCollection: "last-certificates",
@@ -16,6 +16,6 @@ export const navigatorSections: NavigatorSection = {
 
 export const defaultSection = navigatorSections.homeId
 
-export function getListSections() {
+export function getListSections(): string[] {
   return Object.values(navigatorSections)
 }

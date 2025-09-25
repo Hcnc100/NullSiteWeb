@@ -5,7 +5,6 @@ import { EmailService } from "../services/email.service";
 import { FormBuilder } from "@angular/forms";
 import { ReactiveFormsModule, Validators } from "@angular/forms";
 import { ResizeService } from "src/app/services/resize/resize.service";
-import type { Observable } from "rxjs";
 import type { ErrorAndMessage } from "src/app/models/ErrorAndMessage";
 import { CountAndErrorFieldComponent } from "../count-and-error-field/count-and-error-field.component";
 import { environment } from "src/environments/environment";
@@ -55,7 +54,7 @@ export class FormContactComponent {
 
 
 
-  public isMobile: Observable<boolean>;
+
 
   private readonly toast: ToastrService = inject(ToastrService);
   private readonly formBuilder: FormBuilder = inject(FormBuilder);
@@ -94,11 +93,6 @@ export class FormContactComponent {
   });
 
   public siteKey: string = environment.siteKey;
-
-
-  public constructor() {
-    this.isMobile = this.resizeService.isMobileSize;
-  }
 
   public async onSubmit(): Promise<void> {
     this.formContact.markAllAsTouched();
