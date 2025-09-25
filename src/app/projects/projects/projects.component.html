@@ -1,18 +1,12 @@
-@if ((listProjectsAsync | async); as listProjects) {
-  <div class="container-projects">
-    <h3>Projects</h3>
-    <div [id]="listProjectId" class="container-list-projects">
-      @for (project of listProjects; track project) {
-        <app-card-project
-          (click)="clickOnProject(project)"
-          [project]="project"
-          class="item-project"
-        ></app-card-project>
-      }
-    </div>
+@if (listProjects()) {
+<div class="container-projects">
+  <h3>Projects</h3>
+  <div [id]="listProjectId" class="container-list-projects">
+    @for (project of listProjects(); track project.id) {
+    <app-card-project (click)="clickOnProject(project)" [project]="project" class="item-project" />
+    }
   </div>
+</div>
 } @else {
-  <app-loading [pathArg]="'/assets/loading3.json'"></app-loading>
+<app-loading [pathArg]="'/assets/loading3.json'"></app-loading>
 }
-
-

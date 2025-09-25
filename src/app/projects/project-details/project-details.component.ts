@@ -1,10 +1,12 @@
 import type { Project } from "../../models/Project";
 import { DialogRef } from '@ngneat/dialog';
-import { Gallery, GalleryItem } from "ng-gallery";
+import type { GalleryItem } from "ng-gallery";
+import { Gallery } from "ng-gallery";
 import { GalleryModule, ImageItem } from "ng-gallery";
 import { LightboxModule } from 'ng-gallery/lightbox';
 import { faGithub, faGooglePlay } from "@fortawesome/free-brands-svg-icons";
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import type { OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { ImgDetailsProjectComponent } from "../img-details-project/img-details-project.component";
 

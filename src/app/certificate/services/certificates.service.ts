@@ -1,3 +1,4 @@
+import type { Signal } from '@angular/core';
 import { inject, Injectable } from '@angular/core';
 import type { Certificate } from "../../models/Certificate";
 import { collectionNames } from "../../../utils/Constants";
@@ -16,7 +17,7 @@ export class CertificatesService {
 
   private readonly firestore: Firestore = inject(Firestore);
 
-  private readonly certificateCollections = collection(
+  private readonly certificateCollections: CollectionReference<Certificate> = collection(
     this.firestore,
     collectionNames.certificateCollection
   ) as CollectionReference<Certificate>;
@@ -25,7 +26,7 @@ export class CertificatesService {
   /**
   * Observable that emits an array of certificates.
   */
-  public readonly listCertificates = toSignal(
+  public readonly listCertificates: Signal<Certificate[] | undefined> = toSignal(
     collectionData(this.certificateCollections)
   );
 
