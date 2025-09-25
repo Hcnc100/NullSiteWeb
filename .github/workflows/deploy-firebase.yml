@@ -1,74 +1,55 @@
-# .github/workflows/deploy-firebase.yml
 name: Deploy Angular to Firebase Hosting
 
 on:
   push:
     branches:
-      - main   # cambia si usas otra rama principal
+      - main
 
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout del repo
       - name: Checkout repository
         uses: actions/checkout@v5
 
-      # 2️⃣ Configurar Node.js
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22'
+          node-version: "22"
 
-      # 3️⃣ Instalar dependencias
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Install dependencies
         run: npm ci
 
-      # 4️⃣ Generar archivos de environment en CI
-      - name: Setup Angular environments
+      - name: Setup Angular production environment
         run: |
           mkdir -p src/environments
+          cp src/environments/environment.template.ts src/environments/environment.prod.ts
+          envsubst < src/environments/environment.template.ts > src/environments/environment.prod.ts
+        env:
+          SITE_KEY: ${{ secrets.SITE_KEY }}
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
+          FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+          FIREBASE_MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
 
-          # Archivo de desarrollo (placeholder)
-          echo "export const environment = {
-            production: false,
-            siteKey: 'SITE_KEY_DEV_PLACEHOLDER',
-            firebase: {
-              apiKey: 'FIREBASE_API_KEY_DEV_PLACEHOLDER',
-              authDomain: 'FIREBASE_AUTH_DOMAIN_DEV_PLACEHOLDER',
-              projectId: 'FIREBASE_PROJECT_ID_DEV_PLACEHOLDER',
-              storageBucket: 'FIREBASE_STORAGE_BUCKET_DEV_PLACEHOLDER',
-              messagingSenderId: 'FIREBASE_MESSAGING_SENDER_ID_DEV_PLACEHOLDER',
-              appId: 'FIREBASE_APP_ID_DEV_PLACEHOLDER',
-              measurementId: 'FIREBASE_MEASUREMENT_ID_DEV_PLACEHOLDER'
-            }
-          };" > src/environments/environment.ts
-
-          # Archivo de producción (usa secrets)
-          echo "export const environment = {
-            production: true,
-            siteKey: '${{ secrets.SITE_KEY }}',
-            firebase: {
-              apiKey: '${{ secrets.FIREBASE_API_KEY }}',
-              authDomain: '${{ secrets.FIREBASE_AUTH_DOMAIN }}',
-              projectId: '${{ secrets.FIREBASE_PROJECT_ID }}',
-              storageBucket: '${{ secrets.FIREBASE_STORAGE_BUCKET }}',
-              messagingSenderId: '${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}',
-              appId: '${{ secrets.FIREBASE_APP_ID }}',
-              measurementId: '${{ secrets.FIREBASE_MEASUREMENT_ID }}'
-            }
-          };" > src/environments/environment.prod.ts
-
-      # 5️⃣ Build Angular producción
-      - name: Build Angular project (prod)
+      - name: Build Angular (prod)
         run: npm run build -- --configuration production
 
-      # 6️⃣ Deploy a Firebase Hosting
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0.10.0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          channelId: live
           projectId: nullpointer-716ae
