@@ -4,8 +4,8 @@
     <h3>Certificates</h3>
   </header>
   <div [id]="listCertificateId" class="container-list-certificate">
-    @for (certificate of listCertificates(); track certificate.certificate.name; let index = $index) {
-    <app-item-certificate [certificate]="certificate.certificate" [gallery]="galleryId" [lightbox]="index" />
+    @for (certificate of listCertificates(); track certificate.data.name; let index = $index) {
+    <app-item-certificate [certificate]="certificate.data" [gallery]="galleryId" [lightbox]="index" />
     }
   </div>
 </section>

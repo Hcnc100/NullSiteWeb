@@ -5,6 +5,8 @@ import { CertificatesService } from "../services/certificates.service";
 import { ItemCertificateComponent } from "../item-certificate/item-certificate.component";
 import { LoadingComponent } from "src/app/share/loading/loading.component";
 import { LightboxModule } from "ng-gallery/lightbox";
+import type { Certificate } from "src/app/models/Certificate";
+import type { GalleryModel } from "src/app/models/GalleryModel";
 
 @Component({
   selector: 'app-certificate',
@@ -24,9 +26,9 @@ export class CertificateComponent {
   public readonly galleryId: string = "GalleryCertificates"
   public readonly listCertificateId: string = "listCertificateId"
 
-  public readonly listCertificates = computed(() =>
+  public readonly listCertificates = computed<GalleryModel<Certificate>[] | undefined>(() =>
     this.certificatesService.listCertificates()?.map(certificate => ({
-      certificate,
+      data: certificate,
       imageItem: new ImageItem({
         src: certificate.urlCertificate,
         thumb: certificate.urlCertificate,
