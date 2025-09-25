@@ -1,4 +1,4 @@
-import type { OnInit } from '@angular/core';
+import type { OnInit, Signal } from '@angular/core';
 import { Component, DestroyRef, inject } from '@angular/core';
 import type {
   IconDefinition
@@ -8,7 +8,6 @@ import {
   faArrowLeft
 } from "@fortawesome/free-solid-svg-icons";
 import { ResizeService } from 'src/app/services/resize/resize.service';
-import type { Observable } from "rxjs";
 import { navigatorSections } from "../../../utils/Constants";
 import { NavigatorServices } from "../services/navigator.service";
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -33,7 +32,7 @@ export class NavbarComponent implements OnInit {
   public readonly iconMenu: IconDefinition = faBars;
   public readonly iconBack: IconDefinition = faArrowLeft;
   public isMobile: boolean = false;
-  public currentIdSection: Observable<string> = this.navigator.currentSection$;
+  public readonly currentIdSection: Signal<string> = this.navigator.currentSection;
   public isGoneMenu = true;
   public listIdsSections: string[] = Object.values(navigatorSections);
 

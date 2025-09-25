@@ -1,20 +1,19 @@
-import { DestroyRef, inject, Injectable } from '@angular/core';
-import { BehaviorSubject, filter } from "rxjs";
-import type { Observable } from "rxjs";
+import { DestroyRef, inject, Injectable, signal } from '@angular/core';
+import { filter } from "rxjs";
 import { Router } from "@angular/router";
 import { NavigationEnd } from "@angular/router";
-import { defaultSection } from "../../../utils/Constants";
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { defaultSection } from "../../../utils/Constants";
+
 
 @Injectable({ providedIn: 'root' })
 export class NavigatorServices {
-
-
   private readonly destroyRef = inject(DestroyRef);
-  private readonly _currentSection = new BehaviorSubject<string>(defaultSection);
-  public readonly currentSection$: Observable<string> = this._currentSection.asObservable();
-
   private readonly router = inject(Router);
+
+  // 👇 ahora un signal en lugar de BehaviorSubject
+  private readonly _currentSection = signal<string>(defaultSection);
+  public readonly currentSection = this._currentSection.asReadonly();
 
   public constructor() {
     this.router.events
@@ -23,8 +22,8 @@ export class NavigatorServices {
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe((event) => {
-        const onlyUrl = event.urlAfterRedirects.replace("/", "");
-        this._currentSection.next(onlyUrl);
+        const onlyUrl = event.urlAfterRedirects.replace('/', '');
+        this._currentSection.set(onlyUrl || defaultSection);
       });
   }
 }

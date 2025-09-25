@@ -1,29 +1,31 @@
-@if ((currentIdSection|async); as currentIdSection) {
-  @if (listIdsSections.includes(currentIdSection)) {
-    <nav class="home-navbar">
-      <!-- icon menu -->
-      @if (isMobile) {
-        <div (click)="onClickMobile()" (keyup.enter)="onClickMobile()" tabindex="0" class="container-icon" role="button" aria-label="Open menu">
-          <fa-icon [icon]="iconMenu" class="icon-menu"></fa-icon>
-        </div>
-      }
-      <!-- container links navigation -->
-      @if (!(isGoneMenu && isMobile)) {
-        <ul class="container-links-menu" id="navigation-links">
-          @for (idSection of listIdsSections; track idSection) {
-            <li [ngClass]="{'section-active': currentIdSection === idSection}">
-              <a (click)="hiddenMenuIfNeed()" [routerLink]="idSection">{{idSection}}</a>
-            </li>
-          }
-        </ul>
-      }
-    </nav>
-  } @else {
-    <nav class="back-navbar">
-      <div (click)="onClickBack()" class="container-icon">
-        <fa-icon [icon]="iconBack" class="icon-menu"></fa-icon>
-      </div>
-    </nav>
+@if (currentIdSection()) {
+@if (listIdsSections.includes(currentIdSection())) {
+<nav class="home-navbar">
+  <!-- icon menu -->
+  @if (isMobile) {
+  <div (click)="onClickMobile()" (keyup.enter)="onClickMobile()" tabindex="0" class="container-icon" role="button"
+    aria-label="Open menu">
+    <fa-icon [icon]="iconMenu" class="icon-menu"></fa-icon>
+  </div>
   }
-  <!-- icon back -->
+  <!-- container links navigation -->
+  @if (!(isGoneMenu && isMobile)) {
+  <ul class="container-links-menu" id="navigation-links">
+    @for (idSection of listIdsSections; track idSection) {
+    <li [ngClass]="{'section-active': currentIdSection() === idSection}">
+      <a (click)="hiddenMenuIfNeed()" [routerLink]="idSection">{{idSection}}</a>
+    </li>
+    }
+  </ul>
+  }
+</nav>
+} @else {
+<nav class="back-navbar">
+  <div role="button" tabindex="0" (click)="onClickBack()" (keydown.enter)="onClickBack()"
+    (keydown.space)="onClickBack()" class="container-icon">
+    <fa-icon [icon]="iconBack" class="icon-menu"></fa-icon>
+  </div>
+</nav>
+}
+<!-- icon back -->
 }
