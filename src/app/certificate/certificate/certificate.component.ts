@@ -1,16 +1,12 @@
 import { Gallery } from "ng-gallery";
 import { ImageItem } from "ng-gallery";
-import type { Observable } from "rxjs";
-import { map } from "rxjs";
-import type { Certificate } from "../../models/Certificate";
-import type { OnInit } from '@angular/core';
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, computed, effect, inject } from '@angular/core';
 import { CertificatesService } from "../services/certificates.service";
 import { ItemCertificateComponent } from "../item-certificate/item-certificate.component";
 import { LoadingComponent } from "src/app/share/loading/loading.component";
-import { AsyncPipe } from "@angular/common";
 import { LightboxModule } from "ng-gallery/lightbox";
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import type { Certificate } from "src/app/models/Certificate";
+import type { GalleryModel } from "src/app/models/GalleryModel";
 
 @Component({
   selector: 'app-certificate',
@@ -20,42 +16,38 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   imports: [
     ItemCertificateComponent,
     LoadingComponent,
-    AsyncPipe,
     LightboxModule
   ],
 })
-export class CertificateComponent implements OnInit {
+export class CertificateComponent {
 
-  private readonly destroyRef = inject(DestroyRef);
   private readonly gallery: Gallery = inject(Gallery);
   private readonly certificatesService: CertificatesService = inject(CertificatesService);
-
   public readonly galleryId: string = "GalleryCertificates"
+  public readonly listCertificateId: string = "listCertificateId"
 
-  public listCertificatesAsync?: Observable<Certificate[]>;
-  public listCertificateId = "listCertificateId"
+  public readonly listCertificates = computed<GalleryModel<Certificate>[] | undefined>(() =>
+    this.certificatesService.listCertificates()?.map(certificate => ({
+      data: certificate,
+      imageItem: new ImageItem({
+        src: certificate.urlCertificate,
+        thumb: certificate.urlCertificate,
+      }),
+    }))
+  );
 
 
+  public constructor() {
+    effect(() => {
+      const currentList = this.listCertificates();
+      if (!currentList || currentList.length === 0) {
+        return;
+      }
 
-  public ngOnInit(): void {
-    // * init gallery
-    const galleryCertificate = this.gallery.ref(this.galleryId)
-
-    // * init listener for certificates
-    this.listCertificatesAsync = this.certificatesService.listCertificates;
-    this.certificatesService.listCertificates.pipe(
-      map(listCertificate => listCertificate.map(
-        certificate => new ImageItem(
-          {
-            src: certificate.urlCertificate,
-            thumb: certificate.urlCertificate
-          }
-        )
-      )),
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe(listImages => {
-      galleryCertificate.load(listImages)
-    })
+      const listImages = currentList.map(item => item.imageItem);
+      this.gallery.ref(this.galleryId).load(listImages);
+    });
   }
 
 }
+

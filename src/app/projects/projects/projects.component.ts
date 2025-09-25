@@ -1,10 +1,10 @@
+import type { Signal } from '@angular/core';
 import { Component, inject } from '@angular/core';
 import { DialogService } from "@ngneat/dialog";
 import { ProjectDetailsComponent } from "../project-details/project-details.component";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import type { Project } from "../../models/Project";
 import { ProjectsService } from "../services/projects.service";
-import type { Observable } from "rxjs";
 import { CardProjectComponent } from '../card-project/card-project.component';
 import { LoadingComponent } from 'src/app/share/loading/loading.component';
 import { CommonModule } from '@angular/common';
@@ -28,7 +28,7 @@ export class ProjectsComponent {
   public readonly listProjectId = "listProjectId"
   public readonly icon = faGithub;
 
-  public listProjectsAsync: Observable<Project[]> = this.projectServices.listProjects;
+  public readonly listProjects: Signal<Project[] | undefined> = this.projectServices.listProjects;
 
 
   public clickOnProject(project: Project): void {

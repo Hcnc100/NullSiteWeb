@@ -1,4 +1,5 @@
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import type { SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { TermsService } from './../terms.service';
 import type { OnInit } from '@angular/core';
 import { Component, inject, ViewEncapsulation } from '@angular/core';

@@ -1,10 +1,11 @@
-import type { Observable } from "rxjs";
+import type { Signal } from '@angular/core';
 import { inject, Injectable } from '@angular/core';
 import type { Certificate } from "../../models/Certificate";
 import { collectionNames } from "../../../utils/Constants";
 import type { CollectionReference } from "@angular/fire/firestore";
 import { Firestore } from "@angular/fire/firestore";
 import { collection, collectionData } from "@angular/fire/firestore";
+import { toSignal } from "@angular/core/rxjs-interop";
 
 /**
  * Service for managing certificates.
@@ -14,22 +15,20 @@ import { collection, collectionData } from "@angular/fire/firestore";
 })
 export class CertificatesService {
 
-  /**
-   * Observable that emits an array of certificates.
-   */
-  public readonly listCertificates: Observable<Certificate[]>;
-
   private readonly firestore: Firestore = inject(Firestore);
 
+  private readonly certificateCollections: CollectionReference<Certificate> = collection(
+    this.firestore,
+    collectionNames.certificateCollection
+  ) as CollectionReference<Certificate>;
+
+
   /**
-   * Constructs a new CertificatesService.
-   * @param firestore The Firestore instance.
-   */
-  public constructor(firestore: Firestore) {
-    const certificateCollections = collection(
-      firestore,
-      collectionNames.certificateCollection
-    ) as CollectionReference<Certificate>;
-    this.listCertificates = collectionData(certificateCollections);
-  }
+  * Observable that emits an array of certificates.
+  */
+  public readonly listCertificates: Signal<Certificate[] | undefined> = toSignal(
+    collectionData(this.certificateCollections)
+  );
+
+
 }

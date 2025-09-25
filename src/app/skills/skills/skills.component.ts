@@ -1,4 +1,4 @@
-import type { Observable } from "rxjs";
+import type { Signal } from '@angular/core';
 import { Component, inject } from '@angular/core';
 import type { ItemSkill } from "../../models/ItemSkill";
 import { ResizeService } from "../../services/resize/resize.service";
@@ -79,7 +79,7 @@ export class SkillsComponent {
     }
   ]
 
-  public isMobile: Observable<boolean> = this.resizeServices.isMobileSize;
+  public readonly isMobile: Signal<boolean> = this.resizeServices.isMobileSize;
 
   public get allItems(): ItemSkill[] {
     return [...this.listLanguages, ...this.listTech]

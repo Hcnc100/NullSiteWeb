@@ -1,15 +1,14 @@
-@if ((listCertificatesAsync | async ); as listCertificate) {
-  <section class="container-certificate">
-    <header class="container-title-certificate">
-      <h3>Certificates</h3>
-    </header>
-    <div [id]="listCertificateId" class="container-list-certificate">
-      @for (certificate of listCertificate; track certificate; let index = $index) {
-        <app-item-certificate [certificate]="certificate" [gallery]="galleryId" [lightbox]="index"></app-item-certificate>
-      }
-    </div>
-  </section>
+@if (listCertificates()) {
+<section class="container-certificate">
+  <header class="container-title-certificate">
+    <h3>Certificates</h3>
+  </header>
+  <div [id]="listCertificateId" class="container-list-certificate">
+    @for (certificate of listCertificates(); track certificate.data.name; let index = $index) {
+    <app-item-certificate [certificate]="certificate.data" [gallery]="galleryId" [lightbox]="index" />
+    }
+  </div>
+</section>
 } @else {
-  <app-loading [pathArg]="'/assets/loading4.json'"></app-loading>
+<app-loading [pathArg]="'/assets/loading4.json'"/>
 }
-

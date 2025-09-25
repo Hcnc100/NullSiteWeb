@@ -1,4 +1,4 @@
-import type { Observable } from "rxjs";
+import type { Signal } from '@angular/core';
 import { inject, Injectable } from '@angular/core';
 import type { SocialLink } from "../../models/SocialLink";
 import type { InfoProfile } from "../../models/InfoProfile";
@@ -6,6 +6,7 @@ import type { DocumentReference } from "@firebase/firestore";
 import { Firestore } from "@angular/fire/firestore";
 import { doc, docData } from "@angular/fire/firestore";
 import { faFacebookF, faGithub, faInstagram, faTwitter, faWhatsapp } from "@fortawesome/free-brands-svg-icons";
+import { toSignal } from "@angular/core/rxjs-interop";
 
 
 @Injectable({
@@ -36,13 +37,17 @@ export class PersonalInfoService {
     }
   ];
 
-  public readonly infoProfile: Observable<InfoProfile | undefined>;
-
   private readonly firestore: Firestore = inject(Firestore);
 
-  public constructor() {
-    this.infoProfile = docData<InfoProfile>(
-      doc(this.firestore, 'infoProfile', "nullPointer") as DocumentReference<InfoProfile>
-    );
-  }
+  private readonly infoProfileDocRef: DocumentReference<InfoProfile> = doc(
+    this.firestore,
+    'infoProfile',
+    "nullPointer"
+  ) as DocumentReference<InfoProfile>;
+
+  public readonly infoProfile: Signal<InfoProfile | undefined> = toSignal(
+    docData(this.infoProfileDocRef)
+  );
+
+
 }
