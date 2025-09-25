@@ -1,4 +1,4 @@
-import type { Observable } from "rxjs";
+import type { Signal } from '@angular/core';
 import { Component, inject } from '@angular/core';
 import type { InfoProfile } from "../../models/InfoProfile";
 import { PersonalInfoService } from "../services/personal-info.service";
@@ -25,6 +25,6 @@ export class ProfileComponent {
 
   private readonly personalInfo: PersonalInfoService = inject(PersonalInfoService);
 
-  public infoProfileAsync: Observable<InfoProfile | undefined> = this.personalInfo.infoProfile;
+  public readonly infoProfile: Signal<InfoProfile | undefined> = this.personalInfo.infoProfile;
 
 }

@@ -1,15 +1,15 @@
 <!-- Container for the profile information -->
-@if (infoProfileAsync | async; as infoProfile) {
+@if (infoProfile()) {
   <div class="container-profile">
     <div class="container-info-profile">
       <!-- Profile image -->
-      <app-image-profile [urlImgProfile]="infoProfile.urlImg"></app-image-profile>
+      <app-image-profile [urlImgProfile]="infoProfile()?.urlImg!"></app-image-profile>
       <!-- Personal links -->
       <app-personal-links></app-personal-links>
     </div>
     <div class="container-description-profile">
       <!-- Profile description -->
-      <app-description [infoProfile]="infoProfile"></app-description>
+      <app-description [infoProfile]="infoProfile()!"></app-description>
     </div>
   </div>
 } @else {
