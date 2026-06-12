@@ -39,13 +39,13 @@ export const appRoutes: Route[] = [
             import('./terms/terms/terms.component').then(m => m.TermsComponent)
     },
     {
-        path: '**',
-        redirectTo: `/${navigatorSections.homeId}`,
-        pathMatch: 'full'
-    },
-    {
         path: navigatorSections.demosId,
         loadComponent: () =>
             import('./demos/conciliacion/components/comparator/comparator.component').then(m => m.ComparatorComponent)
+    },
+    {
+        path: '**',
+        redirectTo: `/${navigatorSections.homeId}`,
+        pathMatch: 'full'
     }
 ];
