@@ -1,1 +1,74 @@
-<p>comparator works!</p>
+<div class="container-comparator">
+
+  <div class="comparator-content">
+
+    <h3>Conciliador Banco vs Ventas</h3>
+
+    <p class="description">
+      Selecciona ambos archivos para generar el reporte de conciliación.
+    </p>
+
+    <div class="form-section">
+      <label>Archivo Banco</label>
+
+      <input
+        type="file"
+        accept=".xlsx,.xls"
+        (change)="onBancoSelected($event)"
+      />
+
+      @if (bancoFile()) {
+        <span class="file-name">
+          {{ bancoFile()?.name }}
+        </span>
+      }
+    </div>
+
+    <div class="form-section">
+      <label>Archivo Ventas</label>
+
+      <input
+        type="file"
+        accept=".xlsx,.xls"
+        (change)="onVentasSelected($event)"
+      />
+
+      @if (ventasFile()) {
+        <span class="file-name">
+          {{ ventasFile()?.name }}
+        </span>
+      }
+    </div>
+
+    <div class="checkbox-section">
+      <label>
+        <input
+          type="checkbox"
+          [checked]="omitirPrimeraFila()"
+          (change)="omitirPrimeraFila.set($any($event.target).checked)"
+        />
+        Omitir primera fila
+      </label>
+    </div>
+
+    <button
+  class="button-compare"
+  (click)="comparar()"
+  [disabled]="loading() || !bancoFile() || !ventasFile()"
+>
+  {{ loading() ? 'Procesando...' : 'Comparar Archivos' }}
+</button>
+
+  </div>
+
+</div>
+
+@if (loading()) {
+  <div class="loading-overlay">
+    <div class="spinner"></div>
+
+    <p>
+      Comparando archivos...
+    </p>
+  </div>
+}

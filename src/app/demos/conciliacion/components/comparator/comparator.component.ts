@@ -6,12 +6,14 @@ import { ComparatorService } from '../../services/comparator.service';
   selector: 'app-comparator',
   imports: [],
   templateUrl: './comparator.component.html',
-  styleUrl: './comparator.component.scss'
+  styleUrl: './comparator.component.scss',
+  standalone: true
 })
 export class ComparatorComponent {
   public readonly bancoFile = signal<File | undefined>(undefined);
   public readonly ventasFile = signal<File | undefined>(undefined);
   public readonly omitirPrimeraFila = signal(true);
+  public readonly loading = signal(false);
 
   public constructor(
     private readonly compareService: ComparatorService
@@ -35,6 +37,10 @@ export class ComparatorComponent {
 
   public async comparar(): Promise<void> {
 
+  this.loading.set(true);
+
+  try {
+
     const response = await this.compareService.compareData(
       this.bancoFile()!,
       this.ventasFile()!,
@@ -51,5 +57,9 @@ export class ComparatorComponent {
     a.click();
 
     window.URL.revokeObjectURL(url);
+
+  } finally {
+    this.loading.set(false);
   }
+}
 }

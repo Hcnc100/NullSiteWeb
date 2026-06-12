@@ -3,8 +3,7 @@ export interface NavigatorSection {
   skillsId: string,
   projectId: string,
   certificateId: string,
-  contactId: string,
-  demosId: string
+  contactId: string
 }
 
 

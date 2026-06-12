@@ -39,7 +39,7 @@ export const appRoutes: Route[] = [
             import('./terms/terms/terms.component').then(m => m.TermsComponent)
     },
     {
-        path: navigatorSections.demosId,
+        path: "demos/conciliacion",
         loadComponent: () =>
             import('./demos/conciliacion/components/comparator/comparator.component').then(m => m.ComparatorComponent)
     },
