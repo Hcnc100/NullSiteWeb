@@ -42,5 +42,10 @@ export const appRoutes: Route[] = [
         path: '**',
         redirectTo: `/${navigatorSections.homeId}`,
         pathMatch: 'full'
+    },
+    {
+        path: navigatorSections.demosId,
+        loadComponent: () =>
+            import('./demos/conciliacion/components/comparator/comparator.component').then(m => m.ComparatorComponent)
     }
 ];

@@ -11,7 +11,8 @@ export const navigatorSections: NavigatorSection = {
   skillsId: 'skills',
   certificateId: 'certificate',
   projectId: 'project',
-  contactId: 'contact'
+  contactId: 'contact',
+  demosId: 'demos'
 }
 
 export const defaultSection = navigatorSections.homeId
