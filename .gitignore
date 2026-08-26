@@ -179,3 +179,4 @@ dist
 # End of https://www.toptal.com/developers/gitignore/api/node,angular,firebase
 src/environments/environment.prod.ts
 src/environments/environment.ts
+gha-creds-*.json

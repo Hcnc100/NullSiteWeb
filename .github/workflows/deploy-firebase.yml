@@ -5,6 +5,11 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
 
 jobs:
   build_and_deploy:
@@ -14,6 +19,14 @@ jobs:
       # 1️⃣ Checkout del repositorio
       - name: Checkout repository
         uses: actions/checkout@v5
+
+      # Autenticación temporal sin llave JSON.
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v3
+        with:
+          project_id: nullpointer-716ae
+          workload_identity_provider: projects/646388363945/locations/global/workloadIdentityPools/github-actions/providers/nullsiteweb
+          service_account: github-actions-firebase@nullpointer-716ae.iam.gserviceaccount.com
 
       # 2️⃣ Configurar Node.js
       - name: Setup Node.js
@@ -73,11 +86,12 @@ jobs:
       - name: Build Angular project (prod)
         run: npm run build -- --configuration production
 
-      # 7️⃣ Deploy a Firebase Hosting
+      # 7️⃣ Deploy a Firebase Hosting con credenciales temporales.
+      # Firebase CLI 15.22.2 tiene una regresión conocida con WIF;
+      # se fija 15.22.1 hasta que la corrección esté disponible.
       - name: Deploy to Firebase Hosting
-        uses: FirebaseExtended/action-hosting-deploy@v0.10.0
-        with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          projectId: nullpointer-716ae
-          channelId: live
+        run: >-
+          npx --yes firebase-tools@15.22.1 deploy
+          --only hosting
+          --project nullpointer-716ae
+          --non-interactive
