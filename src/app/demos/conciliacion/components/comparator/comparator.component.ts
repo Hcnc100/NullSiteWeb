@@ -87,10 +87,27 @@ export class ComparatorComponent {
     const contentType = response.headers.get('content-type') ?? '';
 
     if (contentType.includes('application/json')) {
-      const body = await response.json() as { detail?: string };
-      return body.detail ?? `Error del servidor (${response.status}).`;
+      const body = await response.json() as { detail?: unknown };
+
+      if (typeof body.detail === 'string' && body.detail.trim()) {
+        return body.detail;
+      }
+
+      if (Array.isArray(body.detail)) {
+        return body.detail
+          .map(item => {
+            if (typeof item === 'object' && item && 'msg' in item) {
+              return String(item.msg);
+            }
+            return String(item);
+          })
+          .join(' ');
+      }
+
+      return `El servidor respondió con el código ${response.status}.`;
     }
 
-    return (await response.text()) || `Error del servidor (${response.status}).`;
+    const text = await response.text();
+    return text || `El servidor respondió con el código ${response.status}.`;
   }
 }

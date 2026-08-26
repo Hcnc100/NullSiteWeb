@@ -90,6 +90,9 @@ input[type="file"] {
   border-radius: 8px;
   color: #ffd1d1;
   background: rgba(140, 20, 20, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .loading-overlay {

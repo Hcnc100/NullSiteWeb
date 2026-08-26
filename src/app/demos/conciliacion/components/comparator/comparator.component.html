@@ -60,9 +60,10 @@
 </button>
 
     @if (errorMessage()) {
-      <p class="error-message" role="alert">
-        {{ errorMessage() }}
-      </p>
+      <div class="error-message" role="alert" aria-live="assertive">
+        <strong>No se pudo generar la conciliación</strong>
+        <span>{{ errorMessage() }}</span>
+      </div>
     }
 
   </div>
