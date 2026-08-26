@@ -14,6 +14,7 @@ export class ComparatorComponent {
   public readonly ventasFile = signal<File | undefined>(undefined);
   public readonly omitirPrimeraFila = signal(true);
   public readonly loading = signal(false);
+  public readonly errorMessage = signal<string | undefined>(undefined);
 
   public constructor(
     private readonly compareService: ComparatorService
@@ -36,30 +37,60 @@ export class ComparatorComponent {
   }
 
   public async comparar(): Promise<void> {
+    this.loading.set(true);
+    this.errorMessage.set(undefined);
 
-  this.loading.set(true);
+    try {
+      const response = await this.compareService.compareData(
+        this.bancoFile()!,
+        this.ventasFile()!,
+        this.omitirPrimeraFila()
+      );
 
-  try {
+      if (!response.ok) {
+        throw new Error(await this.getErrorMessage(response));
+      }
 
-    const response = await this.compareService.compareData(
-      this.bancoFile()!,
-      this.ventasFile()!,
-      this.omitirPrimeraFila()
-    );
+      const contentType = response.headers.get('content-type') ?? '';
+      const isExcel =
+        contentType.includes(
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        ) || contentType.includes('application/octet-stream');
 
-    const blob = await response.blob();
+      if (!isExcel) {
+        throw new Error('El servidor no devolvió un archivo Excel válido.');
+      }
 
-    const url = window.URL.createObjectURL(blob);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
 
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'resultado.xlsx';
-    a.click();
-
-    window.URL.revokeObjectURL(url);
-
-  } finally {
-    this.loading.set(false);
+      try {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'resultado.xlsx';
+        a.click();
+      } finally {
+        window.URL.revokeObjectURL(url);
+      }
+    } catch (error) {
+      this.errorMessage.set(
+        error instanceof Error
+          ? error.message
+          : 'No fue posible generar el archivo de conciliación.'
+      );
+    } finally {
+      this.loading.set(false);
+    }
   }
-}
+
+  private async getErrorMessage(response: Response): Promise<string> {
+    const contentType = response.headers.get('content-type') ?? '';
+
+    if (contentType.includes('application/json')) {
+      const body = await response.json() as { detail?: string };
+      return body.detail ?? `Error del servidor (${response.status}).`;
+    }
+
+    return (await response.text()) || `Error del servidor (${response.status}).`;
+  }
 }

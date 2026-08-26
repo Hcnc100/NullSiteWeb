@@ -83,6 +83,15 @@ input[type="file"] {
   cursor: not-allowed;
 }
 
+.error-message {
+  margin: 0;
+  padding: 12px;
+  border: 1px solid rgba(255, 107, 107, 0.7);
+  border-radius: 8px;
+  color: #ffd1d1;
+  background: rgba(140, 20, 20, 0.35);
+}
+
 .loading-overlay {
   position: fixed;
   top: 0;

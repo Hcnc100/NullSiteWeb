@@ -59,6 +59,12 @@
   {{ loading() ? 'Procesando...' : 'Comparar Archivos' }}
 </button>
 
+    @if (errorMessage()) {
+      <p class="error-message" role="alert">
+        {{ errorMessage() }}
+      </p>
+    }
+
   </div>
 
 </div>
