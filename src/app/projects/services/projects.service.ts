@@ -2,7 +2,7 @@ import type { Signal } from '@angular/core';
 import { inject, Injectable } from '@angular/core';
 import type { CollectionReference } from "@angular/fire/firestore";
 import { Firestore } from "@angular/fire/firestore";
-import { collection, collectionData } from "@angular/fire/firestore";
+import { collection, collectionData, orderBy, query, where } from "@angular/fire/firestore";
 import type { Project } from "../../models/Project";
 import { collectionNames } from "../../../utils/Constants";
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -20,7 +20,7 @@ export class ProjectsService {
   ) as CollectionReference<Project>;
 
   public readonly listProjects: Signal<Project[] | undefined> = toSignal(
-    collectionData(this.projectCollections)
+    collectionData(query(this.projectCollections, where('published', '==', true), orderBy('createdAt', 'desc')))
   );
 
 }

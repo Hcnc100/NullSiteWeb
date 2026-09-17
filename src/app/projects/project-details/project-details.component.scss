@@ -1,4 +1,4 @@
-@use "index" as *;
+@use "../../scss/index" as *;
 
 .container-buttons {
   display: flex;
@@ -77,3 +77,5 @@
   @include style-button-git;
   margin: 0 auto;
 }
+
+

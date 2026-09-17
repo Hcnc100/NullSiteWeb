@@ -1,5 +1,5 @@
 @use "scss/container-card-style";
-@use "index" as *;
+@use "../../scss/index" as *;
 
 .container-contact {
   display: flex;
@@ -38,5 +38,8 @@
     width: 100%;
   }
 }
+
+
+
 
 

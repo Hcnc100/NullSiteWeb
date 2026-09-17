@@ -96,7 +96,7 @@ export class ComparatorComponent {
       if (Array.isArray(body.detail)) {
         return body.detail
           .map(item => {
-            if (typeof item === 'object' && item && 'msg' in item) {
+            if (typeof item === 'object' && item !== null && 'msg' in item) {
               return String(item.msg);
             }
             return String(item);

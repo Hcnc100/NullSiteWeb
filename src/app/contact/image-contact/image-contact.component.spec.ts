@@ -9,16 +9,20 @@ describe('ImageContactComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ImageContactComponent]
+      imports: [ImageContactComponent]
     })
       .compileComponents();
 
     fixture = TestBed.createComponent(ImageContactComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 });
+
+
+
+
+

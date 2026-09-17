@@ -1,3 +1,4 @@
+import { firebaseTestProviders } from 'src/app/testing/firebase-test.providers';
 import type {ComponentFixture} from '@angular/core/testing';
 import { TestBed} from '@angular/core/testing';
 
@@ -9,16 +10,22 @@ describe('LoadingComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [LoadingComponent]
+      imports: [LoadingComponent],
+      providers: firebaseTestProviders
     })
       .compileComponents();
 
     fixture = TestBed.createComponent(LoadingComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 });
+
+
+
+
+
+

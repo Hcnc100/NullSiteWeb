@@ -1,5 +1,7 @@
-@use "index" as *;
+@use "../../../scss/index" as *;
 
 .button-github {
   @include style-button-git;
 }
+
+

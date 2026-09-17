@@ -1,4 +1,4 @@
-@use "index" as *;
+@use "../../scss/index" as *;
 
 .container-language-programming {
   @include size-section;
@@ -30,3 +30,6 @@
     grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
   }
 }
+
+
+

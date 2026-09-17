@@ -1,4 +1,4 @@
-@use "index" as *;
+@use "../../scss/index" as *;
 
 $padding-horizontal: 10px;
 $size-image: 180px;
@@ -45,5 +45,8 @@ $size-title: 30px;
 .container-animation {
   @include elevation-hover($width-content: $size-image, $height-content: $size-image)
 }
+
+
+
 
 

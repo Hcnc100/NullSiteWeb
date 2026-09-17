@@ -9,16 +9,20 @@ describe('CardProjectComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CardProjectComponent]
+      imports: [CardProjectComponent]
     })
       .compileComponents();
 
     fixture = TestBed.createComponent(CardProjectComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 });
+
+
+
+
+

@@ -1,3 +1,5 @@
+import { DialogModule } from '@ngneat/dialog';
+import { firebaseTestProviders } from 'src/app/testing/firebase-test.providers';
 import type {ComponentFixture} from '@angular/core/testing';
 import { TestBed} from '@angular/core/testing';
 
@@ -9,16 +11,25 @@ describe('ProjectsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ProjectsComponent]
+      imports: [ProjectsComponent, DialogModule.forRoot()],
+      providers: firebaseTestProviders
     })
       .compileComponents();
 
     fixture = TestBed.createComponent(ProjectsComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 });
+
+
+
+
+
+
+
+
+

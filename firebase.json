@@ -1,4 +1,11 @@
 {
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "storage": {
+    "rules": "storage.rules"
+  },
   "hosting": {
     "public": "dist/NullSiteWeb2/browser",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],

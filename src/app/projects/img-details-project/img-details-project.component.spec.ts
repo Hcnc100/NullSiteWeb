@@ -9,16 +9,20 @@ describe('ImgProjectComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ImgDetailsProjectComponent]
+      imports: [ImgDetailsProjectComponent]
     })
       .compileComponents();
 
     fixture = TestBed.createComponent(ImgDetailsProjectComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 });
+
+
+
+
+

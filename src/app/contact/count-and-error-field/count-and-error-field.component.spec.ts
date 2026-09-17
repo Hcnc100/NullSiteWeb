@@ -9,16 +9,20 @@ describe('CountAndErrorFieldComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CountAndErrorFieldComponent ]
+      imports: [ CountAndErrorFieldComponent ]
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(CountAndErrorFieldComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 });
+
+
+
+
+

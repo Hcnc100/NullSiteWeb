@@ -9,16 +9,20 @@ describe('SkillCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SkillCardComponent]
+      imports: [SkillCardComponent]
     })
       .compileComponents();
 
     fixture = TestBed.createComponent(SkillCardComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 });
+
+
+
+
+

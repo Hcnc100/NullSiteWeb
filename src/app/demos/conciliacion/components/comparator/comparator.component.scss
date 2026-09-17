@@ -1,4 +1,4 @@
-@use "index" as *;
+@use "../../../../scss/index" as *;
 
 :host {
   display: block;
@@ -132,3 +132,7 @@ h1 span { color: #7c8cff; font-weight: 500; font-style: italic; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
+
+
+
+

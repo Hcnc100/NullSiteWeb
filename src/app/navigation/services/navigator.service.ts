@@ -7,7 +7,7 @@ import { defaultSection } from "../../../utils/Constants";
 
 
 @Injectable({ providedIn: 'root' })
-export class NavigatorServices {
+export class NavigatorService {
   private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
 

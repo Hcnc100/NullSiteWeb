@@ -9,7 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { ResizeService } from 'src/app/services/resize/resize.service';
 import { navigatorSections } from "../../../utils/Constants";
-import { NavigatorServices } from "../services/navigator.service";
+import { NavigatorService } from "../services/navigator.service";
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -24,7 +24,7 @@ import { RouterLink } from '@angular/router';
 export class NavbarComponent {
 
   private readonly resizeService: ResizeService = inject(ResizeService);
-  private readonly navigator: NavigatorServices = inject(NavigatorServices);
+  private readonly navigator: NavigatorService = inject(NavigatorService);
 
 
   public readonly iconMenu: IconDefinition = faBars;
@@ -65,3 +65,4 @@ export class NavbarComponent {
   }
 
 }
+

@@ -1,4 +1,4 @@
-@use "index" as *;
+@use "../../scss/index" as *;
 
 .container-certificate {
   @include size-section;
@@ -31,4 +31,7 @@
     text-align: center;
   }
 }
+
+
+
 

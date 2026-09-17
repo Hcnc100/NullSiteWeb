@@ -1,3 +1,4 @@
+import { firebaseTestProviders } from 'src/app/testing/firebase-test.providers';
 import {TestBed} from '@angular/core/testing';
 
 import {PersonalInfoService} from './personal-info.service';
@@ -6,7 +7,7 @@ describe('PersonalInfoService', () => {
   let service: PersonalInfoService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({ providers: firebaseTestProviders });
     service = TestBed.inject(PersonalInfoService);
   });
 
@@ -14,3 +15,11 @@ describe('PersonalInfoService', () => {
     expect(service).toBeTruthy();
   });
 });
+
+
+
+
+
+
+
+

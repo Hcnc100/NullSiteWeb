@@ -1,3 +1,4 @@
+import { firebaseTestProviders } from 'src/app/testing/firebase-test.providers';
 import type {ComponentFixture} from '@angular/core/testing';
 import { TestBed} from '@angular/core/testing';
 
@@ -9,16 +10,24 @@ describe('CertificateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CertificateComponent]
+      imports: [CertificateComponent],
+      providers: firebaseTestProviders
     })
       .compileComponents();
 
     fixture = TestBed.createComponent(CertificateComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 });
+
+
+
+
+
+
+
+

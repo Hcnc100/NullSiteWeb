@@ -1,6 +1,6 @@
 @use "scss/button-git";
 @use "scss/container-list-projects";
-@use "index" as *;
+@use "../../scss/index" as *;
 
 .container-projects {
   @include size-section;
@@ -17,6 +17,9 @@
   }
 
 }
+
+
+
 
 
 

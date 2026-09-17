@@ -6,4 +6,7 @@ export interface Project {
   readonly urlRepo: string;
   readonly urlPlay: string;
   readonly gallery: string[];
+  readonly published?: boolean;
+  readonly sortOrder?: number;
+  readonly updatedAt?: unknown;
 }
