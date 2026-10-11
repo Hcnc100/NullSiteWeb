@@ -17,6 +17,7 @@ async function persist(mail, ip) {
 }
 
 export const submitContact = onRequest({ region: 'us-central1', maxInstances: 3, concurrency: 20,
+  serviceAccount: 'contact-runtime@nullpointer-716ae.iam.gserviceaccount.com',
   timeoutSeconds: 20, memory: '256MiB', cors: false,
   secrets: [captchaSecret, rateSecret] }, contactHandler({
     origins: () => allowedOrigins.value().split(',').map(value => value.trim()).filter(value => {
