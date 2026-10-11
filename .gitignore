@@ -182,5 +182,6 @@ src/environments/environment.ts
 gha-creds-*.json
 .phase10-backup/
 .vitest-migration-backup/
+.vitest/
 functions-contact/.env*
 functions-contact/.secret.local
