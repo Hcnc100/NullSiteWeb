@@ -4,9 +4,10 @@
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   },
-  "storage": {
+  "storage": [{
+    "bucket": "nullpointer-716ae.appspot.com",
     "rules": "storage.rules"
-  },
+  }],
   "hosting": {
     "public": "dist/NullSiteWeb2/browser",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
