@@ -1,4 +1,5 @@
 import { isHttpsUrl } from '../models/profile-editor.model';
+import { richTextClasses } from '../models/rich-text-format';
 
 export interface LegalHeading { id: string; text: string; level: number; }
 export interface LegalHtmlResult {
@@ -57,7 +58,7 @@ export function sanitizeLegalHtml(
     if (element.namespaceURI !== 'http://www.w3.org/1999/xhtml' || droppedTags.has(originalTag)) {
       changed = true; return;
     }
-    const tag = originalTag === 'h1' ? 'h2'
+    const tag = originalTag === 'font' ? 'span' : originalTag === 'h1' ? 'h2'
       : ['article', 'section', 'header', 'footer', 'main', 'center'].includes(originalTag) ? 'div' : originalTag;
     if (tag !== originalTag) changed = true;
     if (!allowedTags.has(tag)) {
@@ -67,7 +68,7 @@ export function sanitizeLegalHtml(
     }
     const clean = inert.createElement(tag);
     const accepted = new Set<string>();
-    const classes = (element.getAttribute('class') ?? '').split(/\s+/).filter(value => allowedClasses.has(value));
+    const classes = [...(element.getAttribute('class') ?? '').split(/\s+/).filter(value => allowedClasses.has(value)), ...richTextClasses(element)];
     if (element.hasAttribute('class')) {
       if (classes.join(' ') === element.getAttribute('class')) accepted.add('class');
     }

@@ -1,5 +1,7 @@
 # Ramas y pruebas de Tiptap/Kolkov
 
+> Actualización: se amplió el sanitizado en esta misma rama. El formato aprobado ya se conserva en el caso probado de ambos editores; ver [SANITIZADO-ENRIQUECIDO-RESULTADO.md](SANITIZADO-ENRIQUECIDO-RESULTADO.md). Lo siguiente documenta el experimento inicial.
+
 ## Trabajo guardado
 
 - **Respaldo:** `backup/panel-antes-editores`, commit `38863a9`. Conserva el trabajo previo del sitio/panel, configuración y documentación, sin instalar editores nuevos.

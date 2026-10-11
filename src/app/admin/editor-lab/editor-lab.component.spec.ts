@@ -21,7 +21,7 @@ describe('Editor library comparison: save, retrieve and public reader', () => {
     it(`${library}: persists HTML locally and renders recovered text in the real legal reader`, async () => {
       const fixture = await setup(); const c = fixture.componentInstance;
       c.selected.set(library); fixture.detectChanges(); await fixture.whenStable();
-      c.saveLocal(); const expected = c.currentHtml();
+      const expected = c.snapshot().html; c.saveLocal();
       c.saved.set(null); c.recoverLocal(); fixture.detectChanges(); await fixture.whenStable();
       expect(c.saved()?.html).toBe(expected);
       const reader = fixture.nativeElement.querySelector('app-legal-document');
@@ -30,6 +30,11 @@ describe('Editor library comparison: save, retrieve and public reader', () => {
       expect(reader.querySelector('strong').textContent).toBe('negrita');
       expect(reader.querySelector('script')).toBeNull();
       expect(reader.querySelector('[style]')).toBeNull();
+      const rich = reader.querySelector('.rt-size-large') as HTMLElement;
+      expect(rich).toBeTruthy();
+      expect(getComputedStyle(rich).fontSize).toBe('24px');
+      expect(getComputedStyle(rich).color).toBe('rgb(255, 133, 133)');
+      expect(getComputedStyle(rich).fontFamily).toContain('Georgia');
       expect(c.blogResult()).toContain('Texto rojo grande');
       expect(c.blogResult()).not.toContain('font-size');
     });
@@ -42,9 +47,8 @@ describe('Editor library comparison: save, retrieve and public reader', () => {
     expect(c.editor?.getHTML()).toContain('<h3>');
     c.editor?.commands.selectAll(); c.editor?.chain().setColor('#c62828').setFontSize('24px').run();
     expect(c.editor?.getHTML()).toContain('color:');
-    c.saveLocal(); c.recoverLocal(); expect(c.saved()?.html).toContain('font-size: 24px');
-    c.editor?.commands.setContent(c.saved()!.html);
-    expect(c.editor?.getHTML()).toContain('font-size: 24px');
+    c.saveLocal(); c.recoverLocal(); expect(c.saved()?.html).toContain('rt-size-large');
+    c.reopen(); expect(c.editor?.getHTML()).toContain('font-size: 1.5rem');
   });
   it('Kolkov mounts its toolbar and supports multiple headings in the same document', async () => {
     const fixture = await setup(); const c = fixture.componentInstance;
@@ -52,8 +56,9 @@ describe('Editor library comparison: save, retrieve and public reader', () => {
     expect(fixture.nativeElement.querySelector('angular-editor-toolbar')).toBeTruthy();
     expect(fixture.nativeElement.querySelector('.angular-editor-textarea').textContent).toContain('Prueba de encabezado');
     expect(c.currentHtml()).toContain('<h2>'); expect(c.currentHtml()).toContain('<h3>');
-    // With its default Angular sanitizer, input model styles are not necessarily shown in its DOM.
+    // Our closed sanitizer preserves typography as classes, without preserving CSS.
     expect(fixture.nativeElement.querySelector('.angular-editor-textarea span[style*="font-size"]')).toBeNull();
+    expect(fixture.nativeElement.querySelector('.angular-editor-textarea .rt-size-large')).toBeTruthy();
   });
   it('Kolkov formatting commands update the saved HTML, not just the visible DOM', async () => {
     const fixture = await setup(); const c = fixture.componentInstance; c.selected.set('kolkov'); fixture.detectChanges();
@@ -66,7 +71,8 @@ describe('Editor library comparison: save, retrieve and public reader', () => {
     fixture.detectChanges(); await fixture.whenStable();
     c.saveLocal(); c.recoverLocal();
     expect(c.saved()?.html).not.toBe(before);
-    expect(c.saved()?.html).toMatch(/color:|color=/);
+    expect(c.saved()?.html).toContain('rt-color-red');
+    expect(c.saved()?.html).not.toContain('style=');
     expect(c.saved()?.html).toContain('Texto rojo grande');
     selection.removeAllRanges();
   });
@@ -100,13 +106,14 @@ describe('Editor library comparison: save, retrieve and public reader', () => {
       expect(reader.nativeElement.querySelector('.blog-body').textContent).toContain('Texto rojo grande');
       expect(reader.nativeElement.querySelector('.blog-body h2').textContent).toBe('Prueba de encabezado');
       expect(reader.nativeElement.querySelector('.blog-body [style]')).toBeNull();
+      expect(getComputedStyle(reader.nativeElement.querySelector('.blog-body .rt-size-large')).fontSize).toBe('24px');
     });
   }
   if ((import.meta as ImportMeta & { env: Record<string, string> }).env['VITE_EDITOR_EMULATOR'] === '1') {
     for (const library of ['tiptap', 'kolkov'] as const) {
       it(`${library}: actual Firestore emulator round trip renders recovered text`, async () => {
         const fixture = await setup(); const c = fixture.componentInstance; c.selected.set(library);
-        const html = c.currentHtml(); await c.firestore(true);
+        const html = c.snapshot().html; await c.firestore(true);
         expect(c.status()).toContain('Guardado en Firestore EMULADO');
         c.saved.set(null); await c.firestore(false);
         expect(c.saved()?.html).toBe(html);

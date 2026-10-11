@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnDestroy, AfterViewInit, ViewChild, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AngularEditorModule, AngularEditorConfig } from '@kolkov/angular-editor';
+import { AngularEditorModule, AngularEditorConfig, provideEditorSanitizer } from '@kolkov/angular-editor';
 import { Editor } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
 import { TextStyleKit } from '@tiptap/extension-text-style';
@@ -9,6 +9,7 @@ import { TableKit } from '@tiptap/extension-table';
 import { LegalDocumentComponent } from '../../terms/legal-document/legal-document.component';
 import { sanitizePublishedHtml } from '../../models/blog-draft';
 import { sanitizeLegalHtml } from '../../terms/legal-html';
+import { richHtmlForEditor } from '../../models/rich-text-format';
 
 export const LAB_SAMPLE = `<h2>Prueba de encabezado</h2><p>Texto normal y <strong>negrita</strong>, <em>cursiva</em>.</p><h3>Segundo encabezado</h3><p><span style="color: #c62828; font-family: Georgia; font-size: 24px">Texto rojo grande</span></p><ul><li>Uno</li><li>Dos</li></ul><p><a href="https://example.com">Enlace de prueba</a></p><table><tbody><tr><th>Campo</th><th>Valor</th></tr><tr><td>Estado</td><td>Recuperado</td></tr></tbody></table>`;
 export type LabEditor = 'tiptap' | 'kolkov';
@@ -19,6 +20,7 @@ const storageKey = 'nullsite-editor-lab-v1';
 @Component({
   selector: 'app-editor-lab', standalone: true,
   imports: [FormsModule, AngularEditorModule, LegalDocumentComponent],
+  providers: [provideEditorSanitizer(html => sanitizeLegalHtml(html, document).html)],
   templateUrl: './editor-lab.component.html', styleUrls: ['./editor-lab.component.scss', '../blog/blog-body.scss'],
 })
 export class EditorLabComponent implements AfterViewInit, OnDestroy {
@@ -41,7 +43,14 @@ export class EditorLabComponent implements AfterViewInit, OnDestroy {
   }
   public ngOnDestroy(): void { this.editor?.destroy(); }
   public currentHtml(): string { return this.selected() === 'tiptap' ? this.editor?.getHTML() ?? '' : this.kolkovHtml; }
-  public snapshot(): LabRecord { return { title: 'Documento recuperado', html: this.currentHtml(), editor: this.selected() }; }
+  public snapshot(): LabRecord { return { title: 'Documento recuperado', html: sanitizeLegalHtml(this.currentHtml(), document).html, editor: this.selected() }; }
+  public reopen(): void {
+    const record = this.saved(); if (!record) return;
+    const html = sanitizeLegalHtml(record.html, document).html;
+    this.selected.set(record.editor);
+    if (record.editor === 'tiptap') this.editor?.commands.setContent(richHtmlForEditor(html, document));
+    else this.kolkovHtml = html;
+  }
   public saveLocal(): void {
     try { localStorage.setItem(storageKey, JSON.stringify(this.snapshot())); this.status.set('Guardado local: recupera para verificar el lector.'); }
     catch { this.status.set('No se pudo guardar localmente.'); }

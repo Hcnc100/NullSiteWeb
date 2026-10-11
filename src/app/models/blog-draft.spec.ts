@@ -18,7 +18,7 @@ describe('Private blog HTML contract', () => {
       + '<svg onload="alert(1)"><a href="javascript:alert(1)">SVG</a></svg>'
       + '<p onclick="alert(1)" style="color:red" id="clobber">Safe</p>';
     const result = sanitizeBlogHtml(html, 'article', document);
-    expect(result.html).toBe('<p>Safe</p>'); expect(result.changed).toBe(true);
+    expect(result.html).toBe('<p class="rt-color-red">Safe</p>'); expect(result.changed).toBe(true);
   });
   it('rejects javascript, data, credentials and encoded dangerous link protocols', () => {
     for (const href of ['javascript:alert(1)', 'data:text/html,evil', 'https://user:pass@example.com',

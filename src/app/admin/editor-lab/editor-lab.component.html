@@ -33,7 +33,8 @@
   <p role="status">{{status()}}</p>
   @if (saved(); as record) {
     <h2>Recuperado de {{record.editor}}</h2>
-    <p>Importante: los lectores actuales eliminan fuentes, tamaños y colores no admitidos. Si aquí desaparecen, la librería no basta: hay que adaptar la política de formatos.</p>
+    <p>Se conservan únicamente colores, fuentes y tamaños de la lista segura. El CSS original se convierte en clases controladas.</p>
+    <button (click)="reopen()">Volver a editar lo recuperado</button>
     <div class="readers">
       <section aria-label="Lector público real de legales"><h2>Lector real de legales</h2><app-legal-document [terms]="{title: record.title, content: record.html}" [embedded]="true" /></section>
       <section aria-label="Contenido permitido para blog"><h2>Contenido permitido para blog</h2><article class="blog-body" [innerHTML]="blogResult()"></article><details><summary>HTML filtrado del blog</summary><pre>{{blogResult()}}</pre></details></section>

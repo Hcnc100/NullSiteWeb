@@ -1,0 +1,18 @@
+// Closed classes emitted by the sanitizer. Scoped to content readers/editors only.
+:is(.blog-body, .legal-document, .angular-editor-textarea, .tiptap) {
+  .rt-color-red { color: #ff8585; }
+  .rt-color-blue { color: #a9c7ff; }
+  .rt-color-green { color: #9cdbb1; }
+  .rt-color-default { color: inherit; }
+  .rt-font-serif { font-family: Georgia, serif; }
+  .rt-font-sans { font-family: Arial, sans-serif; }
+  .rt-font-mono { font-family: monospace; }
+  .rt-size-small { font-size: .875rem; }
+  .rt-size-normal { font-size: 1rem; }
+  .rt-size-medium { font-size: 1.125rem; }
+  .rt-size-large { font-size: 1.5rem; }
+  .rt-size-xlarge { font-size: 2rem; }
+  .rt-align-left { text-align: left; }
+  .rt-align-center { text-align: center; }
+  .rt-align-right { text-align: right; }
+}

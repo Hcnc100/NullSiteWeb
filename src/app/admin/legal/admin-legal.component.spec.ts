@@ -82,7 +82,7 @@ describe('Private legal editor', () => {
     const c = fixture.componentInstance; c.edit(record); c.switchMode('visual'); fixture.detectChanges();
     const editor: HTMLElement = fixture.nativeElement.querySelector('.legal-visual');
     editor.innerHTML = '<p style="color:red" onclick="evil()">Body</p>'; c.captureVisual(); c.normalize();
-    expect(c.form.controls.content.value).toBe('<p>Body</p>'); expect(c.preview()?.content).toBe('<p>Body</p>');
+    expect(c.form.controls.content.value).toBe('<p class="rt-color-red">Body</p>'); expect(c.preview()?.content).toBe('<p class="rt-color-red">Body</p>');
   });
   it('rejects empty, active-only and oversized HTML without writes', async () => {
     const c = fixture.componentInstance; c.edit(null); c.form.controls.title.setValue('New');
