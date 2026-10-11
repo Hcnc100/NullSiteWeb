@@ -17,6 +17,13 @@
 }
 
 label { font-weight: 600; margin-bottom: 6px; }
+fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+fieldset.is-sending { cursor: wait; }
+.is-sending ngx-recaptcha2 { pointer-events: none; opacity: .65; }
+input[type='submit']:disabled { cursor: wait; opacity: .65; }
+.submission-status, .submission-error { margin: 12px 0 0; line-height: 1.5; }
+.submission-status:empty { display: none; }
+.submission-error { font-weight: 600; }
 @media (max-width: 600px) { .container-form { padding: 20px 16px; } }
 
 form {

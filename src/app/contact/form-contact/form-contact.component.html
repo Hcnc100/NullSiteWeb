@@ -1,6 +1,7 @@
 <!-- FILEPATH: /C:/Users/desarrollador6/Documents/Proyectos/NullSiteWeb/src/app/contact/form-contact/form-contact.component.html -->
 <div class="container-form">
-  <form (ngSubmit)="onSubmit()" [formGroup]="formContact">
+  <form (ngSubmit)="onSubmit()" [formGroup]="formContact" [attr.aria-busy]="isSending()">
+    <fieldset [disabled]="isSending()" [class.is-sending]="isSending()">
     <div class="container-inputs">
 
       <!-- Input field for name -->
@@ -47,7 +48,12 @@
     <ngx-recaptcha2 #captcha formControlName="token" [siteKey]="siteKey" [hl]="i18n.locale()" size="compact"></ngx-recaptcha2>
 
     <!-- Submit button -->
-    <input type="submit" [disabled]="formContact.disabled" [value]="'Send Message' | t">
+    <input type="submit" [disabled]="isSending() || formContact.disabled" [value]="(isSending() ? 'Sending message…' : 'Send Message') | t">
+    </fieldset>
+    <p class="submission-status" role="status" aria-live="polite">{{ (isSending() ? 'Sending message. Please wait without closing this page.' : '') | t }}</p>
+    @if (submissionError()) {
+      <p class="submission-error" role="alert">{{ submissionError() | t }}</p>
+    }
 
   </form>
 </div>

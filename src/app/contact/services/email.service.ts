@@ -2,8 +2,12 @@ import { inject, Injectable, InjectionToken } from '@angular/core';
 import type { Email } from '../../models/Email';
 
 export const CONTACT_FETCH = new InjectionToken<typeof fetch>('CONTACT_FETCH', {
-  providedIn: 'root', factory: () => globalThis.fetch.bind(globalThis),
+  providedIn: 'root', factory: (): typeof fetch => globalThis.fetch.bind(globalThis),
 });
+
+export class ContactSubmissionError extends Error {
+  public constructor(public readonly status: number) { super('Contact submission failed'); }
+}
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +28,7 @@ export class EmailService {
       }),
     });
     if (response.status !== 201 || (await response.json() as { ok?: boolean }).ok !== true) {
-      throw new Error('Contact submission failed');
+      throw new ContactSubmissionError(response.status);
     }
   }
 }
