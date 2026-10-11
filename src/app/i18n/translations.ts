@@ -217,6 +217,11 @@ export const messages: Record<string, readonly [string, string]> = {
   'blog': ['Blog', 'Blog'],
   'El blog se activa desde su editor; guardar no publica artículos.':
     ['El blog se activa desde su editor; guardar no publica artículos.', 'Enable the blog from its editor; saving does not publish articles.'],
+  'Sending message…': ['Enviando mensaje…', 'Sending message…'],
+  'Sending message. Please wait without closing this page.': ['Enviando mensaje. Espera sin cerrar esta página.', 'Sending message. Please wait without closing this page.'],
+  'Review the fields and complete CAPTCHA again.': ['Revisa los campos y vuelve a completar el CAPTCHA.', 'Review the fields and complete CAPTCHA again.'],
+  'Too many attempts. Wait a few minutes before trying again.': ['Demasiados intentos. Espera unos minutos antes de volver a intentarlo.', 'Too many attempts. Wait a few minutes before trying again.'],
+  'The request timed out. Delivery could not be confirmed. Check before retrying.': ['Se agotó el tiempo de espera. No se pudo confirmar el envío. Compruébalo antes de reintentar.', 'The request timed out. Delivery could not be confirmed. Check before retrying.'],
 };
 
 export function localizedText(base: string, translations: Translations | undefined, locale: Locale, field: string): string {
