@@ -37,7 +37,7 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - run: npm --prefix functions-contact ci
       - run: npm --prefix functions-contact test
-      - run: node --test tests/ci-environment.test.mjs tests/contact-config.test.mjs
+      - run: node --test tests/ci-environment.test.mjs tests/contact-config.test.mjs tests/release-workflow.test.mjs
       - run: node scripts/ci-environment.mjs
       - run: npx --no-install tsc --project tsconfig.spec.json --noEmit
       - run: npm test -- --watch=false
@@ -45,7 +45,7 @@ jobs:
       - run: npm run build -- --configuration production
   deploy:
     needs: validate
-    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && inputs.accepted
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.accepted))
     runs-on: ubuntu-latest
     timeout-minutes: 20
     environment: production
@@ -64,7 +64,7 @@ jobs:
         run: npm audit --audit-level=high
       - run: npm --prefix functions-contact audit --audit-level=high
       - name: Validate allowed origins for contact backend
-        if: inputs.target == 'full'
+        if: github.event_name == 'push' || inputs.target == 'full'
         run: node scripts/contact-config.mjs
         env:
           CONTACT_ALLOWED_ORIGINS: ${{ vars.CONTACT_ALLOWED_ORIGINS || secrets.CONTACT_ALLOWED_ORIGINS }}
@@ -85,14 +85,14 @@ jobs:
           project_id: nullpointer-716ae
           workload_identity_provider: projects/646388363945/locations/global/workloadIdentityPools/github-actions/providers/nullsiteweb
           service_account: github-actions-firebase@nullpointer-716ae.iam.gserviceaccount.com
-      # Secrets and allowed origins must exist before manual full release.
+      # Merges to main release the full stack only after validation succeeds.
       # Separate codebase prevents managing the legacy notification functions.
       - name: Release contact backend first
-        if: inputs.target == 'full'
+        if: github.event_name == 'push' || inputs.target == 'full'
         run: npx --yes firebase-tools@15.22.1 deploy --only functions:contact --project nullpointer-716ae --non-interactive
       - name: Release rules and frontend
         env:
-          DEPLOY_TARGET: ${{ inputs.target }}
+          DEPLOY_TARGET: ${{ github.event_name == 'push' && 'full' || inputs.target }}
         run: |
           if [ "$DEPLOY_TARGET" = "full" ]; then
             npx --yes firebase-tools@15.22.1 deploy --only firestore:rules,firestore:indexes,storage,hosting --project nullpointer-716ae --non-interactive
