@@ -1,6 +1,7 @@
 import type { Email } from "../../models/Email";
 import { ToastrService } from "ngx-toastr";
-import { Component, inject, signal, viewChild } from '@angular/core';
+import { Component, effect, inject, signal, viewChild } from '@angular/core';
+import type { ElementRef } from '@angular/core';
 import { ContactSubmissionError, EmailService } from "../services/email.service";
 import { FormBuilder } from "@angular/forms";
 import { ReactiveFormsModule, Validators } from "@angular/forms";
@@ -31,6 +32,7 @@ export class FormContactComponent {
   public readonly i18n = inject(I18nService);
   public readonly isSending = signal(false);
   public readonly submissionError = signal('');
+  public readonly sendingDialog = viewChild<ElementRef<HTMLDialogElement>>('sendingDialog');
 
   public readonly maxCountName = 50;
   public readonly maxCountSubject = 100;
@@ -100,6 +102,17 @@ export class FormContactComponent {
   });
 
   public siteKey: string = environment.siteKey;
+
+  public constructor() {
+    effect(() => {
+      const dialog = this.sendingDialog()?.nativeElement;
+      if (!dialog) return;
+      if (this.isSending() && !dialog.open) dialog.showModal();
+      else if (!this.isSending() && dialog.open) dialog.close();
+    });
+  }
+
+  public preventSendingDismiss(event: Event): void { event.preventDefault(); }
 
   public async onSubmit(): Promise<void> {
     if (this.isSending() || this.formContact.disabled) return;
