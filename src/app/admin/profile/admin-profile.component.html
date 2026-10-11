@@ -1,0 +1,67 @@
+<section class="admin-card" aria-labelledby="profile-title">
+  <h2 id="profile-title">{{'Perfil y redes' | t}}</h2>
+  <p class="muted">Edita la información pública de tu portafolio. Se conserva el documento que usa tu app móvil.</p>
+  @if (loading()) { <p role="status">{{'Cargando perfil…' | t}}</p> }
+  @if (error()) { <p role="alert" class="feedback error">{{ error() | t }}</p> }
+  @if (message()) { <p role="status" class="feedback">{{ message() | t }}</p> }
+  @if (loaded()) {
+    <div class="preview-layout">
+    <form [formGroup]="form" (ngSubmit)="save()" [attr.aria-busy]="isSaving()">
+      <fieldset [disabled]="isSaving() || loading()">
+        <div class="field">
+          <label for="profile-name">{{'Nombre' | t}}</label>
+          <input id="profile-name" formControlName="name" maxlength="120" autocomplete="name" aria-describedby="name-help">
+          <p id="name-help" class="field-help">@if (form.controls.name.touched && form.controls.name.invalid) { Escribe tu nombre (máximo 120 caracteres). }</p>
+        </div>
+        <div class="field">
+          <label for="profile-profession">{{'Profesión' | t}}</label>
+          <input id="profile-profession" formControlName="profession" maxlength="180" aria-describedby="profession-help">
+          <p id="profession-help" class="field-help">@if (form.controls.profession.touched && form.controls.profession.invalid) { Escribe tu profesión (máximo 180 caracteres). }</p>
+        </div>
+        <div class="field">
+          <label for="profile-description">{{'Acerca de mí' | t}}</label>
+          <textarea id="profile-description" formControlName="description" maxlength="5000" rows="7" aria-describedby="description-help"></textarea>
+          <p id="description-help" class="field-help">Texto plano, máximo 5000 caracteres. @if (form.controls.description.touched && form.controls.description.invalid) { Este campo es obligatorio. }</p>
+        </div>
+        <div class="field">
+          <label for="profile-image">{{'URL de la foto' | t}}</label>
+          <input id="profile-image" type="url" formControlName="urlImg" maxlength="2048" aria-describedby="image-help">
+          <p id="image-help" class="field-help">Usa una URL HTTPS. La carga de imágenes está disponible en Proyectos.</p>
+          @if (form.controls.urlImg.touched && form.controls.urlImg.invalid) { <p class="error">Escribe una URL HTTPS válida.</p> }
+        </div>
+        <h3>{{'Redes y enlaces' | t}}</h3>
+        <p class="muted">{{'Deja vacío un enlace para no mostrarlo.' | t}}</p>
+        @for (platform of platforms; track platform) {
+          <div class="field">
+            <label [for]="'social-' + platform">{{ platform === 'twitter' ? 'X / Twitter' : platform }}</label>
+            <input [id]="'social-' + platform" type="url" [formControlName]="platform" maxlength="2048" [attr.aria-describedby]="'help-' + platform">
+            <p [id]="'help-' + platform" class="field-help">@if (form.controls[platform].touched && form.controls[platform].invalid) { Usa una URL HTTPS válida o deja el campo vacío. }</p>
+          </div>
+        }
+        <h3>{{'Traducciones opcionales' | t}}</h3>
+        <details class="editorial-check"><summary>{{'Pendientes editoriales' | t}} · {{translationGaps().length}}</summary>
+          <ul>@for (gap of translationGaps(); track gap) { <li>{{gap}}</li> } @empty { <li>{{'Textos y descripciones completos en ES/EN.' | t}}</li> }</ul>
+        </details>
+        <p class="muted">{{'Vacío = usar el texto original. No se traduce automáticamente.' | t}}</p>
+        <div class="field"><label for="es-profession">Español · {{'Profesión' | t}}</label><input id="es-profession" formControlName="esProfession" maxlength="180"></div>
+        <div class="field"><label for="es-description">Español · {{'Descripción' | t}}</label><textarea id="es-description" formControlName="esDescription" maxlength="5000" rows="4"></textarea></div>
+        <div class="field"><label for="en-profession">English · {{'Profesión' | t}}</label><input id="en-profession" formControlName="enProfession" maxlength="180"></div>
+        <div class="field"><label for="en-description">English · {{'Descripción' | t}}</label><textarea id="en-description" formControlName="enDescription" maxlength="5000" rows="4"></textarea></div>
+        <div class="actions">
+          <button type="submit" [disabled]="form.invalid || !form.dirty || isSaving()"><app-admin-icon name="save" />{{ (isSaving() ? 'Guardando…' : 'Guardar cambios') | t }}</button>
+          <button type="button" class="secondary" (click)="load()"><app-admin-icon name="reload" />{{'Recargar datos' | t}}</button>
+        </div>
+      </fieldset>
+    </form>
+    <aside class="live-preview" aria-labelledby="profile-preview-title">
+      <h3 id="profile-preview-title"><app-admin-icon name="preview" />{{'Vista previa en tiempo real' | t}}</h3>
+      <p class="muted">{{'Los cambios no se publican hasta guardar.' | t}}</p>
+      <app-editor-preview [title]="form.controls.name.value" [image]="form.controls.urlImg.value"
+        [details]="(i18n.locale() === 'es' ? form.controls.esProfession.value : form.controls.enProfession.value) || form.controls.profession.value"
+        [description]="(i18n.locale() === 'es' ? form.controls.esDescription.value : form.controls.enDescription.value) || form.controls.description.value" />
+    </aside>
+    </div>
+  } @else if (!loading()) {
+    <button type="button" (click)="load()">{{'Reintentar carga' | t}}</button>
+  }
+</section>

@@ -1,4 +1,5 @@
 
   <div class="container-animation-load">
-    <ng-lottie [options]="options()"></ng-lottie>
+    @if (motion.reduced()) { <p role="status" style="color: white">{{'Cargando…' | t}}</p> }
+    @else { <ng-lottie [options]="options()" aria-hidden="true"></ng-lottie> }
   </div>

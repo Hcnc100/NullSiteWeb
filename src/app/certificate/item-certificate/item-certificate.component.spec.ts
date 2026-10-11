@@ -20,6 +20,15 @@ describe('ItemCertificateComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('reserves image space and uses the certificate name as alternative text', () => {
+    fixture.componentRef.setInput('certificate', { name: 'Kotlin', urlCertificate: 'https://example.invalid/certificate.jpg' });
+    fixture.detectChanges();
+    const image = fixture.nativeElement.querySelector('img') as HTMLImageElement;
+    expect(image.alt).toBe('Kotlin');
+    expect(image.width).toBeGreaterThan(0);
+    expect(image.getAttribute('loading')).toBe('lazy');
+  });
 });
 
 

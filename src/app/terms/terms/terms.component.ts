@@ -1,61 +1,46 @@
-import type { SafeHtml } from '@angular/platform-browser';
-import { DomSanitizer } from '@angular/platform-browser';
 import { TermsService } from './../terms.service';
-import type { OnInit } from '@angular/core';
-import { Component, inject, ViewEncapsulation } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import type { Observable } from 'rxjs';
-import { tap, switchMap, of, catchError, finalize } from 'rxjs';
+import { combineLatest, Subject, defer, map, distinctUntilChanged, startWith, switchMap, of, catchError } from 'rxjs';
 import type { Terms } from 'src/app/models/Terms';
 import { LoadingComponent } from '../../share/loading/loading.component';
 import { CommonModule } from '@angular/common';
+import { LegalDocumentComponent } from '../legal-document/legal-document.component';
+import { TranslatePipe } from '../../i18n/translate.pipe';
+
+export type TermsViewState = { kind: 'loading' | 'not-found' | 'error' } | { kind: 'ready'; project: Terms };
 
 @Component({
   selector: 'app-terms',
   templateUrl: './terms.component.html',
   styleUrls: ['./terms.component.scss'],
-  encapsulation: ViewEncapsulation.None,
   standalone: true,
   imports: [
     LoadingComponent,
-    CommonModule
+    CommonModule, LegalDocumentComponent, TranslatePipe
   ]
 })
-export class TermsComponent implements OnInit {
+export class TermsComponent {
 
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
   private readonly termsServices: TermsService = inject(TermsService)
-  private readonly sanitizer: DomSanitizer = inject(DomSanitizer);
 
 
-  public termsProject?: Observable<Terms | null>;
-  public isLoading = true;
-
-
-  public ngOnInit(): void {
-    this.termsProject = this.route.paramMap.pipe(
-      switchMap(params => {
-        const projectId = params.get('projectID');
-        if (projectId != null) {
-          return this.termsServices.getTerms(projectId).pipe(
-            catchError(error => this.handleError(error)),
-            finalize(() => this.isLoading = false)
-          );
-        } else {
-          return of(null).pipe(
-            tap(() => this.isLoading = false)
-          );
-        }
-      })
+  private readonly retryRequests = new Subject<void>();
+  public readonly state: Observable<TermsViewState> = combineLatest([
+    this.route.paramMap.pipe(map(params => params.get('projectID')), distinctUntilChanged()),
+    this.retryRequests.pipe(startWith(undefined)),
+  ]).pipe(switchMap(([projectId]) => {
+    if (projectId === null || !/^[^/\u0000-\u001f]{1,1500}$/.test(projectId)
+      || projectId === '.' || projectId === '..') return of<TermsViewState>({ kind: 'not-found' });
+    return defer(() => this.termsServices.getTerms(projectId)).pipe(
+      map((project): TermsViewState => project === null ? { kind: 'not-found' } : { kind: 'ready', project }),
+      startWith<TermsViewState>({ kind: 'loading' }),
+      catchError(() => of<TermsViewState>({ kind: 'error' })),
     );
-  }
+  }));
 
-  public getSafeContent(content: string): SafeHtml {
-    return this.sanitizer.bypassSecurityTrustHtml(content);
-  }
-
-  private handleError(_: unknown): Observable<null> {
-    return of(null);
-  }
+  public retry(): void { this.retryRequests.next(); }
 
 }

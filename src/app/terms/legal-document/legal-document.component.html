@@ -1,0 +1,32 @@
+<article class="legal-document" [class.has-index]="rendered().headings.length > 1"
+  [attr.aria-labelledby]="prefix() + '-document-title'">
+  <header class="legal-document__header">
+    <p class="legal-document__eyebrow">{{'Documento legal' | t}}</p>
+    @if (embedded()) { <h2 class="legal-document__title" [id]="prefix() + '-document-title'">{{terms().title}}</h2> }
+    @else { <h1 class="legal-document__title" [id]="prefix() + '-document-title'">{{terms().title}}</h1> }
+  </header>
+  @if (rendered().rejected === null) {
+    @if (rendered().headings.length > 1) {
+      <aside class="legal-document__index">
+        <details [open]="wide()">
+          <summary>{{'Contenido del documento' | t}}</summary>
+          <nav [attr.aria-label]="'Contenido del documento' | t">
+            <ol>
+              @for (heading of rendered().headings; track heading.id) {
+                <li [class.legal-document__nested]="heading.level > 2">
+                  <a [href]="anchorHref(heading.id)">{{heading.text}}</a>
+                </li>
+              }
+            </ol>
+          </nav>
+        </details>
+      </aside>
+    }
+    <div #content class="legal-document__content" [innerHTML]="rendered().html"></div>
+  } @else {
+    <div class="legal-document__notice" role="alert">
+      <h2>{{'No se pudo mostrar el documento completo.' | t}}</h2>
+      <p>{{'El contenido no tiene un formato válido o supera los límites de lectura. No se muestra una versión parcial.' | t}}</p>
+    </div>
+  }
+</article>

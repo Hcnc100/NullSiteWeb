@@ -4,14 +4,20 @@
 
 
 .container-form {
-  @include fill_max_size_with_padding(40px);
+  padding: 28px;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .form-section {
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
+  min-width: 0;
 }
+
+label { font-weight: 600; margin-bottom: 6px; }
+@media (max-width: 600px) { .container-form { padding: 20px 16px; } }
 
 form {
   display: flex;

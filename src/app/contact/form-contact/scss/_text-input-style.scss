@@ -3,26 +3,32 @@ $width-border-text: 1px;
 
 
 input.ng-invalid.ng-touched, textarea.ng-invalid.ng-touched {
-  border: $width-border-text solid red;
+  border: 2px solid #b42318;
   transition: border 0.3s ease-in-out;
 }
 
-input[type=text], textarea {
-  width: calc(100% - ($inner-padding-text * 2 + $width-border-text * 2));
+input[type=text], input[type=email], textarea {
+  font-size: 16px;
+  min-height: 44px;
+  box-sizing: border-box;
+  width: 100%;
+  color: #19191d;
+  background: #fff;
   padding: 12px $inner-padding-text;
-  border: $width-border-text solid #ccc;
+  border: $width-border-text solid #777;
   border-radius: 4px;
 }
 
-input[type=text]:focus, textarea:focus {
+input[type=text]:focus, input[type=email]:focus, textarea:focus {
   border: $width-border-text solid #0ab5b1;
-  outline: none;
+  outline: 3px solid var(--site-focus);
+  outline-offset: 2px;
   transition: border 0.3s ease-in-out;
 }
 
 textarea {
-  resize: none;
-  height: 70px;
+  resize: vertical;
+  min-height: 100px;
 }
 
 @media screen and (max-width: 600px) {

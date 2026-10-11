@@ -1,9 +1,11 @@
 @if (listProjects()) {
 <div class="container-projects">
-  <h3>Projects</h3>
+  <h1>{{'Projects' | t}}</h1>
   <div [id]="listProjectId" class="container-list-projects">
-    @for (project of listProjects(); track project.name) {
-    <app-card-project (click)="clickOnProject(project)" [project]="project" class="item-project" />
+    @for (project of listProjects(); track project.id) {
+    <app-card-project (click)="clickOnProject(project)" (keydown.enter)="clickOnProject(project)"
+      (keydown.space)="$event.preventDefault(); clickOnProject(project)" role="button" tabindex="0"
+      aria-haspopup="dialog" [attr.aria-label]="project.name" [project]="project" class="item-project" />
     }
   </div>
 </div>

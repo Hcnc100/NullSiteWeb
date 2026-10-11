@@ -4,27 +4,32 @@
   @include size-section;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: flex-start;
+  gap: 24px;
+  padding-bottom: 40px;
   color: white;
   background-image: url("/assets/background-skills.svg");
   background-size: cover;
 
-  h3 {
+  h1, h2 {
     text-align: center;
-    font-size: 25px;
-    padding-bottom: 25px;
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
+    padding-block: 16px;
   }
+  h1 { font-size: clamp(1.5rem, 3vw, 2rem); margin-top: 16px; }
 
   @media screen and (max-width: 600px) {
-    justify-content: center;
+    justify-content: flex-start;
   }
 }
 
 .container-cards-items {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  width: min(1100px, calc(100% - 48px));
+  margin-inline: auto;
   justify-items: center;
-  row-gap: 10px;
+  gap: 20px;
 
   @media screen and (max-width: 300px) {
     grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));

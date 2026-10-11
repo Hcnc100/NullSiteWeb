@@ -1,0 +1,108 @@
+<section class="admin-card" aria-labelledby="content-title">
+  <h2 id="content-title">{{ (kind === 'projects' ? 'Proyectos' : 'Habilidades') | t }}</h2>
+  @if (kind === 'projects') {
+    <p class="muted">{{i18n.locale() === 'es' ? 'Los proyectos guardados son públicos. No se habilitan borradores privados en esta fase.' : 'Saved projects are public. Private project drafts are not enabled in this phase.'}}</p>
+  }
+  <div class="actions">
+    <button type="button" (click)="edit(null)" [disabled]="isSaving() || loading()"><app-admin-icon name="add" />{{(kind === 'projects' ? 'Nuevo proyecto' : 'Nueva habilidad') | t}}</button>
+    <button type="button" class="secondary" (click)="load()" [disabled]="isSaving()"><app-admin-icon name="reload" />{{'Recargar datos' | t}}</button>
+    @if (kind === 'skills') {
+      <button type="button" class="secondary" (click)="importSkills()" [disabled]="isSaving()">{{i18n.locale() === 'es' ? 'Importar habilidades actuales sin sobrescribir' : 'Import existing skills without overwriting'}}</button>
+    }
+  </div>
+  @if (kind === 'skills') { <p class="muted">{{i18n.locale() === 'es' ? 'Importa las habilidades actuales para activar su administración; no se migran automáticamente.' : 'Import existing skills to enable management; migration is not automatic.'}}</p> }
+  @if (loading()) { <p role="status">{{'Cargando…' | t}}</p> }
+  @if (error()) { <p role="alert" class="feedback error">{{error() | t}}</p> }
+  @if (message()) { <p role="status" class="feedback">{{message() | t}}</p> }
+  @if (progress() !== null) { <p role="status">{{'Subir imágenes' | t}}: {{progress()}}%</p> }
+  @if (activeId() !== null) {
+    <div class="preview-layout">
+    <form class="editor" [formGroup]="form" (ngSubmit)="save()" [attr.aria-busy]="isSaving()">
+      <fieldset [disabled]="isSaving()">
+        <h3>{{'Textos originales' | t}}</h3>
+        <div class="field"><label for="content-name">{{'Nombre' | t}}</label><input id="content-name" formControlName="name" maxlength="120" required></div>
+        <div class="field"><label for="content-description">{{'Descripción' | t}}</label><textarea id="content-description" formControlName="description" rows="5" maxlength="10000"></textarea></div>
+        <details class="editorial-check">
+          <summary>{{'Pendientes editoriales' | t}} · {{editorialGaps().length}}</summary>
+          <p class="muted">{{'Estos avisos no bloquean el guardado. Vacío mantiene el texto original; revisa cada idioma antes de publicar.' | t}}</p>
+          <ul>@for (gap of editorialGaps(); track $index) { <li>{{gap}}</li> } @empty { <li>{{'Textos y descripciones completos en ES/EN.' | t}}</li> }</ul>
+        </details>
+        @if (kind === 'projects') {
+          <div class="field"><label for="content-cover">{{'Portada HTTPS' | t}}</label><input id="content-cover" formControlName="urlImg" type="url" maxlength="2048" required></div>
+          <div class="field"><label for="upload-cover">{{'Imagen de portada' | t}} (PNG / JPEG / WEBP / GIF · 10 MiB)</label><input id="upload-cover" type="file" accept="image/png,image/jpeg,image/webp,image/gif" (change)="upload($event, true)"></div>
+          <div class="field"><label for="cover-alt">{{'Descripción accesible de portada' | t}}</label><input id="cover-alt" formControlName="coverAlt" maxlength="300"></div>
+          <div class="field"><label for="cover-alt-es">Español · {{'Descripción accesible de portada' | t}}</label><input id="cover-alt-es" formControlName="esCoverAlt" maxlength="300"></div>
+          <div class="field"><label for="cover-alt-en">English · {{'Descripción accesible de portada' | t}}</label><input id="cover-alt-en" formControlName="enCoverAlt" maxlength="300"></div>
+          <div class="field"><label for="cover-thumbnail">{{'Miniatura HTTPS opcional' | t}}</label><input id="cover-thumbnail" formControlName="thumbnailUrl" type="url" maxlength="2048" aria-describedby="thumbnail-help"><p id="thumbnail-help" class="field-help">{{'Usa una versión ligera de la misma imagen. Vacío utiliza el original; la miniatura no sustituye la imagen ampliada.' | t}}</p></div>
+          <div class="field"><label for="upload-thumbnail">{{'Subir miniatura de portada' | t}}</label><input id="upload-thumbnail" type="file" accept="image/png,image/jpeg,image/webp,image/gif" (change)="upload($event, true, true)"></div>
+          <div class="field"><label for="content-repo">{{'Repositorio HTTPS' | t}}</label><input id="content-repo" formControlName="urlRepo" type="url" maxlength="2048"></div>
+          <div class="field"><label for="content-demo">{{'Demo / tienda HTTPS' | t}}</label><input id="content-demo" formControlName="urlPlay" type="url" maxlength="2048"></div>
+          <div class="field"><label for="content-tech">{{'Tecnologías (separadas por coma)' | t}}</label><input id="content-tech" formControlName="technologies" maxlength="2000"></div>
+          <div class="actions"><button type="button" class="secondary" (click)="addCapture()" [disabled]="galleryMetadata.length >= 60"><app-admin-icon name="add" />{{'Añadir captura por URL' | t}}</button></div>
+          <div class="field"><label for="upload-gallery">{{'Subir imágenes' | t}} (PNG / JPEG / WEBP / GIF · 10 MiB)</label><input id="upload-gallery" type="file" multiple accept="image/png,image/jpeg,image/webp,image/gif" (change)="upload($event, false)"></div>
+          <h3>{{'Descripciones y miniaturas de galería' | t}}</h3>
+          <details class="gallery-help"><summary>{{'Ayuda de galería' | t}}</summary><p class="muted">{{'Describe lo que muestra cada captura. Los metadatos siguen a su URL al reordenar la galería; no se inventan descripciones automáticamente.' | t}}</p></details>
+          @for (item of galleryMetadata.controls; track item; let index = $index) {
+            <details class="editorial-check" [formGroup]="item" [open]="!item.controls.url.value">
+              <summary>
+                @if (safeImage(item.controls.url.value)) { <img class="capture-thumb" [src]="safeImage(item.controls.url.value)" alt="" loading="lazy" referrerpolicy="no-referrer"> }
+                {{'Captura' | t}} {{index + 1}} · {{item.controls.alt.value || ('Sin descripción' | t)}}
+              </summary>
+              @if (safeImage(item.controls.url.value)) {
+                <img class="gallery-preview" [src]="safeImage(item.controls.url.value)" [alt]="item.controls.alt.value || (('Captura' | t) + ' ' + (index + 1))" loading="lazy" referrerpolicy="no-referrer">
+              }
+              <div class="field"><label [for]="'gallery-url-' + index">{{'URL HTTPS de la captura' | t}}</label><input [id]="'gallery-url-' + index" formControlName="url" type="url" maxlength="2048" required>
+                @if (item.controls.url.invalid) { <p class="error">{{'Escribe una URL HTTPS válida.' | t}}</p> }
+              </div>
+              <div class="field"><label [for]="'gallery-alt-' + index">{{'Descripción accesible' | t}}</label><input [id]="'gallery-alt-' + index" formControlName="alt" maxlength="300"></div>
+              <div class="field"><label [for]="'gallery-es-' + index">Español · {{'Descripción accesible' | t}}</label><input [id]="'gallery-es-' + index" formControlName="esAlt" maxlength="300"></div>
+              <div class="field"><label [for]="'gallery-en-' + index">English · {{'Descripción accesible' | t}}</label><input [id]="'gallery-en-' + index" formControlName="enAlt" maxlength="300"></div>
+              <div class="field"><label [for]="'gallery-thumbnail-' + index">{{'Miniatura HTTPS opcional' | t}}</label><input [id]="'gallery-thumbnail-' + index" formControlName="thumbnailUrl" type="url" maxlength="2048"></div>
+              <button type="button" class="secondary icon-action" (click)="removeCapture(index)" [attr.aria-label]="('Quitar captura de la galería' | t) + ' ' + (index + 1)" [title]="'Quitar captura de la galería' | t"><app-admin-icon name="remove" /></button>
+            </details>
+          }
+          <p class="muted">{{'Quitar una captura se aplica al guardar; no borra el archivo de Storage.' | t}}</p>
+          <div class="field"><label for="content-links">{{'Enlaces (etiqueta | URL HTTPS, uno por línea)' | t}}</label><textarea id="content-links" rows="3" formControlName="links" maxlength="22000"></textarea></div>
+        } @else {
+          <div class="field"><label for="content-category">{{'Categoría' | t}}</label><select id="content-category" formControlName="category"><option value="language">{{'Lenguajes' | t}}</option><option value="tech">{{'Technologies' | t}}</option></select></div>
+          <div class="field"><label for="content-icon">{{'Icono' | t}}</label><select id="content-icon" formControlName="iconKey">@for (icon of icons; track icon) { <option [value]="icon">{{icon}}</option> }</select></div>
+          <div class="field"><label for="content-color">{{'Color' | t}}</label><input id="content-color" type="color" formControlName="color"></div>
+          <div class="field"><label for="content-order">{{'Orden' | t}}</label><input id="content-order" type="number" min="0" max="9999" formControlName="sortOrder"></div>
+          <label class="checkbox"><input type="checkbox" formControlName="published">{{'Publicar habilidad' | t}}</label>
+        }
+        <h3>{{'Traducciones opcionales' | t}}</h3><p class="muted">{{'Vacío = usar el texto original. No se traduce automáticamente.' | t}}</p>
+        <div class="actions" role="group" aria-label="Translation language">
+          <button type="button" class="secondary" [attr.aria-pressed]="translationLocale() === 'es'" (click)="translationLocale.set('es')">Español</button>
+          <button type="button" class="secondary" [attr.aria-pressed]="translationLocale() === 'en'" (click)="translationLocale.set('en')">English</button>
+        </div>
+        <div class="field"><label for="translated-name">{{'Nombre traducido' | t}}</label><input id="translated-name" [formControlName]="translationLocale() === 'es' ? 'esName' : 'enName'" maxlength="120"></div>
+        <div class="field"><label for="translated-description">{{'Descripción traducida' | t}}</label><textarea id="translated-description" [formControlName]="translationLocale() === 'es' ? 'esDescription' : 'enDescription'" rows="4" maxlength="10000"></textarea></div>
+        <div class="actions"><button type="submit" [disabled]="form.invalid || galleryMetadata.invalid"><app-admin-icon name="save" />{{'Guardar cambios' | t}}</button><button type="button" class="secondary" (click)="cancel()"><app-admin-icon name="cancel" />{{'Cancelar' | t}}</button></div>
+      </fieldset>
+    </form>
+    <aside class="live-preview" aria-labelledby="content-preview-title">
+      <h3 id="content-preview-title"><app-admin-icon name="preview" />{{'Vista previa en tiempo real' | t}}</h3>
+      <p class="muted">{{'Los cambios no se publican hasta guardar.' | t}}</p>
+      <app-editor-preview
+        [title]="(i18n.locale() === 'es' ? form.controls.esName.value : form.controls.enName.value) || form.controls.name.value"
+        [description]="(i18n.locale() === 'es' ? form.controls.esDescription.value : form.controls.enDescription.value) || form.controls.description.value"
+        [image]="kind === 'projects' ? form.controls.urlImg.value : ''" [alt]="form.controls.coverAlt.value"
+        [details]="kind === 'projects' ? form.controls.technologies.value : form.controls.category.value" />
+      @if (kind === 'projects') {
+        <div class="preview-gallery">
+          @for (item of galleryMetadata.controls; track item; let index = $index) {
+            @if (safeImage(item.controls.url.value)) {
+              <figure><img class="gallery-preview" [src]="safeImage(item.controls.url.value)" [alt]="item.controls.alt.value || (('Captura' | t) + ' ' + (index + 1))" loading="lazy" referrerpolicy="no-referrer"><figcaption>{{'Captura' | t}} {{index + 1}} · {{item.controls.alt.value}}</figcaption></figure>
+            }
+          }
+        </div>
+      }
+    </aside>
+    </div>
+  }
+  <ul class="record-list">
+    @for (record of records(); track record.id) {
+      <li>@if (kind === 'projects' && safeImage(record.urlImg)) { <img class="record-cover" [src]="safeImage(record.urlImg)" [alt]="record.coverAlt || record.name || ''" loading="lazy" referrerpolicy="no-referrer"> }<span>{{record.name}}</span><div class="actions"><button type="button" class="secondary" (click)="edit(record)" [disabled]="isSaving()"><app-admin-icon name="edit" />{{'Editar' | t}}</button><button type="button" class="secondary" (click)="remove(record)" [disabled]="isSaving()"><app-admin-icon name="remove" />{{'Eliminar' | t}}</button></div></li>
+    } @empty { @if (!loading()) { <li>{{'Sin registros.' | t}}</li> } }
+  </ul>
+</section>

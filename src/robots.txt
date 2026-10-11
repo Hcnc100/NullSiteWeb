@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /admin
+Disallow: /es/admin
+Disallow: /en/admin
+
+# Published blog pages are discovered through the enabled public navigation.
+# Add an absolute Sitemap URL only after confirming the production canonical domain.

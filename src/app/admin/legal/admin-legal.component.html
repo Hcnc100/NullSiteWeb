@@ -1,0 +1,101 @@
+<section aria-labelledby="legal-editor-title">
+  <h2 id="legal-editor-title">{{'Documentos legales' | t}}</h2>
+  <p class="muted">{{'Guardar crea un borrador privado. Solo Publicar cambia el documento público; la URL no cambia.' | t}}</p>
+  <div class="actions">
+    <button type="button" (click)="edit(null)" [disabled]="loading() || isSaving()">{{'Nuevo documento legal' | t}}</button>
+    <button type="button" class="secondary" (click)="load()" [disabled]="loading() || isSaving()">{{'Recargar documentos' | t}}</button>
+  </div>
+  @if (loading()) { <p role="status">{{'Cargando documentos legales…' | t}}</p> }
+  @if (error()) { <p role="alert" class="feedback error">{{error() | t}}</p> }
+  @if (message()) { <p role="status" class="feedback">{{message() | t}}</p> }
+  <ul class="record-list">
+    @for (record of records(); track record.id) {
+      <li>
+        <strong>{{record.draft?.title || record.published?.title}}</strong>
+        <p class="muted">{{record.published ? ('Versión pública disponible' | t) : ('Solo borrador privado' | t)}} · {{record.id}}</p>
+        <div class="actions">
+          <button type="button" class="secondary" (click)="edit(record)" [disabled]="loading() || isSaving()">{{'Editar' | t}}</button>
+          @if (record.published) {
+            <a [href]="i18n.publicUrl('terms-and-conditions/' + record.id)" target="_blank" rel="noopener noreferrer">{{'Ver versión pública' | t}}</a>
+            @if (record.draft) { <button type="button" class="secondary" (click)="edit(record, true)" [disabled]="isSaving()">{{'Partir de versión pública' | t}}</button> }
+          }
+        </div>
+      </li>
+    } @empty { @if (!loading()) { <li>{{'No hay documentos legales cargados.' | t}}</li> } }
+  </ul>
+  @if (activeId(); as id) {
+    <form class="admin-card legal-editor" [formGroup]="form" (ngSubmit)="save()" [attr.aria-busy]="isSaving()">
+      <h3>{{'Editor legal privado' | t}}</h3>
+      <p class="muted legal-id">{{'Identificador permanente' | t}}: {{id}}</p>
+      <fieldset [disabled]="isSaving()">
+        <div class="field">
+          <label for="legal-title">{{'Título del documento' | t}}</label>
+          <input id="legal-title" formControlName="title" maxlength="180" required aria-describedby="legal-title-help">
+          <p id="legal-title-help" class="field-help">{{'Título obligatorio, máximo 180 caracteres.' | t}}</p>
+          @if (form.controls.title.touched && form.controls.title.invalid) { <p class="error">{{'Título obligatorio, máximo 180 caracteres.' | t}}</p> }
+        </div>
+        <div class="actions" [attr.aria-label]="'Modo de edición' | t">
+          <button type="button" class="secondary" (click)="switchMode('html')" [attr.aria-pressed]="mode() === 'html'">HTML</button>
+          <button type="button" class="secondary" (click)="switchMode('visual')" [attr.aria-pressed]="mode() === 'visual'">{{'Edición visual' | t}}</button>
+          <button type="button" class="secondary" (click)="structure()">{{'Insertar estructura básica' | t}}</button>
+        </div>
+        <div class="field">
+          @if (mode() === 'html') {
+          <label for="legal-html">{{'Contenido HTML legal' | t}}</label>
+          <textarea id="legal-html" formControlName="content" rows="16" maxlength="500000" required spellcheck="false" aria-describedby="legal-html-help"></textarea>
+          } @else {
+            <app-format-toolbar [disabled]="isSaving()" (format)="insert($event === 'pre' ? 'p' : $event)" />
+            <label for="legal-link">{{'Enlace HTTPS o correo' | t}}</label>
+            <input id="legal-link" [formControl]="link" maxlength="2048" type="text">
+            <button type="button" class="secondary" (mousedown)="$event.preventDefault()" (click)="insert('a')">{{'Insertar enlace' | t}}</button>
+            <div #visual class="legal-visual" role="textbox" aria-multiline="true" [attr.aria-label]="'Contenido visual legal' | t"
+              aria-describedby="legal-html-help" [attr.contenteditable]="!isSaving()" [innerHTML]="visualHtml()"
+              (input)="captureVisual()" (beforeinput)="preventNativeInsert($any($event))" (paste)="paste($event)"
+              (drop)="$event.preventDefault()" (dragover)="$event.preventDefault()" (click)="preventNavigation($event)"></div>
+            <p class="muted">{{'En modo visual, pegar inserta solo texto. Usa HTML para conservar formatos y tablas; revisa siempre la vista previa.' | t}}</p>
+          }
+          <p id="legal-html-help" class="field-help">{{'Usa h2, h3, p, listas, enlaces HTTPS y tablas. No se permiten scripts, imágenes ni CSS arbitrario. Máximo 500.000 caracteres.' | t}}</p>
+          @if (form.controls.content.touched && form.controls.content.invalid) { <p class="error">{{'HTML legal inválido, vacío o demasiado complejo. No se guardó nada.' | t}}</p> }
+          <details><summary>{{'Ejemplos de HTML seguro' | t}}</summary>
+            <pre><code>&lt;h2&gt;Título de sección&lt;/h2&gt;
+&lt;p class="legal-lead"&gt;Introducción&lt;/p&gt;
+&lt;ul&gt;&lt;li&gt;Elemento&lt;/li&gt;&lt;/ul&gt;
+&lt;div class="legal-note"&gt;Nota&lt;/div&gt;
+&lt;a href="https://example.com"&gt;Enlace&lt;/a&gt;</code></pre>
+            <p class="muted">{{'Los ejemplos son de formato, no una plantilla ni asesoría legal.' | t}}</p>
+          </details>
+        </div>
+        <div class="actions">
+          <button type="button" class="secondary" (click)="normalize()">{{'Normalizar HTML y previsualizar' | t}}</button>
+          <button type="button" class="secondary" (click)="showPreview()">{{'Vista previa segura' | t}}</button>
+          <button type="submit" [disabled]="form.invalid">{{'Guardar borrador' | t}}</button>
+          <button type="button" (click)="publish()" [disabled]="hasUnsavedChanges() || !saved() || saved()?.revision === saved()?.publishedRevision">{{'Publicar versión guardada' | t}}</button>
+          <button type="button" class="secondary" (click)="cancel()">{{'Cerrar editor' | t}}</button>
+        </div>
+      </fieldset>
+      @if (warning()) { <p role="status" class="feedback">{{'El HTML se normalizó: revisa el resultado antes de guardar. Se eliminaron o adaptaron formatos no admitidos.' | t}}</p> }
+      <p class="muted">{{'Los cambios sin guardar se advierten al salir. No se eliminan documentos desde este editor.' | t}}</p>
+    </form>
+    @if (preview(); as document) {
+      <section class="legal-preview" [attr.aria-label]="'Vista previa segura' | t">
+        <h3>{{'Vista previa segura' | t}}</h3>
+        <app-legal-document [terms]="document" anchorPrefix="legal-preview" [embedded]="true" />
+      </section>
+    }
+    <section aria-labelledby="legal-history-title">
+      <h3 id="legal-history-title">{{'Historial de publicaciones' | t}}</h3>
+      <p class="muted">{{'Últimas 20 publicaciones del portal. Las versiones anteriores al portal se conservan al publicar por primera vez.' | t}}</p>
+      <button type="button" class="secondary" (click)="loadHistory(id)" [disabled]="isSaving()">{{'Recargar historial' | t}}</button>
+      <ul class="record-list">
+        @for (version of history(); track version.id) {
+          <li><strong>{{version.title}}</strong> · {{'Revisión' | t}} {{version.revision}}
+            <div class="actions">
+              <button type="button" class="secondary" (click)="restore(version)" [disabled]="isSaving()">{{'Copiar versión al borrador' | t}}</button>
+              @if (version.previous; as previous) { <button type="button" class="secondary" (click)="restore(previous)" [disabled]="isSaving()">{{'Copiar versión pública anterior' | t}}</button> }
+            </div>
+          </li>
+        } @empty { <li>{{'Sin publicaciones registradas en el portal.' | t}}</li> }
+      </ul>
+    </section>
+  }
+</section>

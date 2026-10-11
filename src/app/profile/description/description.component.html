@@ -1,6 +1,11 @@
 <div class="container-personal-info">
   <h1>{{infoProfile().name}}</h1>
-  <p>{{infoProfile().profession}}</p>
-  <h2>About me</h2>
-  <p>{{infoProfile().description}}</p>
+  <p>{{localizedText(infoProfile().profession, infoProfile().translations, i18n.locale(), 'profession')}}</p>
+  <h2>{{'About me' | t}}</h2>
+  <p>{{localizedText(infoProfile().description, infoProfile().translations, i18n.locale(), 'description')}}</p>
+</div>
+<div class="profile-actions">
+  <a class="primary-action" [routerLink]="i18n.publicUrl('project')">{{'Ver proyectos' | t}}</a>
+  <a class="secondary-action" [routerLink]="i18n.publicUrl('contact')">{{'Contactar' | t}}</a>
+  <app-resume-download />
 </div>

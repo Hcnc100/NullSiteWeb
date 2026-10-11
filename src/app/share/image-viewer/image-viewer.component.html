@@ -1,0 +1,18 @@
+<section class="image-viewer">
+  <header>
+    <h2 id="image-dialog-title" tabindex="-1">{{data.title}}</h2>
+    <button type="button" class="close-dialog" (click)="dialogRef.close()" [attr.aria-label]="'Cerrar' | t">×</button>
+  </header>
+  @if (data.images[index()]; as image) {
+    <figure>
+      <img [src]="image.url" [alt]="image.alt" decoding="async">
+      <figcaption aria-live="polite" aria-atomic="true">{{image.alt}} · {{index() + 1}} / {{data.images.length}}</figcaption>
+    </figure>
+    @if (data.images.length > 1) {
+      <nav [attr.aria-label]="'Navegar imágenes' | t">
+        <button type="button" (click)="move(-1)" [disabled]="index() === 0">{{'Anterior' | t}}</button>
+        <button type="button" (click)="move(1)" [disabled]="index() === data.images.length - 1">{{'Siguiente' | t}}</button>
+      </nav>
+    }
+  }
+</section>

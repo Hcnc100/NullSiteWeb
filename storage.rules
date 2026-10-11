@@ -1,11 +1,58 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
-    function isAdmin() { return request.auth != null && request.auth.token.admin == true; }
-    match /{allPaths=**} {
+    function isAdmin() { return request.auth != null && request.auth.token.get('admin', false) == true; }
+    function imageUpload() {
+      return request.resource.size > 0 && request.resource.size <= 10 * 1024 * 1024
+        && request.resource.contentType.matches('image/(jpeg|png|webp|gif)');
+    }
+    match /projects/{projectId}/{file} {
       allow read: if true;
-      allow write: if isAdmin() && request.resource.size < 10 * 1024 * 1024
-        && request.resource.contentType.matches('image/.*');
+      allow create, update: if isAdmin() && imageUpload();
+      allow delete: if isAdmin();
+    }
+    match /blog-drafts/{draftId}/{file} {
+      allow read, delete: if isAdmin();
+      allow create, update: if isAdmin() && imageUpload();
+    }
+    match /blog-public/{postKey}/{version}/{file} {
+      function publishedImage() {
+        let settings = firestore.get(/databases/(default)/documents/siteSettings/public).data;
+        let post = firestore.get(/databases/(default)/documents/blog-posts/$(postKey)).data;
+        return settings.get('blogEnabled', false) == true
+          && post.status == 'published' && post.assetVersion == version;
+      }
+      allow get: if isAdmin() || publishedImage();
+      allow list, delete: if isAdmin();
+      allow create: if isAdmin() && imageUpload()
+        && (!firestore.exists(/databases/(default)/documents/blog-posts/$(postKey))
+          || firestore.get(/databases/(default)/documents/blog-posts/$(postKey)).data.assetVersion != version)
+        && postKey.matches('(es|en)-[a-z0-9]+(-[a-z0-9]+)*')
+        && version.matches('[a-zA-Z0-9_-]+') && file.matches('[a-zA-Z0-9_-]+[.](png|jpeg|webp|gif)');
+      // Active published versions cannot be overwritten, even when a client classifies an upload as create.
+      allow update: if false;
+    }
+    match /resumes/{locale}/{file} {
+      function publishedResume() {
+        let settings = firestore.get(/databases/(default)/documents/siteSettings/public).data;
+        return (locale == 'es' || locale == 'en')
+          && settings.resume[locale].enabled == true
+          && settings.resume[locale].storagePath == 'resumes/' + locale + '/' + file;
+      }
+      allow get: if isAdmin() || publishedResume();
+      allow list: if isAdmin();
+      allow create, update: if isAdmin() && (locale == 'es' || locale == 'en')
+        && file.matches('[a-zA-Z0-9_-]+[.]pdf')
+        && request.resource.size > 5 && request.resource.size <= 10 * 1024 * 1024
+        && request.resource.contentType == 'application/pdf';
+      allow delete: if isAdmin();
+    }
+    // Rules are ORed: keep the legacy wildcard disjoint from the PDF namespace.
+    match /{root}/{allPaths=**} {
+      allow read: if root != 'resumes' && root != 'projects' && root != 'blog-drafts' && root != 'blog-public';
+      allow create, update: if root != 'resumes' && root != 'projects' && root != 'blog-drafts' && root != 'blog-public'
+        && isAdmin() && imageUpload();
+      allow delete: if root != 'resumes' && root != 'projects' && root != 'blog-drafts' && root != 'blog-public' && isAdmin();
     }
   }
 }

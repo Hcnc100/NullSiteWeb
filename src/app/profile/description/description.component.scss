@@ -3,16 +3,21 @@
 .container-personal-info {
 
   h1 {
-    font-size: 25px;
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    line-height: 1.15;
+    letter-spacing: -.03em;
     padding: 10px 0;
   }
 
   h2 {
-    font-size: 23px;
+    font-size: 1.25rem;
+    margin-top: 20px;
   }
 
   p {
-    font-size: 18px;
+    font-size: clamp(1rem, 1.4vw, 1.125rem);
+    max-width: 62ch;
+    color: var(--site-muted);
     padding: 10px 0;
   }
 
@@ -23,3 +28,8 @@
     }
   }
 }
+.profile-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 24px; }
+.profile-actions a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px;
+  padding: 8px 20px; box-sizing: border-box; border-radius: 6px; text-decoration: none; font-weight: 600; }
+.primary-action { background: white; color: black; border: 1px solid white; }
+.secondary-action { border: 1px solid #777; color: white; }

@@ -5,24 +5,30 @@
 
       <!-- Input field for name -->
       <div class="form-section">
-        <input formControlName="name" placeholder="Name" type="text" [maxlength]="maxCountName+10">
-        <app-count-and-error-field [control]="formContact.controls.name" [errorsList]="errorsListName" [maxCount]="maxCountName">
+        <label for="contact-name">{{'Name' | t}}</label>
+        <input id="contact-name" formControlName="name" autocomplete="name" required aria-describedby="contact-name-help"
+          [attr.aria-invalid]="formContact.controls.name.touched && formContact.controls.name.invalid" type="text" [maxlength]="maxCountName+10">
+        <app-count-and-error-field id="contact-name-help" [control]="formContact.controls.name" [errorsList]="errorsListName" [maxCount]="maxCountName">
         </app-count-and-error-field>
       </div>
 
       <!-- Input field for email -->
       <div class="form-section">
-        <input formControlName="email" placeholder="Email" type="text" [maxlength]="maxCountEmail+10">
+        <label for="contact-email">{{'Email' | t}}</label>
+        <input id="contact-email" formControlName="email" autocomplete="email" required aria-describedby="contact-email-help"
+          [attr.aria-invalid]="formContact.controls.email.touched && formContact.controls.email.invalid" type="email" [maxlength]="maxCountEmail+10">
         <div class="count-and-error">
-          <app-count-and-error-field [control]="formContact.controls.email" [errorsList]="errorsListEmail" [maxCount]="maxCountEmail">
+          <app-count-and-error-field id="contact-email-help" [control]="formContact.controls.email" [errorsList]="errorsListEmail" [maxCount]="maxCountEmail">
           </app-count-and-error-field>
         </div>
       </div>
 
       <!-- Input field for subject -->
       <div class="form-section">
-        <input formControlName="subject" placeholder="Subject" type="text" [maxlength]="maxCountSubject+10">
-        <app-count-and-error-field [control]="formContact.controls.subject" [errorsList]="errorsListSubject"
+        <label for="contact-subject">{{'Subject' | t}}</label>
+        <input id="contact-subject" formControlName="subject" required aria-describedby="contact-subject-help"
+          [attr.aria-invalid]="formContact.controls.subject.touched && formContact.controls.subject.invalid" type="text" [maxlength]="maxCountSubject+10">
+        <app-count-and-error-field id="contact-subject-help" [control]="formContact.controls.subject" [errorsList]="errorsListSubject"
           [maxCount]="maxCountSubject">
         </app-count-and-error-field>
       </div>
@@ -30,16 +36,18 @@
 
     <!-- Textarea field for message -->
     <div class="form-section">
-      <textarea formControlName="message" placeholder="Write your message" [maxlength]="maxCountMessage+10"></textarea>
-      <app-count-and-error-field [control]="formContact.controls.message" [errorsList]="errorsListMessage"
+      <label for="contact-message">{{'Write your message' | t}}</label>
+      <textarea id="contact-message" formControlName="message" required aria-describedby="contact-message-help"
+        [attr.aria-invalid]="formContact.controls.message.touched && formContact.controls.message.invalid" [maxlength]="maxCountMessage+10"></textarea>
+      <app-count-and-error-field id="contact-message-help" [control]="formContact.controls.message" [errorsList]="errorsListMessage"
         [maxCount]="maxCountMessage"></app-count-and-error-field>
     </div>
 
     <!-- reCAPTCHA field -->
-    <ngx-recaptcha2 formControlName="token" [siteKey]="siteKey"></ngx-recaptcha2>
+    <ngx-recaptcha2 #captcha formControlName="token" [siteKey]="siteKey" [hl]="i18n.locale()" size="compact"></ngx-recaptcha2>
 
     <!-- Submit button -->
-    <input type="submit" value="Send Message">
+    <input type="submit" [disabled]="formContact.disabled" [value]="'Send Message' | t">
 
   </form>
 </div>

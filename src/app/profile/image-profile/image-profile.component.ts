@@ -1,4 +1,5 @@
-import { Component, input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
+import { MotionService } from '../../services/motion/motion.service';
 import type { AnimationOptions } from "ngx-lottie";
 import { LottieComponent } from "ngx-lottie";
 
@@ -12,17 +13,20 @@ import { LottieComponent } from "ngx-lottie";
   ]
 })
 export class ImageProfileComponent {
+  public readonly motion = inject(MotionService);
 
   public readonly urlImgProfile = input.required<string>();
 
   public isLoading = true;
+  public failed = false;
 
   public readonly options: AnimationOptions = {
     path: "assets/loading2.json",
   }
 
   public changeLoad(): void {
-    setTimeout(() => this.isLoading = false, 800);
+    this.isLoading = false;
   }
+  public imageFailed(): void { this.isLoading = false; this.failed = true; }
 
 }

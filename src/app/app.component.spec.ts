@@ -1,10 +1,13 @@
 import {TestBed} from '@angular/core/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {AppComponent} from './app.component';
+import { signal } from '@angular/core';
+import { PublicBlogService } from './blog/public-blog.service';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      providers: [{ provide: PublicBlogService, useValue: { enabled: signal(false) } }],
       imports: [
         RouterTestingModule,
         AppComponent

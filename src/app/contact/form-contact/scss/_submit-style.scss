@@ -5,7 +5,10 @@ input[type=submit] {
   color: white;
   padding: 12px 10px;
   text-decoration: none;
-  width: 120px;
+  width: fit-content;
+  max-width: 100%;
+  min-height: 44px;
+  border-radius: 6px;
   margin-top: 10px;
 }
 

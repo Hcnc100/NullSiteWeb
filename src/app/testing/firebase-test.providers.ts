@@ -8,10 +8,15 @@ import { environment } from '../../environments/environment';
 import { provideToastr } from 'ngx-toastr';
 import { provideLottieOptions } from 'ngx-lottie';
 import { DialogRef } from '@ngneat/dialog';
+import { provideRouter } from '@angular/router';
+import { provideStorage } from '@angular/fire/storage';
+import { getStorage } from 'firebase/storage';
 
 const testApp = initializeApp(environment.firebase, 'test');
 
 export const firebaseTestProviders = [
+  provideRouter([]),
+  provideStorage(() => getStorage(testApp)),
   provideFirebaseApp(() => testApp),
   provideFirestore(() => getFirestore(testApp)),
   provideAnalytics(() => getAnalytics(testApp)),

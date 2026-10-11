@@ -1,0 +1,41 @@
+<section class="admin-page login-page" aria-labelledby="login-title">
+  <div class="admin-card login-card">
+    <a routerLink="/home" class="quiet-link">{{'Volver al portafolio' | t}}</a>
+    <p class="eyebrow">NullPointer · Administración</p>
+    <h1 id="login-title">{{'Tu espacio de edición' | t}}</h1>
+    <p class="muted">{{'Usa el mismo correo y contraseña de tu app móvil. No necesitas otra cuenta.' | t}}</p>
+
+    @if (auth.access() === 'loading' && !busy()) {
+      <p role="status">{{'Verificando sesión…' | t}}</p>
+    } @else if (auth.access() === 'forbidden') {
+      <div role="alert" class="feedback error">{{'Tu cuenta está autenticada, pero no tiene permisos administrativos.' | t}}</div>
+      <button type="button" (click)="logout()">{{'Salir y usar otra cuenta' | t}}</button>
+    } @else if (!auth.isAdmin()) {
+      @if (auth.access() === 'error') {
+        <p role="alert" class="feedback error">{{'No se pudo verificar la sesión. Puedes intentar iniciar sesión de nuevo.' | t}}</p>
+      }
+      <form [formGroup]="form" (ngSubmit)="submit()" [attr.aria-busy]="busy()">
+        <div class="field">
+          <label for="admin-email">{{'Correo electrónico' | t}}</label>
+          <input id="admin-email" type="email" formControlName="email" autocomplete="username"
+            inputmode="email" maxlength="254" [readOnly]="busy()" aria-describedby="email-help"
+            [attr.aria-invalid]="form.controls.email.touched && form.controls.email.invalid">
+          <p id="email-help" class="field-help">
+            @if (form.controls.email.touched && form.controls.email.invalid) { Escribe un correo válido. }
+          </p>
+        </div>
+        <div class="field">
+          <label for="admin-password">{{'Contraseña' | t}}</label>
+          <input id="admin-password" type="password" formControlName="password" autocomplete="current-password"
+            [readOnly]="busy()" aria-describedby="password-help"
+            [attr.aria-invalid]="form.controls.password.touched && form.controls.password.invalid">
+          <p id="password-help" class="field-help">
+            @if (form.controls.password.touched && form.controls.password.invalid) { Escribe tu contraseña. }
+          </p>
+        </div>
+        <button type="submit" [disabled]="busy() || form.invalid">{{ (busy() ? 'Entrando…' : 'Entrar al panel') | t }}</button>
+      </form>
+    }
+    @if (error()) { <p role="alert" class="feedback error">{{ error() | t }}</p> }
+  </div>
+</section>

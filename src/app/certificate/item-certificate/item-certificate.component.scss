@@ -2,16 +2,20 @@
 
 
 .container-img-certificate {
-  @include elevation-hover($width-content: 150px, $height-content: 120px);
+  aspect-ratio: 4 / 3;
   box-shadow: 10px 9px 26px -8px rgba(112, 112, 112, 0.52);
   -webkit-box-shadow: 10px 9px 26px -8px rgba(112, 112, 112, 0.52);
   -moz-box-shadow: 10px 9px 26px -8px rgba(112, 112, 112, 0.52);
   border: 2px solid black;
   border-radius: 5px;
+  box-sizing: border-box;
+  @include elevation-hover($width-content: 100%, $height-content: auto);
 
   img {
-    width: 150px;
-    height: 120px;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
   }
 }
 

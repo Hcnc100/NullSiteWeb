@@ -69,6 +69,13 @@ export default [
   },
 
   // =========================
+  // Specs use Vitest's typed globals, not the application TypeScript program.
+  {
+    files: ['src/**/*.spec.ts', 'src/testing/**/*.ts'],
+    languageOptions: { parserOptions: { project: path.join(__dirname, 'tsconfig.spec.json') } },
+  },
+
+  // =========================
   // Archivos HTML / Angular templates
   // =========================
   {

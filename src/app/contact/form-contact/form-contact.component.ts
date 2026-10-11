@@ -1,6 +1,6 @@
 import type { Email } from "../../models/Email";
 import { ToastrService } from "ngx-toastr";
-import { Component, inject } from '@angular/core';
+import { Component, inject, viewChild } from '@angular/core';
 import { EmailService } from "../services/email.service";
 import { FormBuilder } from "@angular/forms";
 import { ReactiveFormsModule, Validators } from "@angular/forms";
@@ -8,8 +8,10 @@ import { ResizeService } from "src/app/services/resize/resize.service";
 import type { ErrorAndMessage } from "src/app/models/ErrorAndMessage";
 import { CountAndErrorFieldComponent } from "../count-and-error-field/count-and-error-field.component";
 import { environment } from "src/environments/environment";
-import { NgxCaptchaModule } from 'ngx-captcha';
+import { NgxCaptchaModule, ReCaptcha2Component } from 'ngx-captcha';
 import { Analytics, logEvent } from '@angular/fire/analytics';
+import { TranslatePipe } from '../../i18n/translate.pipe';
+import { I18nService } from '../../i18n/i18n.service';
 
 
 @Component({
@@ -20,10 +22,12 @@ import { Analytics, logEvent } from '@angular/fire/analytics';
   imports: [
     CountAndErrorFieldComponent,
     ReactiveFormsModule,
-    NgxCaptchaModule
+    NgxCaptchaModule, TranslatePipe
   ]
 })
 export class FormContactComponent {
+  public readonly captcha = viewChild<ReCaptcha2Component>('captcha');
+  public readonly i18n = inject(I18nService);
 
   public readonly maxCountName = 50;
   public readonly maxCountSubject = 100;
@@ -95,23 +99,30 @@ export class FormContactComponent {
   public siteKey: string = environment.siteKey;
 
   public async onSubmit(): Promise<void> {
+    if (this.formContact.disabled) return;
     this.formContact.markAllAsTouched();
     if (!this.formContact.valid) {
-      this.toast.error('Email is invalid', "Error");
+      this.toast.error(this.i18n.text('Email is invalid'), "Error");
       return;
     }
 
     this.formContact.disable();
 
     try {
-      await this.emailService.sendNewEmail(this.createEmailFromForm());
-      this.toast.success('Email has been sent');
+      await this.emailService.sendNewEmail(this.createEmailFromForm(), this.formContact.controls.token.value);
+      this.toast.success(this.i18n.text('Email has been sent'));
       this.formContact.reset();
-    } catch (e) {
-      logEvent(this.analytics, 'exception', { description: (e as Error).message, fatal: false });
-      this.toast.error('Could not send email', "Error");
+    } catch {
+      // Never send raw SDK errors, contact contents or credentials to analytics.
+      logEvent(this.analytics, 'exception', { description: 'contact_send_failed', fatal: false });
+      this.toast.error(this.i18n.text('Could not send email'), "Error");
     } finally {
       this.formContact.enable();
+      // ngx-captcha's writeValue is a no-op: FormControl.reset alone does not reset the widget.
+      try { const widget = this.captcha(); if (widget?.isLoaded === true) widget.resetCaptcha(); }
+      catch { /* The external widget may have unloaded; still invalidate its token below. */ }
+      // Tokens are single use, including failed or uncertain submissions.
+      this.formContact.controls.token.reset('');
     }
   }
 

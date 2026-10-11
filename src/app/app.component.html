@@ -1,4 +1,6 @@
-<main>
-  <app-navbar></app-navbar>
+<a [routerLink]="[]" fragment="main-content" class="skip-link" (click)="mainContent.focus()">{{'Saltar al contenido' | t}}</a>
+<app-language-switcher />
+@if (!isAdminRoute()) { <app-navbar></app-navbar> }
+<main #mainContent id="main-content" tabindex="-1">
   <router-outlet></router-outlet>
 </main>

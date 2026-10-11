@@ -1,11 +1,14 @@
 @if (listCertificates()) {
 <section class="container-certificate">
   <header class="container-title-certificate">
-    <h3>Certificates</h3>
+    <h1>{{'Certificates' | t}}</h1>
   </header>
   <div [id]="listCertificateId" class="container-list-certificate">
-    @for (certificate of listCertificates(); track certificate.data.name; let index = $index) {
-    <app-item-certificate [certificate]="certificate.data" [gallery]="galleryId" [lightbox]="index" />
+    @for (certificate of listCertificates(); track $index) {
+    <button type="button" class="certificate-button" (click)="openCertificate(certificate)"
+      [attr.aria-label]="('Ampliar imagen' | t) + ': ' + certificate.name" aria-haspopup="dialog">
+      <app-item-certificate [certificate]="certificate" />
+    </button>
     }
   </div>
 </section>

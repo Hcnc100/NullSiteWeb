@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, input } from '@angular/core';
 import type { FormControl } from '@angular/forms';
 import type { ErrorAndMessage } from 'src/app/models/ErrorAndMessage';
+import { TranslatePipe } from '../../i18n/translate.pipe';
 
 @Component({
   selector: 'app-count-and-error-field',
@@ -9,7 +10,7 @@ import type { ErrorAndMessage } from 'src/app/models/ErrorAndMessage';
   styleUrls: ['./count-and-error-field.component.scss'],
   standalone: true,
   imports: [
-    CommonModule
+    CommonModule, TranslatePipe
   ]
 })
 export class CountAndErrorFieldComponent {

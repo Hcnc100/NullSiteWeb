@@ -2,7 +2,7 @@
 
 $padding-count-error: 5px; // Padding value for error count element
 $font-size: 12px; // Font size for error count element
-$color-error: red; // Color for error text
+$color-error: #b42318; // Accessible error text on the light contact card.
 
 @mixin flex-end {
   display: flex;
@@ -23,6 +23,8 @@ span {
 .count-and-error {
   @include flex-end;
   justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .only-count {

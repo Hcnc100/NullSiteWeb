@@ -1,0 +1,61 @@
+<section class="admin-card" aria-labelledby="blog-title">
+  <h2 id="blog-title">Blog</h2>
+  <p class="feedback">{{text('Guardar sólo modifica el borrador privado. Publicar crea una copia pública independiente.', 'Saving only changes the private draft. Publishing creates a separate public snapshot.')}}</p>
+  <p class="muted">{{text('La primera imagen del artículo publicado se usa como miniatura del listado. Incluye una descripción alt útil y un resumen en el idioma del artículo; una entrada por idioma, sin traducción automática.', 'The first image in the published article is used as its list thumbnail. Include useful alt text and an excerpt in the article language; one entry per language, without automatic translation.')}}</p>
+  <p role="status">{{blog.enabled() ? text('Blog público activado.', 'Public blog enabled.') : text('Blog oculto; lectura pública bloqueada.', 'Blog hidden; public reads blocked.')}}</p>
+  <button type="button" class="secondary" (click)="toggleBlog()" [disabled]="isSaving() || !blog.ready() || blog.error()">{{blog.enabled() ? text('Desactivar blog', 'Disable blog') : text('Activar blog', 'Enable blog')}}</button>
+  @if (blog.error()) { <p role="alert">{{text('No se pudo verificar la configuración. Recarga antes de activarlo.', 'Settings could not be verified. Reload before enabling.')}}</p> }
+  <div class="actions">
+    <button type="button" (click)="edit(null)" [disabled]="isSaving() || loading()">{{text('Nueva entrada', 'New article')}}</button>
+    <button type="button" class="secondary" (click)="load()" [disabled]="isSaving()">{{text('Recargar', 'Reload')}}</button>
+  </div>
+  @if (loading()) { <p role="status">{{text('Cargando…', 'Loading…')}}</p> }
+  @if (error()) { <p class="feedback error" role="alert">{{error()}}</p> }
+  @if (message()) { <p class="feedback" role="status">{{message()}}</p> }
+  @if (warning()) { <p class="feedback" role="status">{{text('HTML ajustado por seguridad: sólo títulos H2/H3, párrafos, énfasis, listas, citas, código, enlaces HTTPS e imágenes privadas. Se eliminan scripts, eventos, estilos, embeds y recursos externos.', 'HTML adjusted for safety: only H2/H3, paragraphs, emphasis, lists, quotes, code, HTTPS links and private images. Scripts, events, styles, embeds and external resources are removed.')}}</p> }
+  @if (progress() !== null) { <p role="status">{{progress()}}%</p> }
+  @if (activeId(); as id) {
+    <form [formGroup]="form" (ngSubmit)="save()" [attr.aria-busy]="isSaving()">
+      <fieldset [disabled]="isSaving()">
+        <div class="field"><label for="blog-name">{{text('Título', 'Title')}}</label><input id="blog-name" formControlName="title" maxlength="180" required></div>
+        <div class="field"><label for="blog-slug">Slug</label><input id="blog-slug" formControlName="slug" maxlength="100" required aria-describedby="slug-help"><p id="slug-help" class="muted">{{text('Único por idioma. Sólo minúsculas, números y guiones: mi-entrada.', 'Unique per language. Lowercase letters, numbers and hyphens only: my-article.')}}</p></div>
+        <div class="field"><label for="blog-locale">{{text('Idioma del artículo', 'Article language')}}</label><select id="blog-locale" formControlName="locale"><option value="es">Español</option><option value="en">English</option></select></div>
+        <div class="field"><label for="blog-excerpt">{{text('Resumen', 'Excerpt')}}</label><textarea id="blog-excerpt" formControlName="excerpt" maxlength="500" rows="3"></textarea></div>
+        <div class="field"><label for="blog-tags">{{text('Etiquetas separadas por coma', 'Comma-separated tags')}}</label><input id="blog-tags" formControlName="tags" maxlength="820"><p class="muted">{{text('Hasta 20 etiquetas, 40 caracteres cada una. No son etiquetas HTML.', 'Up to 20 tags, 40 characters each. These are not HTML tags.')}}</p></div>
+        <div class="actions" role="group" aria-label="Editor mode">
+          <button type="button" class="secondary" [attr.aria-pressed]="mode() === 'visual'" (click)="switchMode('visual')">Visual</button>
+          <button type="button" class="secondary" [attr.aria-pressed]="mode() === 'html'" (click)="switchMode('html')">HTML</button>
+          <button type="button" class="secondary" [attr.aria-pressed]="mode() === 'preview'" (click)="switchMode('preview')">{{text('Vista previa privada', 'Private preview')}}</button>
+        </div>
+        @if (mode() === 'html') {
+          <div class="field"><label for="blog-html">HTML (200 000 {{text('caracteres máximo', 'characters maximum')}})</label><textarea id="blog-html" formControlName="contentHtml" maxlength="200000" rows="16" spellcheck="false"></textarea></div>
+        } @else if (mode() === 'visual') {
+          <p class="muted">{{text('Selecciona texto para darle formato. El pegado visual usa texto plano; pega HTML en su pestaña. Las imágenes se muestran completas en Vista previa.', 'Select text to format it. Visual paste uses plain text; paste HTML in its tab. Full images appear in Preview.')}}</p>
+            <app-format-toolbar [disabled]="isSaving()" [code]="true" (format)="insert($event)" />
+          <div class="field"><label for="blog-link">{{text('Enlace HTTPS', 'HTTPS link')}}</label><input id="blog-link" type="url" [formControl]="linkUrl" maxlength="2048"><button type="button" class="secondary" (mousedown)="$event.preventDefault()" (click)="insert('a')">{{text('Insertar enlace', 'Insert link')}}</button></div>
+          <div #visual class="visual-editor" [attr.contenteditable]="!isSaving()" role="textbox" aria-multiline="true" [attr.aria-label]="text('Contenido visual', 'Visual content')" [innerHTML]="visualHtml()" (input)="captureVisual()" (paste)="paste($event)" (drop)="preventDrop($event)" (click)="preventNavigation($event)"></div>
+        } @else {
+          <h1>{{form.controls.title.value}}</h1>
+          <p>{{form.controls.excerpt.value}}</p>
+          <app-blog-renderer [html]="previewHtml()" [draftId]="id" />
+        }
+        <h3>{{text('Imagen privada', 'Private image')}}</h3>
+        <div class="field"><label for="blog-alt">{{text('Descripción de la imagen (alt)', 'Image description (alt)')}}</label><input id="blog-alt" [formControl]="imageAlt" maxlength="300"></div>
+        <div class="field"><label for="blog-upload">JPEG / PNG / WebP / GIF · 10 MiB</label><input id="blog-upload" type="file" accept="image/jpeg,image/png,image/webp,image/gif" (change)="upload($event)"></div>
+        <p class="muted">{{text('Las imágenes se guardan como rutas privadas, no URLs con token. Las subidas canceladas se conservan para limpieza posterior.', 'Images are saved as private paths, not token URLs. Cancelled uploads remain for later cleanup.')}}</p>
+        <div class="actions"><button type="submit" [disabled]="form.invalid || !form.dirty">{{text('Guardar borrador privado', 'Save private draft')}}</button><button type="button" class="secondary" (click)="cancel()">{{text('Cancelar', 'Cancel')}}</button></div>
+      </fieldset>
+    </form>
+  }
+  <ul class="record-list">
+    @for (record of records(); track record.id) {
+      <li><strong>{{record.title}}</strong> · {{record.locale}} · r{{record.revision}}
+        <p class="muted">{{record.publicationKey ? text('Versión pública guardada: r', 'Saved public version: r') + record.publishedRevision : text('Sólo borrador privado', 'Private draft only')}}</p>
+        <div class="actions"><button type="button" class="secondary" (click)="edit(record)" [disabled]="isSaving()">{{text('Editar', 'Edit')}}</button><button type="button" class="secondary" (click)="remove(record)" [disabled]="isSaving()">{{text('Eliminar', 'Delete')}}</button></div>
+        <div class="actions"><button type="button" (click)="publication(record, true)" [disabled]="isSaving() || hasUnsavedChanges()">{{text('Publicar versión guardada', 'Publish saved version')}}</button>
+          @if (record.publicationKey) { <button type="button" class="secondary" (click)="publication(record, false)" [disabled]="isSaving() || hasUnsavedChanges()">{{text('Retirar publicación', 'Withdraw publication')}}</button> }
+        </div>
+      </li>
+    } @empty { @if (!loading()) { <li>{{text('Sin borradores.', 'No drafts.')}}</li> } }
+  </ul>
+</section>
