@@ -67,7 +67,7 @@ jobs:
         if: inputs.target == 'full'
         run: node scripts/contact-config.mjs
         env:
-          CONTACT_ALLOWED_ORIGINS: ${{ vars.CONTACT_ALLOWED_ORIGINS }}
+          CONTACT_ALLOWED_ORIGINS: ${{ vars.CONTACT_ALLOWED_ORIGINS || secrets.CONTACT_ALLOWED_ORIGINS }}
       - name: Generate production configuration safely
         run: node scripts/ci-environment.mjs --production
         env:
