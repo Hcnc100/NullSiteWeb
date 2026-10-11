@@ -30,7 +30,7 @@ export function legalHref(value: string): string | null {
 
 /** Rebuild in an inert document; never trust raw HTML, CSS, IDs or Angular template syntax. */
 export function sanitizeLegalHtml(
-  html: unknown, document: Document, prefix = 'legal',
+  html: unknown, document: Document, prefix = 'legal', acceptsImage?: (path: string) => boolean,
 ): LegalHtmlResult {
   const rejected = (reason: LegalHtmlResult['rejected']): LegalHtmlResult =>
     ({ html: '', headings: [], changed: true, rejected: reason });
@@ -55,19 +55,27 @@ export function sanitizeLegalHtml(
     if (source.nodeType !== 1) { changed = true; return; }
     const element = source as HTMLElement;
     const originalTag = element.localName.toLowerCase();
-    if (element.namespaceURI !== 'http://www.w3.org/1999/xhtml' || droppedTags.has(originalTag)) {
+    if (element.namespaceURI !== 'http://www.w3.org/1999/xhtml' || (droppedTags.has(originalTag) && !(originalTag === 'img' && acceptsImage))) {
       changed = true; return;
     }
     const tag = originalTag === 'font' ? 'span' : originalTag === 'h1' ? 'h2'
       : ['article', 'section', 'header', 'footer', 'main', 'center'].includes(originalTag) ? 'div' : originalTag;
     if (tag !== originalTag) changed = true;
-    if (!allowedTags.has(tag)) {
+    if (!allowedTags.has(tag) && !(tag === 'img' && acceptsImage)) {
       changed = true;
       for (const child of Array.from(source.childNodes)) copy(child, parent, depth + 1);
       return;
     }
     const clean = inert.createElement(tag);
     const accepted = new Set<string>();
+    if (tag === 'img') {
+      const path = element.getAttribute('src') ?? element.getAttribute('data-image-path') ?? '';
+      if (!acceptsImage?.(path)) { changed = true; return; }
+      // Path is inert until an authenticated resolver obtains the private bytes.
+      clean.setAttribute('data-image-path', path);
+      clean.setAttribute('alt', (element.getAttribute('alt') ?? '').slice(0, 300));
+      accepted.add('data-image-path'); accepted.add('alt');
+    }
     const classes = [...(element.getAttribute('class') ?? '').split(/\s+/).filter(value => allowedClasses.has(value)), ...richTextClasses(element)];
     if (element.hasAttribute('class')) {
       if (classes.join(' ') === element.getAttribute('class')) accepted.add('class');
@@ -115,7 +123,7 @@ export function sanitizeLegalHtml(
   }
   for (const child of Array.from(template.content.childNodes)) copy(child, output, 0);
   if (tooComplex) return rejected('too-complex');
-  if ((output.textContent?.trim().length ?? 0) === 0) return rejected('invalid-content');
+  if ((output.textContent?.trim().length ?? 0) === 0 && !output.querySelector('img')) return rejected('invalid-content');
   let previousLevel = 1;
   for (const element of Array.from(output.querySelectorAll('h2,h3,h4,h5,h6'))) {
     const text = element.textContent?.trim() ?? '';

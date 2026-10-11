@@ -35,6 +35,22 @@ describe('Private blog editor', () => {
     expect(fixture.componentInstance.records()).toEqual([record]);
     expect(fixture.nativeElement.querySelector('[routerLink="/blog"]')).toBeNull();
   });
+  it('uses Tiptap and uploads pasted images only when saving under the real draft ID', async () => {
+    const c = fixture.componentInstance; c.edit(record); fixture.detectChanges(); await fixture.whenStable();
+    expect(fixture.nativeElement.querySelector('app-rich-editor .tiptap')).toBeTruthy();
+    const canvas = document.createElement('canvas'); canvas.width = canvas.height = 1;
+    const blob = await new Promise<Blob>(resolve => canvas.toBlob(value => resolve(value!), 'image/png'));
+    service.upload.mockResolvedValue('blog-drafts/article/uploaded.png');
+    await c.rich()!.stage(new File([blob], 'pasted.png', { type: 'image/png' }), 'Imagen pegada');
+    expect(service.upload).not.toHaveBeenCalled(); expect(c.form.controls.contentHtml.value).toContain('blog-drafts/article/pending-');
+    c.switchMode('html'); fixture.detectChanges(); c.switchMode('visual'); fixture.detectChanges();
+    await c.save();
+    expect(service.upload).toHaveBeenCalledWith('article', expect.any(File), expect.any(Function));
+    const saved = service.save.mock.calls[0][0];
+    expect(saved.contentHtml).toContain('blog-drafts/article/uploaded.png');
+    expect(saved.contentHtml).not.toContain('pending-'); expect(saved.contentHtml).not.toContain('blob:');
+    expect(service.publish).not.toHaveBeenCalled();
+  });
   it('requires explicit confirmation and publishes only the saved record', async () => {
     const confirm = vi.spyOn(window, 'confirm').mockReturnValue(false);
     await fixture.componentInstance.publication(record, true); expect(service.publish).not.toHaveBeenCalled();

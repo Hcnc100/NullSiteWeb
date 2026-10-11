@@ -8,8 +8,9 @@ import { sanitizePublishedHtml } from '../models/blog-draft';
 import { PublicBlogService } from './public-blog.service';
 import { SeoService } from './seo.service';
 import { BlogThumbnailComponent } from './blog-thumbnail.component';
+import { RichColorsDirective } from '../models/rich-colors.directive';
 
-@Component({ selector: 'app-public-blog', standalone: true, imports: [RouterLink, BlogThumbnailComponent],
+@Component({ selector: 'app-public-blog', standalone: true, imports: [RouterLink, BlogThumbnailComponent, RichColorsDirective],
   templateUrl: './blog.component.html', styleUrls: ['./blog.component.scss', '../admin/blog/blog-body.scss'] })
 export class BlogComponent {
   public readonly i18n = inject(I18nService);

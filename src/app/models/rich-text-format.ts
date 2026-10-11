@@ -1,5 +1,22 @@
 /** Closed presentation vocabulary. Never preserve user-supplied CSS. */
+export function safeHexColor(value: string): string | null {
+  const hex = value.trim().toLowerCase();
+  if (/^#[0-9a-f]{6}$/.test(hex)) return hex;
+  if (/^#[0-9a-f]{3}$/.test(hex)) return '#' + [...hex.slice(1)].map(c => c + c).join('');
+  const rgb = /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/.exec(hex);
+  if (!rgb || rgb.slice(1).some(v => Number(v) > 255)) return null;
+  return '#' + rgb.slice(1).map(v => Number(v).toString(16).padStart(2, '0')).join('');
+}
+export function colorFromClass(value: string): string | null {
+  return /^rt-color-hex-[0-9a-f]{6}$/.test(value) ? '#' + value.slice(-6) : null;
+}
+export function backgroundFromClass(value: string): string | null {
+  return /^rt-background-hex-[0-9a-f]{6}$/.test(value) ? '#' + value.slice(-6) : null;
+}
 export const richStyles: Readonly<Record<string, string>> = {
+  'rt-image-left': 'display: block; margin-inline-start: 0; margin-inline-end: auto',
+  'rt-image-center': 'display: block; margin-inline: auto',
+  'rt-image-right': 'display: block; margin-inline-start: auto; margin-inline-end: 0',
   'rt-color-red': 'color: #ff8585', 'rt-color-blue': 'color: #a9c7ff',
   'rt-color-green': 'color: #9cdbb1', 'rt-color-default': 'color: inherit',
   'rt-font-serif': 'font-family: Georgia, serif', 'rt-font-sans': 'font-family: Arial, sans-serif',
@@ -10,12 +27,18 @@ export const richStyles: Readonly<Record<string, string>> = {
   'rt-align-left': 'text-align: left', 'rt-align-center': 'text-align: center', 'rt-align-right': 'text-align: right',
 };
 export function richTextClasses(element: HTMLElement): string[] {
-  const classes = (element.getAttribute('class') ?? '').split(/\s+/).filter(value => Object.prototype.hasOwnProperty.call(richStyles, value));
+  const classes = (element.getAttribute('class') ?? '').split(/\s+/).filter(value => Object.prototype.hasOwnProperty.call(richStyles, value) || colorFromClass(value) !== null || backgroundFromClass(value) !== null);
   const style = element.style;
   const color = (style.color || element.getAttribute('color') || '').toLowerCase().replace(/\s/g, '');
   const colors: Record<string, string> = { red: 'red', '#c62828': 'red', '#ff8585': 'red', 'rgb(198,40,40)': 'red', 'rgb(255,133,133)': 'red',
     blue: 'blue', '#a9c7ff': 'blue', 'rgb(169,199,255)': 'blue', green: 'green', '#9cdbb1': 'green', 'rgb(156,219,177)': 'green', inherit: 'default' };
   if (Object.prototype.hasOwnProperty.call(colors, color)) classes.push('rt-color-' + colors[color]);
+  else {
+    const hex = safeHexColor(color);
+    if (hex) classes.push('rt-color-hex-' + hex.slice(1));
+  }
+  const background = safeHexColor(style.backgroundColor);
+  if (background) classes.push('rt-background-hex-' + background.slice(1));
   const font = (style.fontFamily || element.getAttribute('face') || '').toLowerCase().replace(/["']/g, '').replace(/\s/g, '');
   const fonts: Record<string, string> = { georgia: 'serif', 'georgia,serif': 'serif', arial: 'sans', 'arial,sans-serif': 'sans', monospace: 'mono' };
   if (Object.prototype.hasOwnProperty.call(fonts, font)) classes.push('rt-font-' + fonts[font]);
@@ -35,7 +58,7 @@ export function richTextClasses(element: HTMLElement): string[] {
 export function richHtmlForEditor(html: string, document: Document): string {
   const template = document.createElement('template'); template.innerHTML = html;
   for (const element of Array.from(template.content.querySelectorAll<HTMLElement>('[class]'))) {
-    const declarations = richTextClasses(element).map(value => richStyles[value]);
+    const declarations = richTextClasses(element).map(value => colorFromClass(value) ? 'color: ' + colorFromClass(value) : backgroundFromClass(value) ? 'background-color: ' + backgroundFromClass(value) : richStyles[value]);
     if (declarations.length) element.setAttribute('style', declarations.join('; '));
   }
   return template.innerHTML;

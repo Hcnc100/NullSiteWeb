@@ -1,18 +1,41 @@
-:host { display: block; --ae-toolbar-bg-color: #24242a; --ae-button-bg-color: #34343b; --ae-button-active-bg-color: #800000; --ae-picker-label-color: white; --ae-picker-option-bg-color: #24242a; }
+:host { display: block; --ae-toolbar-bg-color: #24242a; --ae-button-bg-color: #34343b; --ae-button-active-bg-color: #800000; --ae-picker-label-color: #34343b; --ae-picker-option-bg-color: #24242a;
+  --ae-picker-option-active-bg-color: #800000; --ae-picker-option-focused-bg-color: #45454f;
+  --ae-picker-option-hover-bg-color: #45454f; --ae-button-disabled-bg-color: #24242a; }
 .lab { max-width: 1400px; padding: 64px 24px 32px; margin: auto; }
 h1,h2,p { margin-block: 16px; }
 .buttons { display: flex; flex-wrap: wrap; gap: 8px; margin-block: 16px; }
 button { min-height: 44px; padding: 8px 14px; border: 1px solid #777; color: white; background: #25252c; border-radius: 6px; cursor: pointer; }
 button[aria-pressed=true] { background: #800000; }
 .tiptap-host { padding: 20px; border: 1px solid #777; min-height: 280px; }
-:host ::ng-deep .tiptap { min-height: 260px; outline-offset: 4px; }
+:host ::ng-deep .tiptap { min-height: 260px; outline: none; }
+.tiptap-host:focus-within { border-color: var(--site-focus, #ff8585); box-shadow: inset 0 0 0 1px var(--site-focus, #ff8585); }
+:host ::ng-deep .tiptap { font-family: Arial, sans-serif; font-size: 16px; color: #fff; }
 :host ::ng-deep .tiptap p { margin-block: 12px; }
 :host ::ng-deep .tiptap ul { padding-left: 24px; }
 :host ::ng-deep .tiptap table { border-collapse: collapse; }
 :host ::ng-deep .tiptap td, :host ::ng-deep .tiptap th { border: 1px solid #777; padding: 8px; }
 .readers { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 24px; }
+.image-upload { margin-block: 16px; padding: 12px; border: 1px solid #777; }
+.image-upload label { display: block; margin-block: 12px; }
+:host ::ng-deep img { max-width: 100%; height: auto; }
 :host ::ng-deep .angular-editor-toolbar svg { filter: brightness(0) invert(1); }
 :host ::ng-deep .ae-picker-label { background: #34343b !important; color: white !important; }
 :host ::ng-deep .ae-picker-options { background: #24242a !important; color: white; }
+:host ::ng-deep .ae-picker-label::before,
+:host ::ng-deep .ae-picker-label:hover::before { background: #34343b !important; }
+:host ::ng-deep .ae-picker-item.selected { color: white !important; }
+:host ::ng-deep .ae-picker-label:focus-visible { outline: 3px solid var(--site-focus); outline-offset: 2px; }
+:host ::ng-deep .angular-editor-button:disabled { opacity: .45; }
+// The global reset removes list indentation; restore it only inside editable content.
+:host ::ng-deep :is(.angular-editor-textarea, .tiptap) :is(ul, ol) {
+  padding-inline-start: 1.75rem; margin-block: .75rem; list-style-position: outside;
+}
+:host ::ng-deep :is(.angular-editor-textarea, .tiptap) ul { list-style-type: disc; }
+:host ::ng-deep :is(.angular-editor-textarea, .tiptap) ol { list-style-type: decimal; }
+:host ::ng-deep :is(.angular-editor-textarea, .tiptap) ul ul { list-style-type: circle; }
+:host ::ng-deep .angular-editor-textarea { overflow-x: auto; }
+:host ::ng-deep .angular-editor-textarea table { border-collapse: collapse; margin-block: 1rem; }
+:host ::ng-deep .angular-editor-textarea :is(td, th) { border: 1px solid #777; padding: .5rem .75rem; }
+:host ::ng-deep .angular-editor-textarea th { background: #24242a; text-align: start; }
 pre { white-space: pre-wrap; overflow-wrap: anywhere; border: 1px solid #555; padding: 16px; }
 @media(max-width: 900px) { .readers { grid-template-columns: minmax(0,1fr); } }

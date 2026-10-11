@@ -43,17 +43,8 @@
           @if (mode() === 'html') {
           <label for="legal-html">{{'Contenido HTML legal' | t}}</label>
           <textarea id="legal-html" formControlName="content" rows="16" maxlength="500000" required spellcheck="false" aria-describedby="legal-html-help"></textarea>
-          } @else {
-            <app-format-toolbar [disabled]="isSaving()" (format)="insert($event === 'pre' ? 'p' : $event)" />
-            <label for="legal-link">{{'Enlace HTTPS o correo' | t}}</label>
-            <input id="legal-link" [formControl]="link" maxlength="2048" type="text">
-            <button type="button" class="secondary" (mousedown)="$event.preventDefault()" (click)="insert('a')">{{'Insertar enlace' | t}}</button>
-            <div #visual class="legal-visual" role="textbox" aria-multiline="true" [attr.aria-label]="'Contenido visual legal' | t"
-              aria-describedby="legal-html-help" [attr.contenteditable]="!isSaving()" [innerHTML]="visualHtml()"
-              (input)="captureVisual()" (beforeinput)="preventNativeInsert($any($event))" (paste)="paste($event)"
-              (drop)="$event.preventDefault()" (dragover)="$event.preventDefault()" (click)="preventNavigation($event)"></div>
-            <p class="muted">{{'En modo visual, pegar inserta solo texto. Usa HTML para conservar formatos y tablas; revisa siempre la vista previa.' | t}}</p>
           }
+          <app-rich-editor [hidden]="mode() !== 'visual'" [html]="form.controls.content.value" (htmlChange)="richChanged($event)" [disabled]="isSaving()" [documentId]="id" />
           <p id="legal-html-help" class="field-help">{{'Usa h2, h3, p, listas, enlaces HTTPS y tablas. No se permiten scripts, imágenes ni CSS arbitrario. Máximo 500.000 caracteres.' | t}}</p>
           @if (form.controls.content.touched && form.controls.content.invalid) { <p class="error">{{'HTML legal inválido, vacío o demasiado complejo. No se guardó nada.' | t}}</p> }
           <details><summary>{{'Ejemplos de HTML seguro' | t}}</summary>

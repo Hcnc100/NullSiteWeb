@@ -38,7 +38,7 @@ function sanitizeHtml(html: string, document: Document, acceptsImage: (path: str
   const inert = template.content.ownerDocument;
   const output = inert.createElement('div');
   const allowed = new Set(['p', 'span', 'h2', 'h3', 'h4', 'h5', 'h6', 'u', 's', 'strong', 'b', 'em', 'i', 'ul', 'ol', 'li',
-    'blockquote', 'pre', 'code', 'br', 'a', 'img']);
+    'blockquote', 'pre', 'code', 'br', 'a', 'img', 'hr', 'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'caption']);
   const drop = new Set(['script', 'style', 'iframe', 'object', 'embed', 'svg', 'math', 'template',
     'form', 'input', 'button', 'textarea', 'select', 'video', 'audio', 'link', 'meta', 'base']);
   let changed = false;
@@ -71,6 +71,12 @@ function sanitizeHtml(html: string, document: Document, acceptsImage: (path: str
       else changed = true;
       clean.setAttribute('rel', 'noopener noreferrer');
       if (element.getAttribute('rel') === 'noopener noreferrer') accepted.add('rel');
+    }
+    if (tag === 'td' || tag === 'th') {
+      for (const name of ['colspan', 'rowspan']) {
+        const value = element.getAttribute(name) ?? '';
+        if (/^[1-9]\d?$/.test(value)) { clean.setAttribute(name, value); accepted.add(name); }
+      }
     }
     if (tag === 'img') {
       const src = element.getAttribute('src') ?? '';

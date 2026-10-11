@@ -22,7 +22,7 @@
         </details>
       </aside>
     }
-    <div #content class="legal-document__content" [innerHTML]="rendered().html"></div>
+    <div #content class="legal-document__content" [innerHTML]="rendered().html" [appRichColors]="rendered().html"></div>
   } @else {
     <div class="legal-document__notice" role="alert">
       <h2>{{'No se pudo mostrar el documento completo.' | t}}</h2>

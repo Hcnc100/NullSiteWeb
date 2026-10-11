@@ -12,7 +12,7 @@
     @if (post(); as article) {
       <h1 id="public-blog-title">{{article.title}}</h1><p class="excerpt">{{article.excerpt}}</p>
       <ul class="tags" [attr.aria-label]="text('Etiquetas', 'Tags')">@for (tag of article.tags; track $index) { <li>{{tag}}</li> }</ul>
-      <article class="blog-body" [innerHTML]="rendered()"></article>
+      <article class="blog-body" [innerHTML]="rendered()" [appRichColors]="rendered()"></article>
       @if (imageError()) { <p role="status">{{text('Algunas imágenes no están disponibles.', 'Some images are unavailable.')}}</p> }
     } @else { <h1 id="public-blog-title">{{text('Artículo no disponible', 'Article unavailable')}}</h1> }
   } @else {

@@ -11,11 +11,11 @@ import type { Terms } from '../../models/Terms';
 import { AdminLegalService } from './admin-legal.service';
 import type { LegalDraft, LegalHistory, LegalRecord } from './legal-editor.model';
 import { legalContent, sameTerms } from './legal-editor.model';
-import { FormatToolbarComponent } from '../format-toolbar.component';
+import { RichEditorComponent } from '../rich-editor/rich-editor.component';
 
 @Component({
   selector: 'app-admin-legal', standalone: true,
-  imports: [ReactiveFormsModule, TranslatePipe, LegalDocumentComponent, FormatToolbarComponent],
+  imports: [ReactiveFormsModule, TranslatePipe, LegalDocumentComponent, RichEditorComponent],
   templateUrl: './admin-legal.component.html', styleUrls: ['../admin-ui.scss', './legal-editor.scss'],
 })
 export class AdminLegalComponent {
@@ -42,6 +42,11 @@ export class AdminLegalComponent {
   public readonly mode = signal<'html' | 'visual'>('html');
   public readonly visualHtml = signal('');
   private readonly visual = viewChild<ElementRef<HTMLElement>>('visual');
+  public readonly rich = viewChild(RichEditorComponent);
+  public richChanged(html: string): void {
+    if (this.isSaving() || !this.auth.isAdmin()) return;
+    this.form.controls.content.setValue(html); this.form.markAsDirty();
+  }
   public readonly formats = ['h2', 'h3', 'p', 'strong', 'em', 'ul', 'ol', 'blockquote'] as const;
   public readonly link = this.fb.control('');
   public readonly form = this.fb.group({ title: ['', [Validators.required, Validators.maxLength(180)]],
@@ -108,6 +113,7 @@ export class AdminLegalComponent {
     this.mode.set(mode);
   }
   public captureVisual(): void {
+    if (this.rich()) return;
     if (this.isSaving() || !this.auth.isAdmin()) return;
     const element = this.visual()?.nativeElement;
     if (element !== undefined && element.innerHTML !== this.form.controls.content.value) {
@@ -147,6 +153,8 @@ export class AdminLegalComponent {
     this.insertNode(element);
   }
   private insertNode(node: Node): void {
+    const rich = this.rich();
+    if (rich) { if (node.nodeType === 3) rich.insertText(node.textContent ?? ''); else { const container = this.document.createElement('div'); container.appendChild(node); rich.insert(container.innerHTML); } return; }
     const editor = this.visual()?.nativeElement;
     if (editor === undefined || !this.auth.isAdmin() || this.isSaving()) return;
     const selection = this.document.getSelection();

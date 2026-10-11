@@ -5,7 +5,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AdminAuthService } from '../auth/admin-auth.service';
 import { AdminBlogService } from './admin-blog.service';
 import { BlogRendererComponent } from './blog-renderer.component';
-import { FormatToolbarComponent } from '../format-toolbar.component';
+import { RichEditorComponent } from '../rich-editor/rich-editor.component';
 import { sanitizeBlogHtml, validateDraft } from '../../models/blog-draft';
 import type { BlogDraft } from '../../models/blog-draft';
 import { I18nService } from '../../i18n/i18n.service';
@@ -13,7 +13,7 @@ import { isHttpsUrl } from '../../models/profile-editor.model';
 import { PublicBlogService } from '../../blog/public-blog.service';
 
 @Component({ selector: 'app-admin-blog', standalone: true,
-  imports: [ReactiveFormsModule, BlogRendererComponent, FormatToolbarComponent], templateUrl: './admin-blog.component.html',
+  imports: [ReactiveFormsModule, BlogRendererComponent, RichEditorComponent], templateUrl: './admin-blog.component.html',
   styleUrls: ['../admin-ui.scss', './blog-editor.scss'] })
 export class AdminBlogComponent {
   private readonly service = inject(AdminBlogService);
@@ -34,6 +34,21 @@ export class AdminBlogComponent {
   public readonly progress = signal<number | null>(null);
   public readonly formats = ['p', 'h2', 'h3', 'strong', 'em', 'ul', 'ol', 'blockquote', 'pre'] as const;
   public readonly visual = viewChild<ElementRef<HTMLElement>>('visual');
+  public readonly rich = viewChild(RichEditorComponent);
+  public readonly uploadRichImage = async (file: File): Promise<string> => {
+    const id = this.activeId(); if (!id || !this.auth.isAdmin()) throw Error('unauthorized');
+    return this.service.upload(id, file, percent => this.progress.set(percent));
+  };
+  public readonly loadRichImage = async (path: string): Promise<Blob> => {
+    const id = this.activeId(); if (!id) throw Error('unauthorized'); return this.service.image(path, id);
+  };
+  public readonly previewImage = async (path: string): Promise<Blob> => {
+    const file = this.rich()?.temporaryFile(path); if (file) return file; return this.loadRichImage(path);
+  };
+  public richChanged(html: string): void {
+    if (this.isSaving() || !this.auth.isAdmin()) return;
+    this.form.controls.contentHtml.setValue(html); this.form.markAsDirty();
+  }
   private baseline: BlogDraft | null = null;
   private generation = 0;
   public readonly form = inject(FormBuilder).nonNullable.group({
@@ -86,6 +101,7 @@ export class AdminBlogComponent {
     if (mode === 'preview') this.previewHtml.set(html);
   }
   public captureVisual(): void {
+    if (this.rich()) return; // Tiptap updates the form on each transaction.
     if (this.isSaving() || !this.auth.isAdmin()) return;
     const element = this.visual()?.nativeElement;
     if (element === undefined) return;
@@ -132,6 +148,11 @@ export class AdminBlogComponent {
     this.insertNode(node);
   }
   private insertNode(node: Node): void {
+    const rich = this.rich();
+    if (rich) {
+      if (node.nodeType === 3) { rich.insertText(node.textContent ?? ''); return; }
+      const container = this.document.createElement('div'); container.appendChild(node); rich.insert(container.innerHTML); return;
+    }
     const editor = this.visual()?.nativeElement;
     if (editor === undefined || this.isSaving()) return;
     const selection = this.document.getSelection();
@@ -149,6 +170,7 @@ export class AdminBlogComponent {
     if (alt.length === 0 || alt.length > 300) {
       this.error.set(this.text('Describe la imagen antes de subirla.', 'Describe the image before uploading.')); return;
     }
+    if (this.rich()) { await this.rich()!.stage(file, alt); return; }
     if (this.mode() === 'visual') this.captureVisual();
     const generation = this.generation; this.isSaving.set(true); this.error.set('');
     try {
@@ -175,9 +197,11 @@ export class AdminBlogComponent {
     try { validateDraft(draft); } catch { this.failed('blog-invalid'); return; }
     const generation = this.generation; this.isSaving.set(true); this.error.set(''); this.message.set('');
     try {
+      if (this.rich()) draft.contentHtml = await this.rich()!.persist();
       await this.service.save(draft, this.baseline);
       if (!this.valid(generation)) return;
       this.baseline = { ...draft, revision: draft.revision + 1 };
+      this.form.controls.contentHtml.setValue(draft.contentHtml); this.progress.set(null);
       this.form.markAsPristine();
       this.message.set(this.text('Borrador guardado. Sigue siendo privado.', 'Draft saved. It remains private.'));
       const records = await this.service.list(); if (this.valid(generation)) this.records.set(records);

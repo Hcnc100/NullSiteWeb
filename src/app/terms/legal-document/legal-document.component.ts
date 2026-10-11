@@ -6,10 +6,11 @@ import { I18nService } from '../../i18n/i18n.service';
 import { TranslatePipe } from '../../i18n/translate.pipe';
 import { ResizeService } from '../../services/resize/resize.service';
 import { sanitizeLegalHtml } from '../legal-html';
+import { RichColorsDirective } from '../../models/rich-colors.directive';
 
 /** The public reader and the future admin preview must use this same rendering boundary. */
 @Component({
-  selector: 'app-legal-document', standalone: true, imports: [TranslatePipe],
+  selector: 'app-legal-document', standalone: true, imports: [TranslatePipe, RichColorsDirective],
   templateUrl: './legal-document.component.html', styleUrl: './legal-document.component.scss',
   encapsulation: ViewEncapsulation.None, changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -17,6 +18,8 @@ export class LegalDocumentComponent {
   public readonly terms = input.required<Terms>();
   public readonly anchorPrefix = input('legal');
   public readonly embedded = input(false);
+  /** Trusted application policy; public readers keep images disabled by default. */
+  public readonly acceptsImage = input<((path: string) => boolean) | undefined>(undefined);
   private readonly document = inject(DOCUMENT);
   private readonly renderer = inject(Renderer2);
   private readonly i18n = inject(I18nService);
@@ -25,7 +28,7 @@ export class LegalDocumentComponent {
   private lastFragmentTarget: HTMLElement | null = null;
   public readonly prefix = computed(() => /^[a-z][a-z0-9-]{0,40}$/.test(this.anchorPrefix()) ? this.anchorPrefix() : 'legal');
   public readonly wide = computed(() => this.resize.widthSize() >= 1200);
-  public readonly rendered = computed(() => sanitizeLegalHtml(this.terms().content, this.document, this.prefix()));
+  public readonly rendered = computed(() => sanitizeLegalHtml(this.terms().content, this.document, this.prefix(), this.acceptsImage()));
 
   public constructor() {
     afterRenderEffect(() => {

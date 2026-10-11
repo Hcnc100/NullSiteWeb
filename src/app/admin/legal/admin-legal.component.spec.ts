@@ -31,6 +31,26 @@ describe('Private legal editor', () => {
     expect(fixture.componentInstance.records()).toEqual([record]);
     expect(fixture.nativeElement.querySelector('a')?.getAttribute('href')).toBe('/es/terms-and-conditions/stable');
   });
+  it('uses the approved Tiptap toolbar, saves sanitized formats and keeps images disabled', async () => {
+    const c = fixture.componentInstance; c.edit(record); fixture.detectChanges(); await fixture.whenStable();
+    fixture.detectChanges();
+    const rich = c.rich()!; expect(rich.images).toBe(false);
+    rich.editor!.commands.selectAll(); rich.editor!.chain().setColor('#123456').setBackgroundColor('#fedcba').run();
+    expect(c.form.controls.content.value).toContain('rt-color-hex-123456');
+    expect(c.form.controls.content.value).toContain('rt-background-hex-fedcba');
+    expect(fixture.nativeElement.querySelector('app-tiptap-toolbar summary[aria-label="Opciones de tabla"]')?.textContent).toContain('Tabla');
+    await c.save(); expect(service.save).toHaveBeenCalled(); expect(service.publish).not.toHaveBeenCalled();
+    expect(service.save.mock.calls[0][1].content).not.toContain('style=');
+  });
+  it('preserves advanced legacy HTML and requires HTML mode instead of silently dropping it', async () => {
+    const c = fixture.componentInstance; c.edit(record);
+    c.form.controls.content.setValue('<dl><dt>Concepto</dt><dd>Definición</dd></dl>');
+    fixture.detectChanges(); await fixture.whenStable();
+    const rich = c.rich()!;
+    expect(rich.editor!.isEditable).toBe(false);
+    expect(rich.getHtml()).toContain('<dt>Concepto</dt>');
+    expect(rich.message()).toContain('modo HTML');
+  });
   it('normalizes and previews unsafe HTML with the same reader before saving a private draft', async () => {
     const c = fixture.componentInstance; c.edit(record);
     c.form.controls.content.setValue('<h2>Safe</h2><p onclick="evil()">Body</p><script>bad()</script>'); c.form.markAsDirty();
@@ -80,8 +100,8 @@ describe('Private legal editor', () => {
   });
   it('normalizes visual content without immediately recapturing stale unsanitized DOM', () => {
     const c = fixture.componentInstance; c.edit(record); c.switchMode('visual'); fixture.detectChanges();
-    const editor: HTMLElement = fixture.nativeElement.querySelector('.legal-visual');
-    editor.innerHTML = '<p style="color:red" onclick="evil()">Body</p>'; c.captureVisual(); c.normalize();
+    c.form.controls.content.setValue('<p style="color:red" onclick="evil()">Body</p>'); fixture.detectChanges();
+    c.richChanged(c.rich()!.getHtml()); c.captureVisual(); c.normalize();
     expect(c.form.controls.content.value).toBe('<p class="rt-color-red">Body</p>'); expect(c.preview()?.content).toBe('<p class="rt-color-red">Body</p>');
   });
   it('rejects empty, active-only and oversized HTML without writes', async () => {
@@ -127,11 +147,11 @@ describe('Private legal editor', () => {
     const event = new Event('beforeunload', { cancelable: true }); c.beforeUnload(event as BeforeUnloadEvent);
     expect(event.defaultPrevented).toBe(true);
   });
-  it('keeps the embedded preview free of a second page H1 and bounds content at small and large container widths', () => {
+  it('keeps the embedded preview free of a second page H1 and bounds content at small and large container widths', async () => {
     const c = fixture.componentInstance; c.edit(record);
     c.form.patchValue({ title: 'Long'.repeat(40), content: '<h2>Section</h2><p>' + 'word'.repeat(300)
       + '</p><table><caption>Data</caption><tr><th>Header</th><td>Value</td></tr></table>' });
-    c.showPreview(); fixture.detectChanges();
+    c.showPreview(); fixture.detectChanges(); await fixture.whenStable(); fixture.detectChanges();
     const host: HTMLElement = fixture.nativeElement;
     expect(host.querySelector('.legal-preview h1')).toBeNull();
     expect(host.querySelector('#legal-title')?.getAttribute('aria-describedby')).toBe('legal-title-help');

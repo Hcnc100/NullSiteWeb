@@ -1,7 +1,28 @@
 import { sanitizeBlogHtml, sanitizePublishedHtml } from './blog-draft';
 import { sanitizeLegalHtml } from '../terms/legal-html';
+import { safeHexColor, colorFromClass } from './rich-text-format';
 
 describe('Closed rich text vocabulary', () => {
+  it('accepts only bounded opaque hex/RGB colors and roundtrips their safe classes', () => {
+    expect(safeHexColor('#B438C2')).toBe('#b438c2'); expect(safeHexColor('#abc')).toBe('#aabbcc');
+    expect(safeHexColor('rgb(180, 56, 194)')).toBe('#b438c2');
+    for (const input of ['red;position:fixed', 'url(https://bad.test)', 'var(--evil)', 'rgb(256,0,0)', '#fff;background:red', 'rgba(0,0,0,.5)']) expect(safeHexColor(input)).toBeNull();
+    expect(colorFromClass('rt-color-hex-b438c2')).toBe('#b438c2');
+    expect(colorFromClass('rt-color-hex-b438c2;position:fixed')).toBeNull();
+    for (const sanitizer of [normalize, (html: string) => sanitizeLegalHtml(html, document).html]) {
+      const result = sanitizer('<p style="color:#b438c2;position:fixed" onclick="alert(1)">Color</p>');
+      expect(result).toContain('rt-color-hex-b438c2'); expect(result).not.toMatch(/style=|onclick|position/);
+      expect(sanitizer(result)).toBe(result);
+    }
+  });
+  it('preserves independently validated foreground and background without accepting CSS URLs', () => {
+    const input = '<p style="color:#123456;background-color:#fedcba;background-image:url(https://bad.test);position:fixed">Both</p>';
+    for (const sanitizer of [normalize, (html: string) => sanitizeLegalHtml(html, document).html]) {
+      const result = sanitizer(input);
+      expect(result).toContain('rt-color-hex-123456'); expect(result).toContain('rt-background-hex-fedcba');
+      expect(result).not.toMatch(/style=|url\(|bad.test|position/); expect(sanitizer(result)).toBe(result);
+    }
+  });
   const normalize = (html: string): string => sanitizeBlogHtml(html, 'lab', document).html;
   it('converts editor styles and legacy font attributes to known classes only', () => {
     const input = '<p><span style="color:#c62828;font-family:Georgia;font-size:24px;background:url(https://bad.test);position:fixed">Hello</span><font face="Arial" size="5" color="red">Legacy</font></p>';

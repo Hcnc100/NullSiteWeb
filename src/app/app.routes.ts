@@ -3,8 +3,6 @@ import { navigatorSections } from 'src/utils/Constants';
 import { adminGuard, unsavedChangesGuard } from './admin/auth/admin.guard';
 import { inject } from '@angular/core';
 import { I18nService } from './i18n/i18n.service';
-import { environment } from '../environments/environment';
-import { provideHttpClient } from '@angular/common/http';
 
 
 const baseRoutes: Route[] = [
@@ -96,7 +94,6 @@ const publicPages = baseRoutes.filter(route => route.path !== '' && route.path !
   && route.path !== 'admin' && route.path !== 'admin/login');
 
 export const appRoutes: Route[] = [
-    ...(!environment.production ? [{ path: 'editor-lab', providers: [provideHttpClient()], loadComponent: () => import('./admin/editor-lab/editor-lab.component').then(m => m.EditorLabComponent) }] : []),
     ...baseRoutes.filter(route => route.path === 'admin' || route.path === 'admin/login'),
     ...(['es', 'en'] as const).map(locale => ({
         path: locale,

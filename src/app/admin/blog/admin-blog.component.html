@@ -30,18 +30,13 @@
         @if (mode() === 'html') {
           <div class="field"><label for="blog-html">HTML (200 000 {{text('caracteres máximo', 'characters maximum')}})</label><textarea id="blog-html" formControlName="contentHtml" maxlength="200000" rows="16" spellcheck="false"></textarea></div>
         } @else if (mode() === 'visual') {
-          <p class="muted">{{text('Selecciona texto para darle formato. El pegado visual usa texto plano; pega HTML en su pestaña. Las imágenes se muestran completas en Vista previa.', 'Select text to format it. Visual paste uses plain text; paste HTML in its tab. Full images appear in Preview.')}}</p>
-            <app-format-toolbar [disabled]="isSaving()" [code]="true" (format)="insert($event)" />
-          <div class="field"><label for="blog-link">{{text('Enlace HTTPS', 'HTTPS link')}}</label><input id="blog-link" type="url" [formControl]="linkUrl" maxlength="2048"><button type="button" class="secondary" (mousedown)="$event.preventDefault()" (click)="insert('a')">{{text('Insertar enlace', 'Insert link')}}</button></div>
-          <div #visual class="visual-editor" [attr.contenteditable]="!isSaving()" role="textbox" aria-multiline="true" [attr.aria-label]="text('Contenido visual', 'Visual content')" [innerHTML]="visualHtml()" (input)="captureVisual()" (paste)="paste($event)" (drop)="preventDrop($event)" (click)="preventNavigation($event)"></div>
+            <p class="muted">{{text('Selecciona texto para darle formato. Las imágenes pegadas se suben solo al guardar el borrador.', 'Select text to format it. Pasted images upload only when saving the draft.')}}</p>
         } @else {
           <h1>{{form.controls.title.value}}</h1>
           <p>{{form.controls.excerpt.value}}</p>
-          <app-blog-renderer [html]="previewHtml()" [draftId]="id" />
+          <app-blog-renderer [html]="previewHtml()" [draftId]="id" [imageLoader]="previewImage" />
         }
-        <h3>{{text('Imagen privada', 'Private image')}}</h3>
-        <div class="field"><label for="blog-alt">{{text('Descripción de la imagen (alt)', 'Image description (alt)')}}</label><input id="blog-alt" [formControl]="imageAlt" maxlength="300"></div>
-        <div class="field"><label for="blog-upload">JPEG / PNG / WebP / GIF · 10 MiB</label><input id="blog-upload" type="file" accept="image/jpeg,image/png,image/webp,image/gif" (change)="upload($event)"></div>
+          <app-rich-editor [hidden]="mode() !== 'visual'" [html]="form.controls.contentHtml.value" (htmlChange)="richChanged($event)" [disabled]="isSaving()" [images]="true" [documentId]="id" [uploadImage]="uploadRichImage" [loadImage]="loadRichImage" />
         <p class="muted">{{text('Las imágenes se guardan como rutas privadas, no URLs con token. Las subidas canceladas se conservan para limpieza posterior.', 'Images are saved as private paths, not token URLs. Cancelled uploads remain for later cleanup.')}}</p>
         <div class="actions"><button type="submit" [disabled]="form.invalid || !form.dirty">{{text('Guardar borrador privado', 'Save private draft')}}</button><button type="button" class="secondary" (click)="cancel()">{{text('Cancelar', 'Cancel')}}</button></div>
       </fieldset>

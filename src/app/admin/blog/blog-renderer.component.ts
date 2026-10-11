@@ -3,13 +3,15 @@ import { Component, DestroyRef, effect, inject, input, signal } from '@angular/c
 import { AdminBlogService } from './admin-blog.service';
 import { AdminAuthService } from '../auth/admin-auth.service';
 import { sanitizeBlogHtml } from '../../models/blog-draft';
+import { RichColorsDirective } from '../../models/rich-colors.directive';
 
-@Component({ selector: 'app-blog-renderer', standalone: true,
-  template: `@if (error()) { <p role="alert">{{error()}}</p> }<article class="blog-body" [innerHTML]="rendered()"></article>`,
+@Component({ selector: 'app-blog-renderer', standalone: true, imports: [RichColorsDirective],
+  template: `@if (error()) { <p role="alert">{{error()}}</p> }<article class="blog-body" [innerHTML]="rendered()" [appRichColors]="rendered()"></article>`,
   styleUrl: './blog-body.scss' })
 export class BlogRendererComponent {
   public readonly html = input.required<string>();
   public readonly draftId = input.required<string>();
+  public readonly imageLoader = input<((path: string) => Promise<Blob>) | undefined>(undefined);
   public readonly rendered = signal('');
   public readonly error = signal('');
   private readonly service = inject(AdminBlogService);
@@ -34,7 +36,8 @@ export class BlogRendererComponent {
       const path = image.getAttribute('src') ?? '';
       image.removeAttribute('src');
       try {
-        const blob = await this.service.image(path, id);
+        const loader = this.imageLoader();
+        const blob = loader ? await loader(path) : await this.service.image(path, id);
         if (generation !== this.generation || !this.auth.isAdmin()) return;
         const url = URL.createObjectURL(blob); this.urls.push(url); image.setAttribute('src', url);
       } catch {
