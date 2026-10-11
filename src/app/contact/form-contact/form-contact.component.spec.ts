@@ -69,12 +69,20 @@ describe('FormContactComponent', () => {
     expect(fixture.nativeElement.querySelector('fieldset').disabled).toBe(true);
     expect(fixture.nativeElement.querySelector('input[type=submit]').disabled).toBe(true);
     expect(fixture.nativeElement.querySelector('[role=status]').textContent).toBeTruthy();
+    const dialog = fixture.nativeElement.querySelector('dialog') as HTMLDialogElement;
+    expect(dialog.open).toBe(true);
+    expect(dialog.matches(':modal')).toBe(true);
+    const cancel = new Event('cancel', {cancelable: true});
+    dialog.dispatchEvent(cancel);
+    expect(cancel.defaultPrevented).toBe(true);
     await component.onSubmit();
     expect(sender).toHaveBeenCalledTimes(1);
     expect(sender.mock.calls.at(-1)![1]).toBe('captcha-token');
     complete(); await sending;
     expect(component.formContact.enabled).toBe(true);
     expect(component.isSending()).toBe(false);
+    fixture.detectChanges();
+    expect(dialog.open).toBe(false);
     expect(component.formContact.controls.token.value).toBe('');
     expect(component.captcha()?.resetCaptcha).toHaveBeenCalled();
   });
@@ -89,6 +97,7 @@ describe('FormContactComponent', () => {
     await component.onSubmit();
     fixture.detectChanges();
     expect(component.isSending()).toBe(false);
+    expect((fixture.nativeElement.querySelector('dialog') as HTMLDialogElement).open).toBe(false);
     expect(component.formContact.enabled).toBe(true);
     expect(component.formContact.controls.message.value).toBe('Keep me');
     expect(component.formContact.controls.token.value).toBe('');

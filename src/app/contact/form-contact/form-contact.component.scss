@@ -24,6 +24,27 @@ input[type='submit']:disabled { cursor: wait; opacity: .65; }
 .submission-status, .submission-error { margin: 12px 0 0; line-height: 1.5; }
 .submission-status:empty { display: none; }
 .submission-error { font-weight: 600; }
+.sending-dialog {
+  box-sizing: border-box;
+  width: min(360px, calc(100vw - 40px));
+  padding: 32px 24px;
+  border: 1px solid #555;
+  border-radius: 16px;
+  background: #141418;
+  color: #fff;
+  text-align: center;
+  box-shadow: 0 16px 48px #0008;
+}
+.sending-dialog::backdrop { background: #0009; backdrop-filter: blur(3px); }
+.sending-dialog h2 { margin: 20px 0 12px; font-size: 1.25rem; }
+.sending-dialog p { margin: 0; line-height: 1.6; }
+.sending-spinner {
+  width: 44px; height: 44px; margin-inline: auto;
+  border: 4px solid #555; border-top-color: var(--site-focus, #ff8585);
+  border-radius: 50%; animation: contact-spin .8s linear infinite;
+}
+@keyframes contact-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .sending-spinner { animation: none; } }
 @media (max-width: 600px) { .container-form { padding: 20px 16px; } }
 
 form {
