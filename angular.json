@@ -27,7 +27,7 @@
             "polyfills": ["src/polyfills.ts"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": ["src/favicon.ico", "src/assets", "src/robots.txt"],
+            "assets": ["src/favicon.ico", "src/assets", "src/robots.txt", { "glob": "**/*", "input": "node_modules/@kolkov/angular-editor/assets/icons", "output": "assets/ae-icons" }],
             "styles": ["src/styles.scss"],
             "scripts": [],
             "browser": "src/main.ts",

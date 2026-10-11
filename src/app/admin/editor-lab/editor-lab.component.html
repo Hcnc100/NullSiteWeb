@@ -1,0 +1,43 @@
+<main class="lab">
+  <h1>Laboratorio: Tiptap vs Kolkov</h1>
+  <p>Solo desarrollo. No guarda en Firebase de producción. Compara el mismo documento en ambos editores.</p>
+  <div class="buttons">
+    <button (click)="selected.set('tiptap')" [attr.aria-pressed]="selected() === 'tiptap'">Tiptap 3</button>
+    <button (click)="selected.set('kolkov')" [attr.aria-pressed]="selected() === 'kolkov'">Kolkov 3.4</button>
+    <button (click)="reset()">Restablecer ejemplo</button>
+  </div>
+  <section [hidden]="selected() !== 'tiptap'" aria-label="Editor Tiptap">
+    <div class="buttons" (mousedown)="$event.preventDefault()">
+      <button (click)="editor?.chain()?.focus()?.toggleBold()?.run()">Negrita</button>
+      <button (click)="editor?.chain()?.focus()?.toggleItalic()?.run()">Cursiva</button>
+      <button (click)="editor?.chain()?.focus()?.toggleBulletList()?.run()">Lista</button>
+      <button (click)="editor?.chain()?.focus()?.toggleHeading({level: 2})?.run()">Título</button>
+      <button (click)="editor?.chain()?.focus()?.toggleHeading({level: 3})?.run()">Subtítulo</button>
+      <button (click)="editor?.chain()?.focus()?.setParagraph()?.run()">Párrafo</button>
+      <button (click)="editor?.chain()?.focus()?.setColor('#c62828')?.run()">Rojo</button>
+      <button (click)="editor?.chain()?.focus()?.setFontFamily('Georgia')?.run()">Georgia</button>
+      <button (click)="editor?.chain()?.focus()?.setFontSize('24px')?.run()">24 px</button>
+      <button (click)="editor?.chain()?.focus()?.setTextAlign('center')?.run()">Centrar</button>
+      <button (click)="editor?.chain()?.focus()?.undo()?.run()">Deshacer</button>
+      <button (click)="editor?.chain()?.focus()?.redo()?.run()">Rehacer</button>
+    </div>
+    <div #tiptapHost class="tiptap-host"></div>
+  </section>
+  <section [hidden]="selected() !== 'kolkov'" aria-label="Editor Kolkov">
+    <angular-editor id="kolkov-lab" [(ngModel)]="kolkovHtml" [config]="config" />
+  </section>
+  <div class="buttons">
+    <button (click)="saveLocal()">Guardar local</button><button (click)="recoverLocal()">Recuperar local</button>
+    <button (click)="firestore(true)">Guardar en emulador</button><button (click)="firestore(false)">Recuperar de emulador</button>
+  </div>
+  <p role="status">{{status()}}</p>
+  @if (saved(); as record) {
+    <h2>Recuperado de {{record.editor}}</h2>
+    <p>Importante: los lectores actuales eliminan fuentes, tamaños y colores no admitidos. Si aquí desaparecen, la librería no basta: hay que adaptar la política de formatos.</p>
+    <div class="readers">
+      <section aria-label="Lector público real de legales"><h2>Lector real de legales</h2><app-legal-document [terms]="{title: record.title, content: record.html}" [embedded]="true" /></section>
+      <section aria-label="Contenido permitido para blog"><h2>Contenido permitido para blog</h2><article class="blog-body" [innerHTML]="blogResult()"></article><details><summary>HTML filtrado del blog</summary><pre>{{blogResult()}}</pre></details></section>
+    </div>
+    <details><summary>HTML guardado sin transformar</summary><pre>{{record.html}}</pre></details>
+  }
+</main>

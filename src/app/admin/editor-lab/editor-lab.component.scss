@@ -1,0 +1,18 @@
+:host { display: block; --ae-toolbar-bg-color: #24242a; --ae-button-bg-color: #34343b; --ae-button-active-bg-color: #800000; --ae-picker-label-color: white; --ae-picker-option-bg-color: #24242a; }
+.lab { max-width: 1400px; padding: 64px 24px 32px; margin: auto; }
+h1,h2,p { margin-block: 16px; }
+.buttons { display: flex; flex-wrap: wrap; gap: 8px; margin-block: 16px; }
+button { min-height: 44px; padding: 8px 14px; border: 1px solid #777; color: white; background: #25252c; border-radius: 6px; cursor: pointer; }
+button[aria-pressed=true] { background: #800000; }
+.tiptap-host { padding: 20px; border: 1px solid #777; min-height: 280px; }
+:host ::ng-deep .tiptap { min-height: 260px; outline-offset: 4px; }
+:host ::ng-deep .tiptap p { margin-block: 12px; }
+:host ::ng-deep .tiptap ul { padding-left: 24px; }
+:host ::ng-deep .tiptap table { border-collapse: collapse; }
+:host ::ng-deep .tiptap td, :host ::ng-deep .tiptap th { border: 1px solid #777; padding: 8px; }
+.readers { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 24px; }
+:host ::ng-deep .angular-editor-toolbar svg { filter: brightness(0) invert(1); }
+:host ::ng-deep .ae-picker-label { background: #34343b !important; color: white !important; }
+:host ::ng-deep .ae-picker-options { background: #24242a !important; color: white; }
+pre { white-space: pre-wrap; overflow-wrap: anywhere; border: 1px solid #555; padding: 16px; }
+@media(max-width: 900px) { .readers { grid-template-columns: minmax(0,1fr); } }
