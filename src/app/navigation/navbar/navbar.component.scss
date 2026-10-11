@@ -1,2 +1,8 @@
 @use "scss/links_style";
 @use "scss/icon_style";
+
+// Reserve space for the persistent language controls, rather than covering menu links.
+nav.home-navbar { box-sizing: border-box; padding-right: 112px; }
+.container-icon { border: 0; padding: 0; background: black; cursor: pointer; }
+nav { border-bottom: 1px solid #28282d; }
+@media (max-width: 600px) { nav.home-navbar { padding-right: 0; } }

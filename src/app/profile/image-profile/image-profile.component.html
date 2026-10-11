@@ -1,8 +1,10 @@
 <div class="container-img-container">
-  <img (load)="changeLoad()" [class.container-img-load]="isLoading" [src]="urlImgProfile()" alt="Ricardo Pájaro Coatl"
+  @if (!failed) {
+  <img (load)="changeLoad()" (error)="imageFailed()" [class.container-img-load]="isLoading" [src]="urlImgProfile()" alt="Ricardo Pájaro Coatl" width="260" height="260" fetchpriority="high" decoding="async"
     class="image-profile">
+  } @else { <span class="profile-placeholder" role="img" aria-label="Ricardo Pájaro Coatl">RP</span> }
 
-    @if (isLoading) {
+    @if (isLoading && !motion.reduced()) {
       <ng-lottie [options]="options" class="container-animation"></ng-lottie>
     }
 

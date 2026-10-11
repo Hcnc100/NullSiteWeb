@@ -1,12 +1,14 @@
-import { Gallery } from "ng-gallery";
-import { ImageItem } from "ng-gallery";
-import { Component, computed, effect, inject } from '@angular/core';
+import { Dialog } from '@angular/cdk/dialog';
+import { Component, inject } from '@angular/core';
 import { CertificatesService } from "../services/certificates.service";
 import { ItemCertificateComponent } from "../item-certificate/item-certificate.component";
 import { LoadingComponent } from "src/app/share/loading/loading.component";
-import { LightboxModule } from "ng-gallery/lightbox";
 import type { Certificate } from "src/app/models/Certificate";
-import type { GalleryModel } from "src/app/models/GalleryModel";
+import { TranslatePipe } from '../../i18n/translate.pipe';
+import { I18nService } from '../../i18n/i18n.service';
+import { ImageViewerComponent } from '../../share/image-viewer/image-viewer.component';
+import { PUBLIC_DIALOG_CONFIG } from '../../share/image-viewer/public-dialog.config';
+import { isHttpsUrl } from '../../models/profile-editor.model';
 
 @Component({
   selector: 'app-certificate',
@@ -16,36 +18,30 @@ import type { GalleryModel } from "src/app/models/GalleryModel";
   imports: [
     ItemCertificateComponent,
     LoadingComponent,
-    LightboxModule
+    TranslatePipe
   ],
 })
 export class CertificateComponent {
 
-  private readonly gallery: Gallery = inject(Gallery);
+  private readonly dialog = inject(Dialog);
+  private readonly i18n = inject(I18nService);
   private readonly certificatesService: CertificatesService = inject(CertificatesService);
-  public readonly galleryId: string = "GalleryCertificates"
   public readonly listCertificateId: string = "listCertificateId"
 
-  public readonly listCertificates = computed<GalleryModel<Certificate>[] | undefined>(() =>
-    this.certificatesService.listCertificates()?.map(certificate => ({
-      data: certificate,
-      imageItem: new ImageItem({
-        src: certificate.urlCertificate,
-        thumb: certificate.urlCertificate,
-      }),
-    }))
-  );
+  public readonly listCertificates = this.certificatesService.listCertificates;
 
-
-  public constructor() {
-    effect(() => {
-      const currentList = this.listCertificates();
-      if (!currentList || currentList.length === 0) {
-        return;
-      }
-
-      const listImages = currentList.map(item => item.imageItem);
-      this.gallery.ref(this.galleryId).load(listImages);
+  public openCertificate(certificate: Certificate): void {
+    const certificates = (this.listCertificates() ?? []).filter(item => isHttpsUrl(item.urlCertificate));
+    const index = certificates.indexOf(certificate);
+    if (index < 0) return;
+    this.dialog.open(ImageViewerComponent, {
+      ...PUBLIC_DIALOG_CONFIG,
+      ariaLabelledBy: 'image-dialog-title',
+      data: {
+        title: this.i18n.text('Certificates'),
+        images: certificates.map(item => ({ url: item.urlCertificate, alt: item.name })),
+        index,
+      },
     });
   }
 

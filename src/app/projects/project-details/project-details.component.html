@@ -1,31 +1,41 @@
 <div class="container-details-project">
+  <button type="button" class="close-dialog" (click)="dialogRef.close()" [attr.aria-label]="'Cerrar' | t">×</button>
   <div class="header-project">
-    <h3>{{projectDetails.name}}</h3>
-    <img [src]="projectDetails.urlImg" alt="{{projectDetails.name}} splash">
+    <h2 id="project-dialog-title" tabindex="-1">{{localizedText(projectDetails.name, projectDetails.translations, i18n.locale(), 'name')}}</h2>
+    <img [src]="projectDetails.urlImg" alt="" width="120" height="120" decoding="async">
   </div>
 
-  <p>{{projectDetails.description}}</p>
+  <p>{{localizedText(projectDetails.description, projectDetails.translations, i18n.locale(), 'description')}}</p>
+  @if (projectDetails.technologyIds?.length) { <p>{{projectDetails.technologyIds?.join(' · ')}}</p> }
 
 
   @if (images.length !== 0 ) {
   <div>
-    <h3>Gallery</h3>
+    <h3>{{'Gallery' | t}}</h3>
     <div class="container-images">
       @for (img of images; track img; let index = $index) {
-      <app-img-details-project [gallery]="galleryId" [indexScreenshots]="index" [lightbox]="index"
-        [urlImgProject]="getImgUrl(img.data?.src)"></app-img-details-project>
+      <button type="button" class="gallery-thumbnail" (click)="openImage(index)" [attr.aria-label]="('Ampliar imagen' | t) + ': ' + img.alt" aria-haspopup="dialog">
+        <app-img-details-project [indexScreenshots]="index" [urlImgProject]="img.thumbnail" [originalUrl]="img.url" />
+      </button>
       }
     </div>
   </div>
   }
   <div class="container-buttons">
-    <a class="button-github" href="{{projectDetails.urlRepo}}" target="_blank">
+    @if (isHttpsUrl(projectDetails.urlRepo)) {
+    <a class="button-github" [href]="projectDetails.urlRepo" target="_blank" rel="noopener noreferrer">
       <fa-icon [icon]="iconGit"></fa-icon>
-      Go to Project</a>
-    @if (projectDetails.urlPlay) {
-    <a class="button-github" href="{{projectDetails.urlPlay}}" target="_blank">
+      {{'Go to Project' | t}}</a>
+    }
+    @if (isHttpsUrl(projectDetails.urlPlay)) {
+    <a class="button-github" [href]="projectDetails.urlPlay" target="_blank" rel="noopener noreferrer">
       <fa-icon [icon]="iconPlay"></fa-icon>
-      Go to Demo</a>
+      {{'Go to Demo' | t}}</a>
+    }
+    @for (link of projectDetails.links ?? []; track link.url) {
+      @if (isHttpsUrl(link.url)) {
+        <a class="button-github" [href]="link.url" target="_blank" rel="noopener noreferrer">{{link.label}}</a>
+      }
     }
   </div>
 

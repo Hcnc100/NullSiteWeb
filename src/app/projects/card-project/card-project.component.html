@@ -1,8 +1,8 @@
 <div class="container-animation">
   <div class="container-card-project">
-    <img [src]="project().urlImg || ''" alt="{{ project().name || 'project' }} splash">
+    <img [src]="imageSource() || ''" [alt]="localizedText(project().coverAlt || project().name, project().translations, i18n.locale(), 'coverAlt')" width="180" height="180" loading="lazy" decoding="async" (error)="imageError()">
     <div class="container-title-project">
-      <h3 class="project-title">{{project().name || 'title project'}}</h3>
+      <h2 class="project-title">{{localizedText(project().name, project().translations, i18n.locale(), 'name')}}</h2>
     </div>
   </div>
 

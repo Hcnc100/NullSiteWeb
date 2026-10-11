@@ -1,0 +1,30 @@
+<div class="toolbar" role="group" aria-label="Formato Tiptap" (click)="menuClick($event)">
+  @for (tool of tools; track tool.key) {
+    <button type="button" [title]="tool.label" [attr.aria-label]="tool.label" [attr.aria-pressed]="active(tool.key)" [disabled]="disabled(tool.key)" (mousedown)="$event.preventDefault()" (click)="run(tool.key)"><fa-icon [icon]="tool.icon" aria-hidden="true" /></button>
+  }
+  <select aria-label="Estilo de párrafo" [value]="value('heading')" (change)="format('heading', $any($event.target).value)">
+    <option value="p">Párrafo</option><option value="2">Título 2</option><option value="3">Título 3</option><option value="4">Título 4</option><option value="5">Título 5</option><option value="6">Título 6</option>
+  </select>
+  <select aria-label="Fuente" [value]="value('fontFamily')" (change)="format('fontFamily', $any($event.target).value)"><option value="mixed" disabled>Mixto</option><option>Arial</option><option>Georgia</option><option value="monospace">Monospace</option><option [value]="value('fontFamily')" hidden>{{value('fontFamily')}}</option></select>
+  <select aria-label="Tamaño de fuente" [value]="value('fontSize')" (change)="format('fontSize', $any($event.target).value)"><option value="mixed" disabled>Mixto</option><option value="14px">14 px</option><option value="16px">16 px</option><option value="18px">18 px</option><option value="24px">24 px</option><option value="32px">32 px</option><option [value]="value('fontSize')" hidden>{{value('fontSize')}}</option></select>
+  <details #textMenu><summary class="color-trigger" aria-label="Color de texto" [title]="'Texto: ' + colorLabel()"><fa-icon [icon]="textColorIcon" aria-hidden="true" /><fa-icon class="chevron" [icon]="chevronIcon" aria-hidden="true" /><span class="color-line" [style.background-color]="colorSwatch()"></span></summary><div class="popover icon-menu">
+    <button type="button" title="Elegir color de texto" aria-label="Elegir color de texto" (click)="textMenu.open = false; colorPicker.click()"><fa-icon [icon]="paletteIcon" aria-hidden="true" /></button>
+    <button type="button" title="Restablecer color de texto" aria-label="Restablecer color de texto" (mousedown)="$event.preventDefault()" (click)="format('color', 'default'); textMenu.open = false"><fa-icon [icon]="resetIcon" aria-hidden="true" /></button>
+  </div></details>
+  <input #colorPicker type="color" class="native-color" tabindex="-1" aria-label="Elegir color de texto" [value]="colorSwatch()" (input)="format('color', $any($event.target).value)" />
+  <details #backgroundMenu><summary class="color-trigger" aria-label="Color de fondo del texto" [title]="'Fondo: ' + value('backgroundColor')"><fa-icon [icon]="backgroundIcon" aria-hidden="true" /><fa-icon class="chevron" [icon]="chevronIcon" aria-hidden="true" /><span class="color-line" [style.background-color]="value('backgroundColor').startsWith('#') ? value('backgroundColor') : 'transparent'"></span></summary><div class="popover icon-menu">
+    <button type="button" title="Elegir color de fondo" aria-label="Elegir color de fondo" (click)="backgroundMenu.open = false; backgroundPicker.click()"><fa-icon [icon]="paletteIcon" aria-hidden="true" /></button>
+    <button type="button" title="Restablecer fondo (sin color)" aria-label="Quitar fondo del texto" (mousedown)="$event.preventDefault()" (click)="format('backgroundColor', 'none'); backgroundMenu.open = false"><fa-icon [icon]="resetIcon" aria-hidden="true" /></button>
+  </div></details>
+  <input #backgroundPicker type="color" class="native-color" tabindex="-1" aria-label="Elegir fondo del texto" [value]="value('backgroundColor').startsWith('#') ? value('backgroundColor') : '#ffff00'" (input)="format('backgroundColor', $any($event.target).value)" />
+  <div class="link-group" role="group" aria-label="Enlaces">
+    <details><summary title="Insertar enlace" aria-label="Insertar enlace"><fa-icon [icon]="linkIcon" aria-hidden="true" /><fa-icon class="chevron" [icon]="chevronIcon" aria-hidden="true" /></summary><div class="popover link-editor"><label>Dirección <input #url type="url" placeholder="https://…" /></label><button type="button" title="Aplicar enlace" aria-label="Aplicar enlace" (click)="link(url.value)"><fa-icon [icon]="applyIcon" aria-hidden="true" /></button></div></details>
+    <button type="button" title="Quitar enlace" aria-label="Quitar enlace" [disabled]="disabled('unlink')" (mousedown)="$event.preventDefault()" (click)="run('unlink')"><fa-icon [icon]="unlinkIcon" /></button>
+  </div>
+  <details><summary title="Opciones de tabla" aria-label="Opciones de tabla"><fa-icon [icon]="tableIcon" aria-hidden="true" /> Tabla <fa-icon class="chevron" [icon]="chevronIcon" aria-hidden="true" /></summary><div class="popover table-menu">
+    @for (option of tableActions; track option.action) {
+      <button type="button" [title]="option.label" [attr.aria-label]="option.label" [disabled]="option.action !== 'insert' && !active('table')" (mousedown)="$event.preventDefault()" (click)="table(option.action)"><fa-icon [icon]="option.icon" aria-hidden="true" /><span>{{option.label}}</span></button>
+    }
+  </div></details>
+</div>
+@if (message()) { <p role="status">{{message()}}</p> }

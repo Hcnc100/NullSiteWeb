@@ -1,0 +1,66 @@
+// All rules are scoped: pasted HTML cannot supply selectors or affect the rest of the app.
+.legal-document {
+  max-width: 78ch; margin-inline: auto; color: #f5f5f7; overflow-wrap: anywhere;
+  font-size: clamp(1rem, 1.2vw, 1.125rem); line-height: 1.75;
+
+  .legal-document__header { margin-bottom: 32px; }
+  .legal-document__eyebrow { color: var(--site-muted); font-size: .875rem; letter-spacing: .08em; }
+  .legal-document__title { font-size: clamp(1.75rem, 4vw, 3rem); line-height: 1.2; margin-top: 8px; }
+  .legal-document__content { min-width: 0; max-width: 75ch; }
+  .legal-document__content > :first-child { margin-top: 0; }
+  h2, h3, h4, h5, h6 { line-height: 1.35; margin-block: 2rem .75rem; scroll-margin-top: 80px; }
+  h2 { font-size: clamp(1.4rem, 2.5vw, 1.85rem); }
+  h3 { font-size: 1.3rem; }
+  h4, h5, h6 { font-size: 1.125rem; }
+  p, ul, ol, dl, blockquote, pre { margin-block: 1rem; }
+  ul, ol { padding-inline-start: 1.5rem; }
+  li + li { margin-top: .5rem; }
+  dt { font-weight: 700; }
+  dd { margin-inline-start: 1.5rem; }
+  a[href] { color: #b6b6ff; text-decoration: underline; text-underline-offset: .2em; }
+  a:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
+    outline: 3px solid var(--site-focus); outline-offset: 3px;
+  }
+  hr { border: 0; border-top: 1px solid #555; margin-block: 2rem; }
+  blockquote { border-inline-start: 3px solid #aaa; padding-inline-start: 20px; color: var(--site-muted); }
+  pre, code { font-family: ui-monospace, monospace; }
+  pre { max-width: 100%; overflow: auto; white-space: pre-wrap; padding: 16px; background: #202027; border-radius: 6px; }
+  .legal-note, .legal-warning { padding: 16px 20px; border-inline-start: 3px solid #b6b6ff; border-radius: 4px; background: #202027; }
+  .legal-warning { border-color: #ff8585; background: #322126; }
+  .legal-lead { font-size: 1.125em; }
+  .legal-align-left { text-align: left; }
+  .legal-align-center { text-align: center; }
+  .legal-align-right { text-align: right; }
+  .legal-strong { font-weight: 700; }
+  .legal-emphasis { font-style: italic; }
+  .legal-underline { text-decoration: underline; }
+  .legal-table-scroll { max-width: 100%; overflow-x: auto; margin-block: 1.5rem; }
+  table { border-collapse: collapse; width: 100%; min-width: 32rem; }
+  caption { text-align: left; font-weight: 700; margin-bottom: 12px; }
+  th, td { border: 1px solid #777; padding: 12px; text-align: left; vertical-align: top; }
+  th { background: #272730; }
+  .legal-document__index { min-width: 0; margin-bottom: 32px; }
+  .legal-document__index details { border: 1px solid #555; border-radius: 8px; padding: 16px; }
+  .legal-document__index summary { cursor: pointer; font-weight: 600; min-height: 44px; }
+  .legal-document__index ol { list-style: none; padding: 0; margin-bottom: 0; }
+  .legal-document__index a { display: block; padding-block: 8px; font-size: .9375rem; line-height: 1.5; }
+  .legal-document__nested { padding-inline-start: 12px; }
+  .legal-document__notice { border: 1px solid #777; border-radius: 8px; padding: 24px; }
+
+  @media (min-width: 1200px) {
+    &.has-index { display: grid; grid-template-columns: minmax(0, 75ch) minmax(200px, 260px); gap: 0 48px; max-width: 1200px; }
+    .legal-document__header { grid-column: 1 / -1; }
+    .legal-document__content { grid-column: 1; grid-row: 2; }
+    .legal-document__index { grid-column: 2; grid-row: 2; align-self: start; position: sticky; top: 80px;
+      max-height: calc(100svh - 100px); overflow-y: auto; }
+  }
+  @media print {
+    &, &.has-index { display: block; max-width: none; color: #000; background: #fff; font-size: 11pt; }
+    .legal-document__index { display: none; }
+    a, blockquote, .legal-document__eyebrow { color: #000; }
+    .legal-note, .legal-warning, pre, th { background: #fff; }
+    h1, h2, h3 { break-after: avoid; }
+    .legal-table-scroll { overflow: visible; }
+    table { min-width: 0; }
+  }
+}

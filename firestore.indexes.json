@@ -1,7 +1,11 @@
 {
   "indexes": [
     { "collectionGroup": "last-projects", "queryScope": "COLLECTION",
-      "fields": [{"fieldPath":"published","order":"ASCENDING"},{"fieldPath":"createdAt","order":"DESCENDING"}] }
+      "fields": [{"fieldPath":"published","order":"ASCENDING"},{"fieldPath":"createdAt","order":"DESCENDING"}] },
+    { "collectionGroup": "blog-posts", "queryScope": "COLLECTION",
+      "fields": [{"fieldPath":"locale","order":"ASCENDING"},{"fieldPath":"status","order":"ASCENDING"},{"fieldPath":"publishedAt","order":"DESCENDING"}] }
   ],
-  "fieldOverrides": []
+  "fieldOverrides": [
+    { "collectionGroup": "contact-rate-limits", "fieldPath": "expiresAt", "ttl": true, "indexes": [] }
+  ]
 }

@@ -2,34 +2,98 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     function isAdmin() {
-      return request.auth != null && request.auth.token.admin == true;
+      return request.auth != null && request.auth.token.get('admin', false) == true;
     }
 
     match /last-projects/{id} {
-      allow read: if resource.data.published == true;
+      allow read: if true;
       allow create, update, delete: if isAdmin();
     }
     match /infoProfile/{id} {
       allow read: if true;
       allow create, update, delete: if isAdmin();
     }
-    match /certificates/{id} {
-      allow read: if resource.data.published == true;
+    match /last-certificates/{id} {
+      allow read: if true;
       allow create, update, delete: if isAdmin();
     }
     match /skills/{id} {
-      allow read: if resource.data.published == true;
+      allow read: if isAdmin() || resource.data.published == true;
       allow create, update, delete: if isAdmin();
     }
     match /terms/{id} {
       allow read: if true;
       allow create, update, delete: if isAdmin();
     }
+    function legalText(value) {
+      return value is map && value.keys().hasOnly(['title', 'content'])
+        && value.keys().hasAll(['title', 'content'])
+        && value.title is string && value.title.size() > 0 && value.title.size() <= 180
+        && value.content is string && value.content.size() > 0 && value.content.size() <= 500000;
+    }
+    match /legal-drafts/{id} {
+      allow read: if isAdmin();
+      allow create, update: if isAdmin() && id.matches('[a-zA-Z0-9_-]{1,100}')
+        && request.resource.data.keys().hasOnly(['title', 'content', 'base', 'revision', 'publishedRevision', 'updatedAt'])
+        && legalText({'title': request.resource.data.title, 'content': request.resource.data.content})
+        && (request.resource.data.base == null || legalText(request.resource.data.base))
+        && request.resource.data.revision is int && request.resource.data.revision > 0
+        && request.resource.data.publishedRevision is int && request.resource.data.publishedRevision >= 0
+        && request.resource.data.publishedRevision <= request.resource.data.revision
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if false;
+      match /history/{version} {
+        allow read: if isAdmin();
+        allow create: if isAdmin()
+          && request.resource.data.keys().hasOnly(['title', 'content', 'previous', 'revision', 'publishedAt'])
+          && legalText({'title': request.resource.data.title, 'content': request.resource.data.content})
+          && (request.resource.data.previous == null || legalText(request.resource.data.previous))
+          && request.resource.data.revision is int && request.resource.data.revision > 0
+          && request.resource.data.publishedAt == request.time;
+        allow update, delete: if false;
+      }
+    }
+    match /siteSettings/public {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    function blogEnabled() {
+      return get(/databases/$(database)/documents/siteSettings/public).data.get('blogEnabled', false) == true;
+    }
+    match /blog-posts/{id} {
+      allow read: if isAdmin() || (blogEnabled() && resource.data.status == 'published');
+      allow delete: if isAdmin();
+      allow create, update: if isAdmin()
+        && request.resource.data.keys().hasOnly(['draftId', 'title', 'slug', 'excerpt', 'locale', 'tags',
+          'contentHtml', 'status', 'assetVersion', 'sourceRevision', 'publishedAt'])
+        && request.resource.data.status == 'published'
+        && request.resource.data.locale in ['es', 'en']
+        && request.resource.data.slug is string && request.resource.data.slug.size() <= 100
+        && request.resource.data.slug.matches('[a-z0-9]+(-[a-z0-9]+)*')
+        && id == request.resource.data.locale + '-' + request.resource.data.slug
+        && request.resource.data.draftId is string
+        && request.resource.data.assetVersion is string && request.resource.data.assetVersion.matches('[a-zA-Z0-9_-]+')
+        && request.resource.data.title is string && request.resource.data.title.size() > 0 && request.resource.data.title.size() <= 180
+        && request.resource.data.excerpt is string && request.resource.data.excerpt.size() <= 500
+        && request.resource.data.tags is list && request.resource.data.tags.size() <= 20
+        && request.resource.data.contentHtml is string && request.resource.data.contentHtml.size() <= 200000
+        && request.resource.data.sourceRevision is int && request.resource.data.sourceRevision > 0
+        && request.resource.data.publishedAt == request.time;
+    }
+    match /blog-drafts/{id} {
+      allow read, delete: if isAdmin();
+      allow create, update: if isAdmin()
+        && request.resource.data.status == 'draft'
+        && request.resource.data.contentFormat == 'html'
+        && request.resource.data.contentVersion == 1
+        && request.resource.data.title is string && request.resource.data.title.size() <= 180
+        && request.resource.data.contentHtml is string && request.resource.data.contentHtml.size() <= 200000
+        && request.resource.data.locale in ['es', 'en'];
+    }
+    match /blog-slugs/{id} { allow read, write: if isAdmin(); }
     match /emails/{id} {
-      allow create: if request.resource.data.keys().hasOnly(['name', 'email', 'message', 'createdAt'])
-        && request.resource.data.name is string
-        && request.resource.data.email is string
-        && request.resource.data.message is string;
+      // Creation is server-only after CAPTCHA and atomic quota checks.
+      allow create: if false;
       allow read, update, delete: if isAdmin();
     }
     match /{document=**} { allow read, write: if false; }

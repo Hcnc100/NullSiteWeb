@@ -1,0 +1,121 @@
+{
+  "status": "proposal-not-published",
+  "reviewedByOwner": false,
+  "source": "Public Firestore read, 2026-10-10 America/Mexico_City",
+  "instructions": "Review and copy approved translations into the existing private editors. This file is not imported automatically. Preserve project names, IDs, URLs and original descriptions. Only the MoviesCompose image proposals below were visually reviewed; verify current image order before applying them. Other screenshot contents were not inferred.",
+  "profile": {
+    "id": "nullPointer",
+    "translations": {
+      "es": {
+        "profession": "Desarrollador de aplicaciones móviles",
+        "description": "Me apasionan la tecnología y el aprendizaje autodidacta, especialmente el desarrollo móvil. También me interesan la inteligencia artificial y la seguridad informática. Mi filosofía es nunca dejar de aprender."
+      },
+      "en": {
+        "profession": "Mobile Application Developer",
+        "description": "I am passionate about technology and self-directed learning, especially mobile development. I am also interested in artificial intelligence and computer security. My philosophy is to never stop learning."
+      }
+    }
+  },
+  "projects": [
+    {
+      "id": "4UHO9T8WX3johZrmPDX0",
+      "name": "MoviesCompose",
+      "imageReview": {
+        "status": "visually-reviewed-proposal-awaiting-owner",
+        "coverAlt": { "es": "Pantalla de inicio de MoviesCompose con fondo morado e icono de película", "en": "MoviesCompose splash screen with a purple background and movie icon" },
+        "galleryByOriginalIndex": [
+          { "index": 0, "es": "Catálogo de películas con carteles organizados por categorías", "en": "Movie catalog with posters organized by category" },
+          { "index": 1, "es": "Detalle de una película con sinopsis y reparto", "en": "Movie details with an overview and cast" },
+          { "index": 2, "es": "Pantalla de búsqueda de películas con el teclado abierto", "en": "Movie search screen with the keyboard open" },
+          { "index": 3, "es": "Campo de búsqueda de películas con una ilustración de lupa y el teclado abierto", "en": "Movie search field with a magnifying-glass illustration and the keyboard open" },
+          { "index": 4, "es": "Listado de búsquedas recientes de películas", "en": "List of recent movie searches" },
+          { "index": 5, "es": "Detalle de película con cartel, sinopsis y fotografías del reparto", "en": "Movie details with a poster, overview and cast photos" },
+          { "index": 6, "es": "Búsqueda de películas sin resultados, con un mensaje informativo", "en": "Movie search with no results and an informational message" }
+        ]
+      },
+      "translations": {
+        "es": { "name": "MoviesCompose", "description": "Aplicación sencilla que consulta una API de películas con Retrofit y guarda los resultados en una base de datos con Room, utilizando Android Jetpack." },
+        "en": { "name": "MoviesCompose", "description": "A simple app that uses Retrofit to fetch movies from an API and stores the results in a Room database, using Android Jetpack." }
+      }
+    },
+    {
+      "id": "G2UQaIVXqBAHNjRXFtcS",
+      "name": "Archipelago",
+      "translations": {
+        "es": { "name": "Archipelago", "description": "Mi primera prueba técnica." },
+        "en": { "name": "Archipelago", "description": "My first technical test." }
+      }
+    },
+    {
+      "id": "MKPiJTc5cIrxV2MKXT7T",
+      "name": "DogeDex",
+      "translations": {
+        "es": { "name": "DogeDex", "description": "Aplicación para escanear perros, identificarlos con TensorFlow Lite y guardarlos en una base de datos." },
+        "en": { "name": "DogeDex", "description": "An app that scans dogs, identifies them using TensorFlow Lite and saves them in a database." }
+      }
+    },
+    {
+      "id": "SNVFrAga5AASuly60Kby",
+      "name": "NourseCompose",
+      "translations": {
+        "es": { "name": "NourseCompose", "description": "Proyecto sencillo para registrar temperatura, presión, glucosa y oxígeno, utilizando MVVM, Jetpack Compose y Room." },
+        "en": { "name": "NourseCompose", "description": "A simple project for recording temperature, pressure, glucose and oxygen data, using MVVM, Jetpack Compose and Room." }
+      }
+    },
+    {
+      "id": "Xb0PIznHQirxp1KUus8l",
+      "name": "VirtuallTrainer",
+      "translations": {
+        "es": { "name": "VirtuallTrainer", "description": "Aplicación sencilla que muestra modelos 3D con ARCore como simulación de una aplicación de ejercicio. Las animaciones de los modelos se pueden pausar y reanudar." },
+        "en": { "name": "VirtuallTrainer", "description": "A simple app that displays 3D models using ARCore as an exercise app simulation. Model animations can be paused and resumed." }
+      }
+    },
+    {
+      "id": "g92aYvxjrFvbt81YptAH",
+      "name": "NewsCompose",
+      "translations": {
+        "es": { "name": "NewsCompose", "description": "Aplicación sencilla que muestra noticias obtenidas de una API y guardadas en una base de datos interna." },
+        "en": { "name": "NewsCompose", "description": "A simple app that displays news fetched from an API and saved in a local database." }
+      }
+    },
+    {
+      "id": "icdofynlXyuZE2k42eDT",
+      "name": "NullSiteApp",
+      "translations": {
+        "es": { "name": "NullSiteApp", "description": "Aplicación sencilla para administrar mi sitio web, desarrollada con Jetpack Compose y autenticación biométrica en la app." },
+        "en": { "name": "NullSiteApp", "description": "A simple app for managing my website, built with Jetpack Compose and biometric authentication in the app." }
+      }
+    },
+    {
+      "id": "imUsnbC8AbUxe4Aysj8D",
+      "name": "BlogCompose",
+      "translations": {
+        "es": { "name": "BlogCompose", "description": "Aplicación de blog sencilla desarrollada con Jetpack Compose, Flow, Navigation Compose, Room y Firebase." },
+        "en": { "name": "BlogCompose", "description": "A simple blog app built with Jetpack Compose, Flow, Navigation Compose, Room and Firebase." }
+      }
+    },
+    {
+      "id": "uazpe0Y2xSl6nEfOKjCV",
+      "name": "RunningApp",
+      "translations": {
+        "es": { "name": "RunningApp", "description": "Aplicación sencilla de seguimiento que utiliza Jetpack Compose, Room para guardar datos y servicios de ubicación." },
+        "en": { "name": "RunningApp", "description": "A simple tracking app using Jetpack Compose, Room for data storage and location services." }
+      }
+    },
+    {
+      "id": "xpGbQcHSNGwN8Q68D430",
+      "name": "UsersCompose",
+      "translations": {
+        "es": { "name": "UsersCompose", "description": "Aplicación sencilla que obtiene usuarios de una API con Retrofit y los guarda en una base de datos interna con Room." },
+        "en": { "name": "UsersCompose", "description": "A simple app that fetches users from an API using Retrofit and saves them in a local Room database." }
+      }
+    }
+  ],
+  "ownerInputsRequired": [
+    "Review and approve these editorial translations; no production content has changed.",
+    "Provide final public resume PDFs in Spanish and English, without private information.",
+    "Review the 10 covers and 75 gallery references visually and write meaningful ES/EN image descriptions.",
+    "Supply optional lightweight thumbnails of the same images if wanted; original assets remain intact.",
+    "Review blog excerpts, image alt text and first-image thumbnail selection before explicit publication."
+  ]
+}

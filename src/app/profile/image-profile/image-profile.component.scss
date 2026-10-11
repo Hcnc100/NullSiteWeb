@@ -6,4 +6,6 @@
   display: flex;
   justify-content: center;
 }
+.profile-placeholder { display: grid; place-items: center; width: 240px; height: 240px;
+  border: 1px solid #777; border-radius: 50%; font-size: 3rem; }
 

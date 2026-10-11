@@ -1,0 +1,25 @@
+:host { display: block; }
+.link-group { display: inline-flex; align-items: center; gap: 4px; }
+.color-trigger, .palette button { display: inline-flex; align-items: center; gap: 8px; }
+.color-trigger { position: relative; min-width: 44px; justify-content: center; padding-bottom: 10px; }
+.color-line { position: absolute; bottom: 3px; left: 8px; right: 8px; height: 4px; border: 1px solid #aaa; }
+.swatch { display: inline-block; width: 18px; height: 18px; border: 1px solid #aaa; border-radius: 3px; flex-shrink: 0; }
+.native-color { position: absolute; width: 1px; height: 1px; padding: 0; border: 0; opacity: 0; pointer-events: none; }
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 6px; background: #24242a; border: 1px solid #777; border-bottom: 0; min-width: 0; }
+button, select, summary { box-sizing: border-box; min-height: 36px; border: 1px solid #777; border-radius: 4px; background: #34343b; color: #fff; font: inherit; font-size: .875rem; padding: 6px 9px; cursor: pointer; }
+button { min-width: 36px; } select { max-width: 100%; }
+button:hover, summary:hover { background: #45454f; }
+button[aria-pressed=true] { background: #800000; border-color: #ff8585; }
+button:disabled { opacity: .45; cursor: not-allowed; }
+:is(button, select, summary, input):focus-visible { outline: 3px solid var(--site-focus, #ff8585); outline-offset: 2px; }
+details { position: relative; } summary { display: inline-flex; align-items: center; justify-content: center; gap: 7px; list-style: none; }
+summary::-webkit-details-marker { display: none; }
+.chevron { font-size: .6rem; }
+.popover { position: absolute; inset-inline-end: 0; top: 100%; z-index: 5; display: grid; gap: 6px; width: min(260px, 75vw); padding: 10px; background: #24242a; border: 1px solid #777; border-radius: 4px; box-shadow: 0 8px 20px #0008; }
+.icon-menu { grid-template-columns: repeat(2, minmax(44px, 1fr)); width: max-content; max-width: 75vw; }
+.icon-menu button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; }
+.table-menu { grid-template-columns: minmax(0, 1fr); }
+.table-menu button { display: flex; align-items: center; gap: 10px; text-align: start; min-height: 44px; }
+input { box-sizing: border-box; width: 100%; padding: 8px; background: #111; color: white; border: 1px solid #777; }
+p { margin-block: 8px; }
+@media (pointer: coarse) { button, select, summary { min-height: 44px; } button { min-width: 44px; } }

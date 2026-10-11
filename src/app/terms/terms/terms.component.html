@@ -1,32 +1,22 @@
-<!-- FILEPATH: /c:/Users/desarrollador6/Documents/Proyectos/NullSiteWeb/src/app/terms/terms/terms.component.html -->
-<section class="seccion-terms ">
-  <!-- ngIf directive to conditionally render the section based on the data object -->
-  @if ({ project: termsProject | async, loading: isLoading }; as data) {
-    <!-- ngIf directive to conditionally render the article based on the data.project -->
-    @if (data.project) {
-      <article class="container-term">
-        <header class="container-terms__title">
-          <!-- Display the title of the project -->
-          <h1>{{data.project.title}}</h1>
-        </header>
-        <div class="container-terms__content">
-          <div class="container-terms__content__text" [innerHTML]="getSafeContent(data.project.content)">
-          </div>
-        </div>
-      </article>
-    } @else {
-      <!-- ngIf directive to conditionally render the container-not-found div based on the data.loading -->
-      @if (!data.loading) {
-        <div class="container-not-found">
-          <h1>404</h1>
-          <h2>Not Found Terms and Conditions</h2>
+<section class="seccion-terms">
+  @if (state | async; as current) {
+    @switch (current.kind) {
+      @case ('ready') { <app-legal-document [terms]="current.project" /> }
+      @case ('loading') { <app-loading [pathArg]="'/assets/loading3.json'" /> }
+      @case ('not-found') {
+        <div class="legal-state">
+          <p>404</p>
+          <h1>{{'Documento no encontrado' | t}}</h1>
+          <p>{{'No existe un documento público en esta dirección.' | t}}</p>
         </div>
       }
-      <!-- app-loading component to display a loading animation when data.loading is true -->
-      @if (data.loading) {
-        <app-loading [pathArg]="'/assets/loading3.json'"></app-loading>
+      @case ('error') {
+        <div class="legal-state" role="alert">
+          <h1>{{'No se pudo cargar el documento' | t}}</h1>
+          <p>{{'Revisa tu conexión e inténtalo de nuevo.' | t}}</p>
+          <button type="button" (click)="retry()">{{'Reintentar carga' | t}}</button>
+        </div>
       }
     }
-    <!-- ng-template to handle the case when data.project is falsy -->
   }
 </section>

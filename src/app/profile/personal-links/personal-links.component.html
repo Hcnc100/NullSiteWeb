@@ -1,6 +1,6 @@
 <div class="container-social-links">
-  @for (itemSocialLink of listSocialLink; track itemSocialLink.link) {
-    <a [href]="itemSocialLink.link" target="_blank" rel="noopener noreferrer">
+  @for (itemSocialLink of listSocialLink(); track itemSocialLink.label) {
+    <a [href]="itemSocialLink.link" target="_blank" rel="noopener noreferrer" [attr.aria-label]="itemSocialLink.label">
       <fa-icon [icon]="itemSocialLink.icon" class="icon-social-link"></fa-icon>
     </a>
   }

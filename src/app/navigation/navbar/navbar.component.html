@@ -1,19 +1,19 @@
 @if (currentIdSection()) {
 @if (listIdsSections.includes(currentIdSection())) {
-<nav class="home-navbar">
+<nav class="home-navbar" aria-label="Portfolio" (keydown.escape)="hiddenMenuIfNeed(true)">
   <!-- icon menu -->
   @if (isMobile) {
-  <div (click)="onClickMobile()" (keyup.enter)="onClickMobile()" tabindex="0" class="container-icon" role="button"
-    aria-label="Open menu">
+  <button #menuButton type="button" (click)="onClickMobile()" class="container-icon"
+    [attr.aria-label]="'Open menu' | t" [attr.aria-expanded]="!isGoneMenu" aria-controls="navigation-links">
     <fa-icon [icon]="iconMenu" class="icon-menu"></fa-icon>
-  </div>
+  </button>
   }
   <!-- container links navigation -->
   @if (!(isGoneMenu && isMobile)) {
   <ul class="container-links-menu" id="navigation-links">
     @for (idSection of listIdsSections; track idSection) {
     <li [ngClass]="{'section-active': currentIdSection() === idSection}">
-      <a (click)="hiddenMenuIfNeed()" [routerLink]="idSection">{{idSection}}</a>
+      <a (click)="hiddenMenuIfNeed()" [routerLink]="i18n.publicUrl(idSection)" [attr.aria-current]="currentIdSection() === idSection ? 'page' : null">{{idSection | t}}</a>
     </li>
     }
   </ul>
@@ -21,10 +21,9 @@
 </nav>
 } @else {
 <nav class="back-navbar">
-  <div role="button" tabindex="0" (click)="onClickBack()" (keydown.enter)="onClickBack()"
-    (keydown.space)="onClickBack()" class="container-icon">
+  <button type="button" (click)="onClickBack()" class="container-icon" [attr.aria-label]="'Volver' | t">
     <fa-icon [icon]="iconBack" class="icon-menu"></fa-icon>
-  </div>
+  </button>
 </nav>
 }
 <!-- icon back -->

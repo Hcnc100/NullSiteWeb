@@ -1,0 +1,28 @@
+<section class="blog-page" aria-labelledby="public-blog-title">
+  @if (loading()) {
+    <h1 id="public-blog-title">Blog</h1><p role="status">{{text('Cargando…', 'Loading…')}}</p>
+  } @else if (failed()) {
+    <h1 id="public-blog-title">Blog</h1><p role="alert">{{text('No se pudo cargar el blog. Inténtalo de nuevo.', 'The blog could not be loaded. Please try again.')}}</p>
+  } @else if (!blog.enabled()) {
+    <h1 id="public-blog-title">{{text('Blog no disponible', 'Blog unavailable')}}</h1>
+    <p>{{text('Vuelve al portafolio para conocer mis proyectos.', 'Visit the portfolio to explore my projects.')}}</p>
+    <a [routerLink]="i18n.publicUrl('home')">{{text('Inicio', 'Home')}}</a>
+  } @else if (detail()) {
+    <a class="back-link" [routerLink]="i18n.publicUrl('blog')">← {{text('Todos los artículos', 'All articles')}}</a>
+    @if (post(); as article) {
+      <h1 id="public-blog-title">{{article.title}}</h1><p class="excerpt">{{article.excerpt}}</p>
+      <ul class="tags" [attr.aria-label]="text('Etiquetas', 'Tags')">@for (tag of article.tags; track $index) { <li>{{tag}}</li> }</ul>
+      <article class="blog-body" [innerHTML]="rendered()" [appRichColors]="rendered()"></article>
+      @if (imageError()) { <p role="status">{{text('Algunas imágenes no están disponibles.', 'Some images are unavailable.')}}</p> }
+    } @else { <h1 id="public-blog-title">{{text('Artículo no disponible', 'Article unavailable')}}</h1> }
+  } @else {
+    <h1 id="public-blog-title">Blog</h1><p class="excerpt">{{text('Notas sobre desarrollo y tecnología.', 'Notes on development and technology.')}}</p>
+    <div class="post-grid">
+      @for (article of posts(); track article.id) {
+        <article class="post-card"><app-blog-thumbnail [post]="article" /><h2><a [routerLink]="i18n.publicUrl('blog/' + article.slug)">{{article.title}}</a></h2>
+          <p>{{article.excerpt}}</p><ul class="tags" [attr.aria-label]="text('Etiquetas', 'Tags')">@for (tag of article.tags; track $index) { <li>{{tag}}</li> }</ul>
+        </article>
+      } @empty { <p>{{text('Aún no hay artículos publicados en este idioma.', 'No articles have been published in this language yet.')}}</p> }
+    </div>
+  }
+</section>

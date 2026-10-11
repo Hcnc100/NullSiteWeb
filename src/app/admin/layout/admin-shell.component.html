@@ -1,0 +1,25 @@
+@if (opened()) {
+  <div class="admin-page" [hidden]="!auth.isAdmin()">
+    <header class="admin-header">
+      <div><p class="eyebrow">NullPointer</p><h1>{{'Panel de administración' | t}}</h1></div>
+      <div class="header-actions"><span class="muted account">{{ auth.user()?.email }}</span>
+        <button type="button" class="secondary" (click)="logout()"><app-admin-icon name="logout" />{{'Cerrar sesión' | t}}</button>
+      </div>
+    </header>
+    <nav class="admin-nav" aria-label="Administración">
+      <a routerLink="/admin/profile" routerLinkActive="active" ariaCurrentWhenActive="page"><app-admin-icon name="profile" />{{'Perfil y redes' | t}}</a>
+      <a routerLink="/admin/projects" routerLinkActive="active" ariaCurrentWhenActive="page"><app-admin-icon name="projects" />{{'Proyectos' | t}}</a>
+      <a routerLink="/admin/skills" routerLinkActive="active" ariaCurrentWhenActive="page"><app-admin-icon name="skills" />{{'Habilidades' | t}}</a>
+      <a routerLink="/admin/resume" routerLinkActive="active" ariaCurrentWhenActive="page"><app-admin-icon name="resume" />{{'Currículum' | t}}</a>
+      <a routerLink="/admin/blog" routerLinkActive="active" ariaCurrentWhenActive="page"><app-admin-icon name="blog" />Blog</a>
+      <a routerLink="/admin/legal" routerLinkActive="active" ariaCurrentWhenActive="page"><app-admin-icon name="legal" />{{'Documentos legales' | t}}</a>
+      <a routerLink="/home"><app-admin-icon name="external" />{{'Ver portafolio' | t}}</a>
+    </nav>
+    @if (error()) { <p role="alert" class="feedback error">{{ error() | t }}</p> }
+    <router-outlet />
+    <p class="muted phase-note">{{'El blog se activa desde su editor; guardar no publica artículos.' | t}}</p>
+  </div>
+}
+@if (!auth.isAdmin()) {
+  <section class="admin-page"><p role="status">{{'Verificando acceso…' | t}}</p></section>
+}

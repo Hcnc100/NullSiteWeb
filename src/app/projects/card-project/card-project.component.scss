@@ -10,6 +10,7 @@ $size-title: 30px;
 
 .container-card-project {
   position: relative;
+  line-height: 0;
 
   &:hover {
     cursor: pointer;
@@ -24,20 +25,24 @@ $size-title: 30px;
 
   .container-title-project {
     position: absolute;
-    top: $size-image - $size-title;
+    bottom: 0;
     left: 0;
-    background: black;
-    width: calc(100% - $padding-horizontal * 2);
-    height: $size-title;
+    background: rgba(0, 0, 0, .9);
+    width: 100%;
+    min-height: $size-title;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     padding: 0 $padding-horizontal;
-    opacity: .5;
+    opacity: 1;
     transition: opacity 0.5s ease-in-out;
 
-    h3 {
+    h2 {
       color: white;
-      font-size: 15px;
+      font-size: 14px;
+      line-height: 1.4;
+      padding-block: 8px;
+      overflow-wrap: anywhere;
     }
   }
 }

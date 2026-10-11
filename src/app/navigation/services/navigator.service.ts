@@ -22,7 +22,7 @@ export class NavigatorService {
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe((event) => {
-        const onlyUrl = event.urlAfterRedirects.replace('/', '');
+        const onlyUrl = event.urlAfterRedirects.replace(/^\/(es|en)\//, '/').split(/[?#]/)[0].replace('/', '');
         this._currentSection.set(onlyUrl || defaultSection);
       });
   }

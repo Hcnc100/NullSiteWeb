@@ -2,18 +2,10 @@ import type { Signal } from '@angular/core';
 import { Component, inject } from '@angular/core';
 import type { ItemSkill } from "../../models/ItemSkill";
 import { ResizeService } from "../../services/resize/resize.service";
-import {
-  faAndroid,
-  faAngular,
-  faDocker,
-  faGit,
-  faGithub,
-  faJava,
-  faJsSquare,
-  faPython
-} from "@fortawesome/free-brands-svg-icons";
 import { SkillCardComponent } from "../skill-card/skill-card.component";
 import { CommonModule } from "@angular/common";
+import { SkillsService } from '../skills.service';
+import { TranslatePipe } from '../../i18n/translate.pipe';
 
 @Component({
   selector: 'app-skills',
@@ -22,64 +14,23 @@ import { CommonModule } from "@angular/common";
   standalone: true,
   imports: [
     SkillCardComponent,
-    CommonModule
+    CommonModule,
+    TranslatePipe,
   ]
 })
 export class SkillsComponent {
 
   private readonly resizeServices: ResizeService = inject(ResizeService);
-
-  public readonly listLanguages: ItemSkill[] = [
-    {
-      name: "Python",
-      icon: faPython,
-      color: "#306998",
-    },
-    {
-      name: "Java",
-      icon: faJava,
-      color: "#f89820",
-    }, {
-      name: "JavaScript",
-      icon: faJsSquare,
-      color: "#f0db4f",
-    }
-    , {
-      name: "Kotlin",
-      icon: faAndroid,
-      color: "#78C257",
-    },
-    {
-      name: "Dart",
-      icon: faAndroid,
-      color: "#78C257",
-    },
-    {
-      name: "Angular",
-      icon: faAngular,
-      color: "#a6120d",
-    },
-  ]
-
-  public readonly listTech: ItemSkill[] = [
-    {
-      name: "Github",
-      icon: faGithub,
-      color: "#6e5494",
-    },
-    {
-      name: "Git",
-      icon: faGit,
-      color: "#f34f29",
-    },
-    {
-      name: "Docker",
-      icon: faDocker,
-      color: "#0db7ed",
-    }
-  ]
+  private readonly skillsService = inject(SkillsService);
 
   public readonly isMobile: Signal<boolean> = this.resizeServices.isMobileSize;
+
+  public get listLanguages(): ItemSkill[] {
+    return this.skillsService.items().filter(skill => skill.category === 'language').map(skill => skill.item);
+  }
+  public get listTech(): ItemSkill[] {
+    return this.skillsService.items().filter(skill => skill.category !== 'language').map(skill => skill.item);
+  }
 
   public get allItems(): ItemSkill[] {
     return [...this.listLanguages, ...this.listTech]

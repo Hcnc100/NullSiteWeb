@@ -1,6 +1,6 @@
 import type { Signal } from '@angular/core';
 import { Component, inject } from '@angular/core';
-import { DialogService } from "@ngneat/dialog";
+import { Dialog } from '@angular/cdk/dialog';
 import { ProjectDetailsComponent } from "../project-details/project-details.component";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import type { Project } from "../../models/Project";
@@ -8,6 +8,8 @@ import { ProjectsService } from "../services/projects.service";
 import { CardProjectComponent } from '../card-project/card-project.component';
 import { LoadingComponent } from 'src/app/share/loading/loading.component';
 import { CommonModule } from '@angular/common';
+import { TranslatePipe } from '../../i18n/translate.pipe';
+import { PUBLIC_DIALOG_CONFIG } from '../../share/image-viewer/public-dialog.config';
 
 @Component({
   selector: 'app-projects',
@@ -17,13 +19,14 @@ import { CommonModule } from '@angular/common';
   imports: [
     CardProjectComponent,
     LoadingComponent,
-    CommonModule
+    CommonModule,
+    TranslatePipe,
   ]
 })
 export class ProjectsComponent {
 
   private readonly projectServices: ProjectsService = inject(ProjectsService);
-  private readonly dialog: DialogService = inject(DialogService);
+  private readonly dialog = inject(Dialog);
 
   public readonly listProjectId = "listProjectId"
   public readonly icon = faGithub;
@@ -34,7 +37,8 @@ export class ProjectsComponent {
   public clickOnProject(project: Project): void {
     this.dialog.open(ProjectDetailsComponent,
       {
-        closeButton: false,
+        ...PUBLIC_DIALOG_CONFIG,
+        ariaLabelledBy: 'project-dialog-title',
         data: project
       });
   }

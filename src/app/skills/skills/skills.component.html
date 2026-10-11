@@ -1,8 +1,9 @@
 <div class="container-language-programming">
+  <h1 class="title-skills">{{'Skills' | t}}</h1>
 
   @if (!isMobile()) {
     <div>
-      <h3 class="title-items-skills">Programming languages</h3>
+      <h2 class="title-items-skills">{{'Programming languages' | t}}</h2>
       <div class="container-cards-items">
         @for (item of listLanguages; track item) {
           <app-skill-card [itemSkill]="item"></app-skill-card>
@@ -10,7 +11,7 @@
       </div>
     </div>
     <div>
-      <h3 class="title-items-skills">Technologies</h3>
+      <h2 class="title-items-skills">{{'Technologies' | t}}</h2>
       <div class="container-cards-items">
         @for (tech of listTech; track tech) {
           <app-skill-card [itemSkill]="tech"></app-skill-card>
@@ -19,7 +20,6 @@
     </div>
   } @else {
     <div>
-      <h3 class="title-skills">Skills</h3>
       <div class="container-cards-items">
         @for (tech of allItems; track tech) {
           <app-skill-card [itemSkill]="tech"></app-skill-card>

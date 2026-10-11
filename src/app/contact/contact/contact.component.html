@@ -1,13 +1,15 @@
-<main class="container-contact">
+<section class="container-contact" aria-labelledby="contact-page-title">
+  <h1 id="contact-page-title" class="visually-hidden">{{'Contact' | t}}</h1>
   <section class="container-card-contact">
 
-    <article class="container-image-contact-and-welcome" aria-labelledby="contactImage">
+    <div class="container-image-contact-and-welcome">
       <app-image-contact id="contactImage"></app-image-contact>
-    </article>
+      <app-resume-download />
+    </div>
 
-    <article class="container-form-contact" aria-labelledby="contactForm">
+    <div class="container-form-contact">
       <app-form-contact id="contactForm"></app-form-contact>
-    </article>
+    </div>
 
   </section>
-</main>
+</section>

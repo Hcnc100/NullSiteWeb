@@ -1,0 +1,33 @@
+<section class="admin-card editor" aria-labelledby="resume-title">
+  <h2 id="resume-title">{{'Currículum' | t}}</h2>
+  <p class="muted">{{'PDF público, máximo 10 MiB. No incluyas datos que quieras mantener privados.' | t}}</p>
+  <p class="muted">{{'El archivo anterior se conserva hasta publicar correctamente el nuevo.' | t}}</p>
+  @if (!loading()) {
+    <ul aria-label="PDF ES/EN">
+      <li>Español · {{(validResumeForLocale(settings().es, 'es') ? 'CV válido publicado' : 'Falta CV válido en este idioma') | t}}</li>
+      <li>English · {{(validResumeForLocale(settings().en, 'en') ? 'CV válido publicado' : 'Falta CV válido en este idioma') | t}}</li>
+    </ul>
+    <p class="muted">{{'Si falta un idioma, la web ofrece el otro PDF indicando su idioma. No se traduce el currículum automáticamente.' | t}}</p>
+  }
+  @if (loading()) { <p role="status">{{'Cargando…' | t}}</p> }
+  @if (error()) { <p role="alert" class="feedback error">{{error() | t}}</p> }
+  @if (message()) { <p role="status" class="feedback">{{message() | t}}</p> }
+  <fieldset [disabled]="isSaving() || loading()">
+    <legend>{{'Idioma del PDF' | t}}</legend>
+    <div class="actions">
+      <button type="button" class="secondary" [attr.aria-pressed]="locale() === 'es'" (click)="setLocale('es')">Español</button>
+      <button type="button" class="secondary" [attr.aria-pressed]="locale() === 'en'" (click)="setLocale('en')">English</button>
+    </div>
+    @if (settings()[locale()]; as current) {
+      <p>{{current.fileName}} · {{current.sizeBytes}} bytes · {{current.enabled ? ('Publicada' | t) : '—'}}</p>
+    } @else { <p>{{'Sin CV publicado.' | t}}</p> }
+    <div class="field"><label for="cv-pdf">PDF</label><input id="cv-pdf" type="file" accept="application/pdf,.pdf" (change)="selectFile($event)"></div>
+    @if (file(); as selected) { <p>{{selected.name}} · {{selected.size}} bytes</p> }
+    <div class="actions">
+      <button type="button" (click)="publish()" [disabled]="file() === null">{{'Publicar PDF' | t}}</button>
+      <button type="button" class="secondary" (click)="withdraw()" [disabled]="settings()[locale()]?.enabled !== true">{{'Retirar CV' | t}}</button>
+      <button type="button" class="secondary" (click)="load()">{{'Recargar datos' | t}}</button>
+    </div>
+  </fieldset>
+  @if (isSaving()) { <p role="status">{{'Guardando…' | t}} {{progress()}}%</p> }
+</section>

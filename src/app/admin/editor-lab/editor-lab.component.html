@@ -1,0 +1,40 @@
+<main class="lab">
+  <h1>Laboratorio: Tiptap vs Kolkov</h1>
+  <p>Solo desarrollo. El documento se guarda localmente o en emulador. Subir imágenes sí escribe archivos privados en Firebase y requiere tu sesión de administrador.</p>
+  <div class="buttons">
+    <button (click)="selected.set('tiptap')" [attr.aria-pressed]="selected() === 'tiptap'">Tiptap 3</button>
+    <button (click)="selected.set('kolkov')" [attr.aria-pressed]="selected() === 'kolkov'">Kolkov 3.4</button>
+    <button (click)="reset()">Restablecer ejemplo</button>
+  </div>
+  <section [hidden]="selected() !== 'tiptap'" aria-label="Editor Tiptap">
+    @if (ready()) { <app-tiptap-toolbar [editor]="editor" /> }
+    <div #tiptapHost class="tiptap-host"></div>
+  </section>
+  <section [hidden]="selected() !== 'kolkov'" aria-label="Editor Kolkov">
+    <angular-editor id="kolkov-lab" [(ngModel)]="kolkovHtml" [config]="config" [appRichColors]="kolkovHtml" [appLabImages]="kolkovHtml" />
+  </section>
+  <details class="image-upload"><summary>Insertar imagen · Firebase privado</summary>
+    <p>Prueba para blog y legales. No publica imágenes. <a href="/admin/login" target="_blank" rel="noopener">Iniciar sesión de administrador</a></p>
+    <label>Descripción accesible <input #imageAlt type="text" maxlength="300" /></label>
+    <label>Enlace HTTPS de imagen <input #imageUrl type="url" placeholder="https://…" /></label>
+    <button type="button" [disabled]="uploading()" (click)="insertImageUrl(imageUrl.value, imageAlt.value)">Insertar imagen desde enlace</button>
+    <p>En Tiptap puedes pegar una imagen con Ctrl+V: queda en memoria hasta guardar. Al recargar sin guardar se pierde. Selecciónala y usa los botones de alineación para centrarla.</p>
+    <label>Archivo (PNG, JPEG, WebP o GIF; máximo 10 MB) <input #imageFile type="file" accept="image/png,image/jpeg,image/webp,image/gif" [disabled]="uploading()" /></label>
+    <button type="button" [disabled]="uploading()" (click)="uploadImage(imageFile.files?.[0], imageAlt.value)">{{uploading() ? 'Subiendo…' : 'Subir e insertar imagen'}}</button>
+  </details>
+  <div class="buttons">
+    <button (click)="saveLocal()">Guardar local</button><button (click)="recoverLocal()">Recuperar local</button>
+    <button (click)="firestore(true)">Guardar en emulador</button><button (click)="firestore(false)">Recuperar de emulador</button>
+  </div>
+  <p role="status">{{status()}}</p>
+  @if (saved(); as record) {
+    <h2>Recuperado de {{record.editor}}</h2>
+    <p>Se conservan únicamente colores, fuentes y tamaños de la lista segura. El CSS original se convierte en clases controladas.</p>
+    <button (click)="reopen()">Volver a editar lo recuperado</button>
+    <div class="readers">
+      <section aria-label="Lector público real de legales"><h2>Lector real de legales · imágenes privadas de prueba</h2><app-legal-document [terms]="{title: record.title, content: record.html}" [embedded]="true" [acceptsImage]="acceptsImage" [appLabImages]="record.html" /></section>
+      <section aria-label="Contenido permitido para blog"><h2>Vista de borrador de blog · imágenes privadas de prueba</h2><article class="blog-body" [innerHTML]="legalResult().html" [appRichColors]="legalResult().html" [appLabImages]="legalResult().html"></article><details><summary>HTML filtrado para publicación del blog (sin publicar)</summary><pre>{{blogResult()}}</pre></details></section>
+    </div>
+    <details><summary>HTML guardado sin transformar</summary><pre>{{record.html}}</pre></details>
+  }
+</main>

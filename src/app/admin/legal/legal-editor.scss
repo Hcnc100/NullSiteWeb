@@ -1,0 +1,11 @@
+.legal-editor { max-width: 1100px; margin-top: 28px; }
+.legal-id { overflow-wrap: anywhere; }
+textarea { font-family: ui-monospace, monospace; font-size: 1rem; }
+pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+summary { cursor: pointer; min-height: 44px; }
+summary:focus-visible { outline: 3px solid var(--admin-accent); outline-offset: 4px; }
+.legal-preview { margin-block: 28px; border: 1px solid var(--admin-border); border-radius: 12px; padding: clamp(16px, 3vw, 32px); }
+.legal-preview, .legal-editor, section { min-width: 0; }
+.legal-visual { min-height: 280px; max-height: 65vh; overflow: auto; border: 1px solid var(--admin-border); border-radius: 6px; padding: 16px; overflow-wrap: anywhere; background: var(--admin-bg); }
+.legal-visual:focus-visible { outline: 3px solid var(--admin-accent); outline-offset: 4px; }
+button[aria-pressed="true"] { border-color: var(--admin-accent); }

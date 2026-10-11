@@ -1,5 +1,4 @@
 import { Component, inject } from '@angular/core';
-import type { SocialLink } from "../../models/SocialLink";
 import { PersonalInfoService } from "../services/personal-info.service";
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
@@ -14,6 +13,6 @@ export class PersonalLinksComponent {
 
   private readonly personalInfo: PersonalInfoService = inject(PersonalInfoService);
 
-  public readonly listSocialLink: SocialLink[] = this.personalInfo.listSocialLink;
+  public readonly listSocialLink = this.personalInfo.socialLinks;
 
 }

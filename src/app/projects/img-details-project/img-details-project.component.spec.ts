@@ -20,6 +20,11 @@ describe('ImgProjectComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  it('uses the original screenshot if the lightweight thumbnail is unavailable', () => {
+    fixture.componentRef.setInput('urlImgProject', 'https://example.invalid/small.png');
+    fixture.componentRef.setInput('originalUrl', 'https://example.invalid/full.png'); fixture.componentRef.setInput('indexScreenshots', 0);
+    expect(component.source()).toContain('small.png'); component.imageError(); expect(component.source()).toContain('full.png');
+  });
 });
 
 

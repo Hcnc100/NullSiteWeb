@@ -1,5 +1,7 @@
 import type { OnInit } from '@angular/core';
-import { Component, input, model } from '@angular/core';
+import { Component, inject, input, model } from '@angular/core';
+import { MotionService } from '../../services/motion/motion.service';
+import { TranslatePipe } from '../../i18n/translate.pipe';
 import type { AnimationOptions } from "ngx-lottie";
 import { LottieComponent } from "ngx-lottie";
 
@@ -8,9 +10,10 @@ import { LottieComponent } from "ngx-lottie";
   templateUrl: './loading.component.html',
   styleUrls: ['./loading.component.scss'],
   standalone: true,
-  imports: [LottieComponent]
+  imports: [LottieComponent, TranslatePipe]
 })
 export class LoadingComponent implements OnInit {
+  public readonly motion = inject(MotionService);
 
   public readonly pathArg = input.required<string>();
 

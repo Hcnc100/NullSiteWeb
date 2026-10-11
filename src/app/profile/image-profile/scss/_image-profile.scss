@@ -13,7 +13,8 @@
 }
 
 .image-profile {
-  padding: 20px 0;
+  object-fit: cover;
+  aspect-ratio: 1;
   @include circular-img-responsive($size-image: 20vw, $size-max: 260px, $size-min: 200px);
 
   @media screen and (max-width: #{variables_global.$size-mobile}) {

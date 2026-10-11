@@ -1,4 +1,4 @@
 <div class="container-image-project">
-  <img [src]="urlImgProject() || ''" alt="screenshot number #{{indexScreenshots()}}">
+  <img [src]="source() || ''" alt="" width="100" height="180" loading="lazy" decoding="async" (error)="imageError()">
 </div>
 
