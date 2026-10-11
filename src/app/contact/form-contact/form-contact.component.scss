@@ -25,8 +25,14 @@ input[type='submit']:disabled { cursor: wait; opacity: .65; }
 .submission-status:empty { display: none; }
 .submission-error { font-weight: 600; }
 .sending-dialog {
+  position: fixed;
+  inset: 0;
+  // Restore the native centering overridden by the global * { margin: 0 } reset.
+  margin: auto;
   box-sizing: border-box;
   width: min(360px, calc(100vw - 40px));
+  max-height: calc(100dvh - 40px);
+  overflow: auto;
   padding: 32px 24px;
   border: 1px solid #555;
   border-radius: 16px;
