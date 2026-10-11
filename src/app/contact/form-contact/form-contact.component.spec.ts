@@ -1,4 +1,5 @@
 import { vi } from 'vitest';
+import { page } from 'vitest/browser';
 import type { Mock } from 'vitest';
 import { Component, forwardRef, input } from '@angular/core';
 import type { ControlValueAccessor } from '@angular/forms';
@@ -52,6 +53,35 @@ describe('FormContactComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('centers the pending modal in mobile, landscape, tablet and desktop viewports', async () => {
+    fixture.detectChanges();
+    component.i18n.setLocale('es');
+    component.isSending.set(true);
+    fixture.detectChanges();
+    const dialog = fixture.nativeElement.querySelector('dialog') as HTMLDialogElement;
+    try {
+      for (const locale of ['es', 'en'] as const) {
+        component.i18n.setLocale(locale);
+        fixture.detectChanges();
+        for (const [width, height] of [[320, 568], [390, 844], [844, 390], [768, 1024], [1440, 900]]) {
+        await page.viewport(width, height);
+        const rect = dialog.getBoundingClientRect();
+        await page.screenshot({path: `.vitest/contact-dialog-${locale}-${width}x${height}.png`});
+        expect(Math.abs(rect.left + rect.width / 2 - window.innerWidth / 2)).toBeLessThanOrEqual(1);
+        expect(Math.abs(rect.top + rect.height / 2 - window.innerHeight / 2)).toBeLessThanOrEqual(1);
+        expect(rect.left).toBeGreaterThanOrEqual(16);
+        expect(rect.top).toBeGreaterThanOrEqual(16);
+        expect(rect.right).toBeLessThanOrEqual(window.innerWidth - 16);
+        expect(rect.bottom).toBeLessThanOrEqual(window.innerHeight - 16);
+        }
+      }
+    } finally {
+      component.isSending.set(false);
+      fixture.detectChanges();
+      await page.viewport(1280, 720);
+    }
   });
 
   it('passes verification to backend, blocks duplicate submit and clears the used token', async () => {
