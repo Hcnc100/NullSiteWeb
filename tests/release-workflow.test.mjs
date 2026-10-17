@@ -24,7 +24,12 @@ test('manual release still requires explicit acceptance', () => {
   assert.equal(eligible('workflow_dispatch', 'refs/heads/main', true), true);
 });
 test('automatic release includes origins, contact backend, rules and hosting', () => {
-  assert.equal((release.match(/if: github.event_name == 'push' \|\| inputs.target == 'full'/g) ?? []).length, 2);
+  // Origins, snapshot, function release and retention sync share the same scope guard.
+  assert.equal((release.match(/if: github.event_name == 'push' \|\| inputs.target == 'full'/g) ?? []).length, 4);
+  assert.match(release, /artifact_retention\.py capture --project nullpointer-716ae/);
+  assert.match(release, /artifact_retention\.py sync --project nullpointer-716ae/);
+  assert.ok(release.indexOf('artifact_retention.py capture') < release.indexOf('deploy --only functions:contact'));
+  assert.ok(release.indexOf('deploy --only functions:contact') < release.indexOf('artifact_retention.py sync'));
   assert.match(release, /DEPLOY_TARGET: \$\{\{ github.event_name == 'push' && 'full' \|\| inputs.target \}\}/);
   assert.match(release, /--only firestore:rules,firestore:indexes,storage,hosting/);
 });
