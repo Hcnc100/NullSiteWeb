@@ -2,6 +2,12 @@ name: Validate and release Firebase
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - '.github/scripts/**'
+      - '.github/workflows/deploy-firebase.yml'
+      - '.github/workflows/rollback-retained.yml'
+      - '.github/workflows/sync-retention.yml'
+      - 'tests/release-workflow.test.mjs'
   pull_request:
   workflow_dispatch:
     inputs:
@@ -25,6 +31,8 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v5
+      - name: Test image retention safeguards
+        run: python3 -B -m unittest discover -s .github/scripts -p 'test_artifact_retention.py'
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -85,11 +93,18 @@ jobs:
           project_id: nullpointer-716ae
           workload_identity_provider: projects/646388363945/locations/global/workloadIdentityPools/github-actions/providers/nullsiteweb
           service_account: github-actions-firebase@nullpointer-716ae.iam.gserviceaccount.com
+      - uses: google-github-actions/setup-gcloud@v3
+      - name: Capture contact image before deployment
+        if: github.event_name == 'push' || inputs.target == 'full'
+        run: python3 .github/scripts/artifact_retention.py capture --project nullpointer-716ae --region us-central1 --service submitcontact --state "$RUNNER_TEMP/retention-contact.json"
       # Merges to main release the full stack only after validation succeeds.
       # Separate codebase prevents managing the legacy notification functions.
       - name: Release contact backend first
         if: github.event_name == 'push' || inputs.target == 'full'
         run: npx --yes firebase-tools@15.22.1 deploy --only functions:contact --project nullpointer-716ae --non-interactive
+      - name: Protect active and previous contact image
+        if: github.event_name == 'push' || inputs.target == 'full'
+        run: python3 .github/scripts/artifact_retention.py sync --project nullpointer-716ae --region us-central1 --service submitcontact --state "$RUNNER_TEMP/retention-contact.json"
       - name: Release rules and frontend
         env:
           DEPLOY_TARGET: ${{ github.event_name == 'push' && 'full' || inputs.target }}
