@@ -26,6 +26,7 @@ permissions:
 concurrency:
   group: firebase-${{ github.ref }}
   cancel-in-progress: false
+  queue: max
 jobs:
   validate:
     runs-on: ubuntu-latest
