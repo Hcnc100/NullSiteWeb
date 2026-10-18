@@ -7,6 +7,7 @@ on:
       - '.github/workflows/deploy-firebase.yml'
       - '.github/workflows/rollback-retained.yml'
       - '.github/workflows/sync-retention.yml'
+      - '.github/workflows/retention-guard.yml'
       - 'tests/release-workflow.test.mjs'
   pull_request:
   workflow_dispatch:
@@ -32,7 +33,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Test image retention safeguards
-        run: python3 -B -m unittest discover -s .github/scripts -p 'test_artifact_retention.py'
+        run: python3 -B -m unittest discover -s .github/scripts -p 'test_*retention*.py'
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -94,6 +95,8 @@ jobs:
           workload_identity_provider: projects/646388363945/locations/global/workloadIdentityPools/github-actions/providers/nullsiteweb
           service_account: github-actions-firebase@nullpointer-716ae.iam.gserviceaccount.com
       - uses: google-github-actions/setup-gcloud@v3
+      - name: Gate release on Hosting, secret and image retention
+        run: python3 .github/scripts/retention_guard.py --project nullpointer-716ae --service submitcontact --hosting-site nullpointer-716ae --hosting-site ricardopajarocoatl-conciliacion --secrets
       - name: Capture contact image before deployment
         if: github.event_name == 'push' || inputs.target == 'full'
         run: python3 .github/scripts/artifact_retention.py capture --project nullpointer-716ae --region us-central1 --service submitcontact --state "$RUNNER_TEMP/retention-contact.json"
@@ -115,3 +118,5 @@ jobs:
             # Only for later frontend-only updates after the full migration.
             npx --yes firebase-tools@15.22.1 deploy --only hosting --project nullpointer-716ae --non-interactive
           fi
+      - name: Verify retention after successful release
+        run: python3 .github/scripts/retention_guard.py --project nullpointer-716ae --service submitcontact --hosting-site nullpointer-716ae --hosting-site ricardopajarocoatl-conciliacion --secrets
